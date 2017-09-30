@@ -7,6 +7,7 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 import Buckets from './bucket/Buckets'
 import Items from './items/Items'
+import NotFound from './NotFound'
 
 class Application extends React.Component {
 
@@ -21,6 +22,7 @@ class Application extends React.Component {
             <Route exact path="/signup" component={SignUp}/>
             <Route exact path="/buckets" component={Buckets}/>
             <Route path="/buckets/:bucketId/items" component={Items}/>
+            <Route component={NotFound}/>
           </Switch>
           <Footer/>
         </div>
