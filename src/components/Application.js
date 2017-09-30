@@ -6,6 +6,7 @@ import SignUp from './auth/SignUp'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import Buckets from './bucket/Buckets'
+import Items from './items/Items'
 
 class Application extends React.Component {
 
@@ -18,7 +19,8 @@ class Application extends React.Component {
             <Route exact path="/" component={Home}/>
             <Route exact path="/login" component={Login}/>
             <Route exact path="/signup" component={SignUp}/>
-            <Route path="/buckets" component={Buckets}/>
+            <Route exact path="/buckets" component={Buckets}/>
+            <Route path="/buckets/:bucketId/items" component={Items}/>
           </Switch>
           <Footer/>
         </div>
