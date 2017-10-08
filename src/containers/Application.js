@@ -17,7 +17,7 @@ class Application extends React.Component {
         return (
             <BrowserRouter>
                 <div>
-                    <Navbar/>
+                    <Navbar isAuthenticated={isAuthenticated}/>
                     <Switch>
                         <Route exact path="/" component={Home}/>
                         <Route exact path="/login"

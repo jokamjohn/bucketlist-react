@@ -1,19 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {withRouter} from 'react-router-dom';
 import {loginUser} from "../../actions/login";
 
-export default class Login extends React.Component {
+class Login extends React.Component {
 
     onSubmit = event => {
         event.preventDefault();
         const email = this.email.value.trim();
         const password = this.password.value.trim();
         const credentials = {email: email, password: password};
-        this.props.dispatch(loginUser(credentials))
+        this.props.dispatch(loginUser(credentials));
     };
 
-
     render() {
+        if (this.props.isAuthenticated) {
+            this.props.history.push("buckets");
+        }
+
         return (
             <div className="container main-content">
                 <div className="row">
@@ -51,7 +55,9 @@ export default class Login extends React.Component {
 
 Login.propTypes = {
     dispatch: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired,
 };
+
+export default withRouter(Login)
 
 

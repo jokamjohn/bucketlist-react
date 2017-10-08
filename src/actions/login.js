@@ -1,5 +1,5 @@
 import * as LoginActionTypes from '../actiontypes/login';
-import {AUTH_TOKEN, LOGIN_URL} from "../Constants";
+import {AUTH_TOKEN, LOGIN_URL, USER_EMAIL} from "../utilities/Constants";
 import axios from 'axios';
 
 /**
@@ -71,6 +71,7 @@ export const loginUser = credentials => {
             })
             .then(user => {
                 localStorage.setItem(AUTH_TOKEN, user.auth_token);
+                localStorage.setItem(USER_EMAIL, credentials.email);
                 dispatch(receiveLogin(user));
             })
             .catch(error => {

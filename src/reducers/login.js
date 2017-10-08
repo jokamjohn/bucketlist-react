@@ -1,5 +1,5 @@
 import * as LoginActionTypes from '../actiontypes/login'
-import {AUTH_TOKEN} from "../Constants";
+import {AUTH_TOKEN} from "../utilities/Constants";
 
 const initialState = {
     isFetching: false,
