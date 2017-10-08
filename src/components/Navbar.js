@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {USER_EMAIL} from "../utilities/Constants";
 
 class Navbar extends React.Component {
+
     render() {
         const email = localStorage.getItem(USER_EMAIL);
         return (
@@ -22,10 +23,10 @@ class Navbar extends React.Component {
                                 <NavLink className="nav-link" exact to="/">Home</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link" to="/login">{email}</NavLink>
+                                <NavLink exact className="nav-link" to="/buckets">{email}</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link" to="/signup">logout</NavLink>
+                                <NavLink exact className="nav-link" to="/logout">logout</NavLink>
                             </li>
                         </ul>
                     </div>
@@ -51,6 +52,7 @@ class Navbar extends React.Component {
 
 Navbar.propTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
+    dispatch: PropTypes.func.isRequired,
 };
 
 

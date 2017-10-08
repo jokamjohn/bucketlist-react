@@ -8,12 +8,12 @@ import 'font-awesome/css/font-awesome.css'
 import './css/index.css'
 import './containers/Application'
 import Application from './containers/Application'
-import LoginReducer from './reducers/login'
+import AuthReducer from './reducers/auth'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 
-const store = createStore(LoginReducer, enhancer);
+const store = createStore(AuthReducer, enhancer);
 
 ReactDOM.render(
     <Provider store={store}>
