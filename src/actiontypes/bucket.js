@@ -1,0 +1,2 @@
+export const BUCKET_SUCCESS = "BUCKET_SUCCESS";
+export const BUCKET_FAILURE = "BUCKET_SUCCESS";

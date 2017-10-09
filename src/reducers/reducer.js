@@ -2,6 +2,8 @@ import * as LoginActionTypes from '../actiontypes/login'
 import * as LogoutActionTypes from '../actiontypes/logout';
 import * as RegisterActionTypes from '../actiontypes/register';
 import {AUTH_TOKEN} from "../utilities/Constants";
+import * as BucketActionTypes from "../actiontypes/bucket";
+
 
 const initialState = {
   isFetching: false,
@@ -87,6 +89,18 @@ export default function (state = initialState, action) {
         isFetching: action.isFetching,
         isRegistered: action.isRegistered,
         message: action.message
+      };
+
+    case BucketActionTypes.BUCKET_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        buckets: {
+          buckets: action.data.buckets,
+          count: action.data.count,
+          next: action.data.next,
+          previous: action.data.previous
+        }
       };
 
     default:

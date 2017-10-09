@@ -14,7 +14,7 @@ import NotFound from '../components/NotFound'
 class Application extends React.Component {
 
   render() {
-    const {dispatch, isAuthenticated, message, isRegistered} = this.props;
+    const {dispatch, isAuthenticated, message, isRegistered, buckets} = this.props;
     return (
         <BrowserRouter>
           <div>
@@ -26,7 +26,8 @@ class Application extends React.Component {
               <Route exact path="/signup"
                      render={() => <Register dispatch={dispatch} message={message} isRegistered={isRegistered}/>}/>
               <Route exact path="/logout" render={() => <Logout dispatch={dispatch}/>}/>
-              <Route exact path="/buckets" component={Buckets}/>
+              <Route exact path="/buckets"
+                     render={() => <Buckets dispatch={dispatch} isAuthenticated={isAuthenticated} buckets={buckets}/>}/>
               <Route path="/buckets/:bucketId/items" component={Items}/>
               <Route component={NotFound}/>
             </Switch>
@@ -38,12 +39,13 @@ class Application extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const {isAuthenticated, isFetching, message, isRegistered} = state;
+  const {isAuthenticated, isFetching, message, isRegistered, buckets} = state;
   return {
     isAuthenticated,
     isFetching,
     isRegistered,
-    message
+    message,
+    buckets
   }
 };
 
