@@ -1,6 +1,7 @@
 import * as BucketActionTypes from '../actiontypes/bucket';
 import {AUTH_TOKEN, BASE_URL} from "../utilities/Constants";
 import axios from 'axios';
+import {BUCKETS_REQUEST_URL} from "../actiontypes/bucket";
 
 export const receiveBuckets = data => {
   return {
@@ -15,7 +16,7 @@ export const receiveBuckets = data => {
  * @param isAuthenticated
  * @returns {function(*)}
  */
-export const getBuckets = (isAuthenticated) => {
+export const getBuckets = (url, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
 
@@ -23,13 +24,16 @@ export const getBuckets = (isAuthenticated) => {
     if (token) {
       config = {
         method: 'GET',
-        url: BASE_URL + "bucketlists/",
+        // url: BASE_URL + "bucketlists/",
+        url: url,
         headers: {'Authorization': `Bearer ${token}`}
       };
     } else {
       throw "No token saved!!!"
     }
   }
+
+  console.log("config: ", config)
 
   return dispatch => {
     return axios(config)
@@ -39,6 +43,4 @@ export const getBuckets = (isAuthenticated) => {
         })
         .catch(error => console.log(error))
   }
-
-
 };

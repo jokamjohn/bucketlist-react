@@ -4,14 +4,23 @@ import Bucket from './Bucket'
 import PropTypes from 'prop-types';
 import {getBuckets} from "../../actions/buckets";
 import {parseISOString} from "../../utilities/Utils";
+import Pagination from "../pagination/Pagination";
+import {BASE_URL} from "../../utilities/Constants";
 
 class Buckets extends React.Component {
 
   componentDidMount() {
-    this.props.dispatch(getBuckets(this.props.isAuthenticated))
+    const defaultBucketUrl = BASE_URL + "bucketlists/";
+    this.props.dispatch(getBuckets(defaultBucketUrl, this.props.isAuthenticated))
   }
 
   render() {
+    const count = this.props.buckets.count;
+    const next = this.props.buckets.next;
+    const previous = this.props.buckets.previous;
+    const isAuth = this.props.isAuthenticated;
+    const dispatch = this.props.dispatch;
+
     return (
         <div className="container main-content">
 
@@ -52,6 +61,7 @@ class Buckets extends React.Component {
               :
               ''
           }
+          <Pagination count={count} next={next} previous={previous} dispatch={dispatch} isAuthenticated={isAuth}/>
         </div>
     );
   }

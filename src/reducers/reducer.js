@@ -4,10 +4,12 @@ import * as RegisterActionTypes from '../actiontypes/register';
 import {AUTH_TOKEN} from "../utilities/Constants";
 import * as BucketActionTypes from "../actiontypes/bucket";
 
-
 const initialState = {
   isFetching: false,
-  isAuthenticated: localStorage.getItem(AUTH_TOKEN) ? true : false
+  isAuthenticated: localStorage.getItem(AUTH_TOKEN) ? true : false,
+  buckets: {
+    buckets: []
+  }
 };
 
 

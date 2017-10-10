@@ -10,6 +10,7 @@ import Footer from '../components/Footer'
 import Buckets from '../components/bucket/Buckets'
 import Items from '../components/items/Items'
 import NotFound from '../components/NotFound'
+import Pagination from "../components/pagination/Pagination";
 
 class Application extends React.Component {
 
@@ -29,6 +30,7 @@ class Application extends React.Component {
               <Route exact path="/buckets"
                      render={() => <Buckets dispatch={dispatch} isAuthenticated={isAuthenticated} buckets={buckets}/>}/>
               <Route path="/buckets/:bucketId/items" component={Items}/>
+              {/*<Route path="/page" render={()=> <Pagination next={null} count={1} previous={"http://kbucket-api.herokuapp.com/bucketlists/?page=2"}/>}/>*/}
               <Route component={NotFound}/>
             </Switch>
             <Footer/>

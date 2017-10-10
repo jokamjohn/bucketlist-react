@@ -4,3 +4,5 @@ export const LOGOUT_URL = BASE_URL + "auth/logout";
 export const REGISTER_URL = BASE_URL + "auth/register";
 export const AUTH_TOKEN = "auth_token";
 export const USER_EMAIL = "user_email";
+
+export const NUMBER_OF_ITEMS_PER_PAGE_FROM_API = 4;
