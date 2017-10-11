@@ -112,6 +112,17 @@ export default function (state = initialState, action) {
         bucketUrl: action.url
       };
 
+    case BucketActionTypes.BUCKET_DELETE:
+      return {
+        ...state,
+        buckets: {
+          buckets: [
+            ...state.buckets.buckets.slice(0, action.index),
+            ...state.buckets.buckets.slice(action.index + 1)
+          ]
+        }
+      };
+
     default:
       return state;
   }

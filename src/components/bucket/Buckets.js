@@ -54,8 +54,9 @@ class Buckets extends React.Component {
           {this.props.buckets
               ?
               <div className="row">
-                {this.props.buckets.buckets.map(bucket =>
-                    <Bucket key={bucket.id} name={bucket.name} modifiedAt={parseISOString(bucket.modifiedAt)}/>
+                {this.props.buckets.buckets.map((bucket, index) =>
+                    <Bucket key={bucket.id} index={index} name={bucket.name} dispatch={dispatch}
+                            modifiedAt={parseISOString(bucket.modifiedAt)}/>
                 )}
               </div>
               :

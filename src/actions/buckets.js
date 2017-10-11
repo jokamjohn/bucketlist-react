@@ -18,6 +18,13 @@ export const changeBucketUrl = url => {
   }
 };
 
+export const deleteBucket = index => {
+  return {
+    type: BucketActionTypes.BUCKET_DELETE,
+    index: index
+  }
+};
+
 /**
  * Make an Http request to fetch the user Buckets from the API.
  * @param url Bucket Url
