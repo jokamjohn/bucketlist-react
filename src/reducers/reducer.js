@@ -1,12 +1,13 @@
 import * as LoginActionTypes from '../actiontypes/login'
 import * as LogoutActionTypes from '../actiontypes/logout';
 import * as RegisterActionTypes from '../actiontypes/register';
-import {AUTH_TOKEN} from "../utilities/Constants";
+import {AUTH_TOKEN, BUCKETLIST_URL, LOCAL_BUCKET_URL} from "../utilities/Constants";
 import * as BucketActionTypes from "../actiontypes/bucket";
 
 const initialState = {
   isFetching: false,
   isAuthenticated: localStorage.getItem(AUTH_TOKEN) ? true : false,
+  bucketUrl: localStorage.getItem(LOCAL_BUCKET_URL) || BUCKETLIST_URL,
   buckets: {
     buckets: []
   }
@@ -103,6 +104,12 @@ export default function (state = initialState, action) {
           next: action.data.next,
           previous: action.data.previous
         }
+      };
+
+    case BucketActionTypes.BUCKET_CHANGE_URL:
+      return {
+        ...state,
+        bucketUrl: action.url
       };
 
     default:

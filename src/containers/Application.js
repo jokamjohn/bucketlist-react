@@ -15,7 +15,7 @@ import Pagination from "../components/pagination/Pagination";
 class Application extends React.Component {
 
   render() {
-    const {dispatch, isAuthenticated, message, isRegistered, buckets} = this.props;
+    const {dispatch, isAuthenticated, message, isRegistered, buckets, bucketUrl} = this.props;
     return (
         <BrowserRouter>
           <div>
@@ -28,9 +28,8 @@ class Application extends React.Component {
                      render={() => <Register dispatch={dispatch} message={message} isRegistered={isRegistered}/>}/>
               <Route exact path="/logout" render={() => <Logout dispatch={dispatch}/>}/>
               <Route exact path="/buckets"
-                     render={() => <Buckets dispatch={dispatch} isAuthenticated={isAuthenticated} buckets={buckets}/>}/>
+                     render={() => <Buckets dispatch={dispatch} isAuthenticated={isAuthenticated} buckets={buckets} bucketUrl={bucketUrl}/>}/>
               <Route path="/buckets/:bucketId/items" component={Items}/>
-              {/*<Route path="/page" render={()=> <Pagination next={null} count={1} previous={"http://kbucket-api.herokuapp.com/bucketlists/?page=2"}/>}/>*/}
               <Route component={NotFound}/>
             </Switch>
             <Footer/>
@@ -41,13 +40,14 @@ class Application extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const {isAuthenticated, isFetching, message, isRegistered, buckets} = state;
+  const {isAuthenticated, isFetching, message, isRegistered, buckets, bucketUrl} = state;
   return {
     isAuthenticated,
     isFetching,
     isRegistered,
     message,
-    buckets
+    buckets,
+    bucketUrl
   }
 };
 

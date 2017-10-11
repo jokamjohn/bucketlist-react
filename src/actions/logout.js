@@ -1,5 +1,5 @@
 import * as LogoutActionTypes from '../actiontypes/logout';
-import {AUTH_TOKEN, LOGOUT_URL, USER_EMAIL} from "../utilities/Constants";
+import {AUTH_TOKEN, LOCAL_BUCKET_URL, LOGOUT_URL, USER_EMAIL} from "../utilities/Constants";
 import axios from 'axios';
 
 export const requestLogout = () => {
@@ -47,6 +47,7 @@ export const logoutUser = () => {
           dispatch(receiveLogout(info.message));
           localStorage.removeItem(AUTH_TOKEN);
           localStorage.removeItem(USER_EMAIL);
+          localStorage.removeItem(LOCAL_BUCKET_URL);
         })
         .catch(error => {
           if (error.response) {

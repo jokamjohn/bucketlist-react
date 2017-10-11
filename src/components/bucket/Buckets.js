@@ -10,8 +10,7 @@ import {BASE_URL} from "../../utilities/Constants";
 class Buckets extends React.Component {
 
   componentDidMount() {
-    const defaultBucketUrl = BASE_URL + "bucketlists/";
-    this.props.dispatch(getBuckets(defaultBucketUrl, this.props.isAuthenticated))
+    this.props.dispatch(getBuckets(this.props.bucketUrl, this.props.isAuthenticated))
   }
 
   render() {
@@ -20,6 +19,7 @@ class Buckets extends React.Component {
     const previous = this.props.buckets.previous;
     const isAuth = this.props.isAuthenticated;
     const dispatch = this.props.dispatch;
+    const bucketUrl = this.props.bucketUrl;
 
     return (
         <div className="container main-content">
@@ -61,7 +61,8 @@ class Buckets extends React.Component {
               :
               ''
           }
-          <Pagination count={count} next={next} previous={previous} dispatch={dispatch} isAuthenticated={isAuth}/>
+          <Pagination count={count} next={next} previous={previous} bucketUrl={bucketUrl} dispatch={dispatch}
+                      isAuthenticated={isAuth}/>
         </div>
     );
   }
@@ -70,7 +71,8 @@ class Buckets extends React.Component {
 Buckets.propTypes = {
   dispatch: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
-  buckets: PropTypes.object
+  buckets: PropTypes.object,
+  bucketUrl: PropTypes.string,
 };
 
 

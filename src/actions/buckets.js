@@ -1,5 +1,5 @@
 import * as BucketActionTypes from '../actiontypes/bucket';
-import {AUTH_TOKEN, BASE_URL} from "../utilities/Constants";
+import {AUTH_TOKEN, BASE_URL, LOCAL_BUCKET_URL} from "../utilities/Constants";
 import axios from 'axios';
 import {BUCKETS_REQUEST_URL} from "../actiontypes/bucket";
 
@@ -11,8 +11,16 @@ export const receiveBuckets = data => {
   }
 };
 
+export const changeBucketUrl = url => {
+  return {
+    type: BucketActionTypes.BUCKET_CHANGE_URL,
+    url: url
+  }
+};
+
 /**
  * Make an Http request to fetch the user Buckets from the API.
+ * @param url Bucket Url
  * @param isAuthenticated
  * @returns {function(*)}
  */
@@ -33,12 +41,11 @@ export const getBuckets = (url, isAuthenticated) => {
     }
   }
 
-  console.log("config: ", config)
-
   return dispatch => {
     return axios(config)
         .then(response => response.data)
         .then(data => {
+          localStorage.setItem(LOCAL_BUCKET_URL, url);
           dispatch(receiveBuckets(data))
         })
         .catch(error => console.log(error))

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {BASE_URL, NUMBER_OF_ITEMS_PER_PAGE_FROM_API} from "../../utilities/Constants";
 import Direction from "./Direction";
-import {getBuckets} from "../../actions/buckets";
+import {changeBucketUrl, getBuckets} from "../../actions/buckets";
 
 
 class Pagination extends React.Component {
@@ -18,11 +18,15 @@ class Pagination extends React.Component {
     return [...Array(pages).keys()].slice(1)
   };
 
+  onChangeUrl = url => {
+    this.props.dispatch(changeBucketUrl(url));
+    this.props.dispatch(getBuckets(url, this.props.isAuthenticated))
+  };
+
   render() {
     const url = BASE_URL + "bucketlists/?page=";
     const count = this.props.count;
     const isAuthenticated = this.props.isAuthenticated;
-    const dispatch = this.props.dispatch;
     return (
         <div className="container main-content">
           {count
@@ -30,14 +34,13 @@ class Pagination extends React.Component {
               <nav aria-label="Buckets List pagination">
                 <ul className="pagination">
                   <Direction direction="&laquo;" action={this.props.previous} sr="previous"
-                             isAuthenticated={isAuthenticated} dispatch={dispatch}/>
+                             isAuthenticated={isAuthenticated} onChangeUrl={this.onChangeUrl}/>
                   {this.getNumberOfPage(this.props.count).map((page, index) =>
                       <li key={index} className="page-item">
-                        <a className="page-link" onClick={() => this.props.dispatch(getBuckets(url + page,
-                            isAuthenticated))}>{page}</a></li>
+                        <a className="page-link" onClick={() => this.onChangeUrl(url + page)}>{page}</a></li>
                   )}
                   <Direction direction="&raquo;" action={this.props.next} sr="next" isAuthenticated={isAuthenticated}
-                             dispatch={dispatch}/>
+                             onChangeUrl={this.onChangeUrl}/>
                 </ul>
               </nav>
               :
@@ -53,7 +56,8 @@ Pagination.propTypes = {
   next: PropTypes.string,
   previous: PropTypes.string,
   isAuthenticated: PropTypes.bool,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  bucketUrl: PropTypes.string
 };
 
 export default Pagination
