@@ -116,6 +116,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         buckets: {
+          ...state.buckets,
           buckets: [
             ...state.buckets.buckets.slice(0, action.index),
             ...state.buckets.buckets.slice(action.index + 1)
