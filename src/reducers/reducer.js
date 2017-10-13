@@ -123,6 +123,23 @@ export default function (state = initialState, action) {
         }
       };
 
+    case BucketActionTypes.BUCKET_CREATION:
+      return {
+        ...state,
+        buckets: {
+          ...state.buckets,
+          buckets: [
+            ...state.buckets.buckets,
+            {
+              name: action.name,
+              createdAt: action.createdAt,
+              modifiedAt: action.modifiedAt,
+              id: action.id
+            }
+          ]
+        }
+      };
+
     default:
       return state;
   }

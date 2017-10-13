@@ -3,9 +3,9 @@ import Breadcrumb from './Breadcrumb'
 import Bucket from './Bucket'
 import PropTypes from 'prop-types';
 import {getBuckets} from "../../actions/buckets";
-import {parseISOString} from "../../utilities/Utils";
+import {formatDate, parseISOString} from "../../utilities/Utils";
 import Pagination from "../pagination/Pagination";
-import {BASE_URL} from "../../utilities/Constants";
+import CreateBucket from "./CreateBucket";
 
 class Buckets extends React.Component {
 
@@ -28,15 +28,8 @@ class Buckets extends React.Component {
 
           {/*Create Bucket */}
           <div className="row">
-            <div className="col-sm-5 mx-sm-auto">
-              <form className="form-inline">
-                <div className="form-group">
-                  <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineCreateBucketFormInput"
-                         placeholder="Travel" required/>
-                  <input type="submit" className="btn btn-primary" value="Create Bucket"/>
-                </div>
-              </form>
-            </div>
+
+            <CreateBucket dispatch={this.props.dispatch} isAuthenticated={this.props.isAuthenticated}/>
 
             {/*Search for a Bucket*/}
             <div className="col-sm-5 mx-sm-auto">
@@ -56,7 +49,7 @@ class Buckets extends React.Component {
               <div className="row">
                 {this.props.buckets.buckets.map((bucket, index) =>
                     <Bucket key={bucket.id} index={index} id={bucket.id} name={bucket.name} dispatch={dispatch}
-                            isAuthenticated={isAuth} modifiedAt={parseISOString(bucket.modifiedAt)}/>
+                            isAuthenticated={isAuth} modifiedAt={formatDate(bucket.modifiedAt)}/>
                 )}
               </div>
               :

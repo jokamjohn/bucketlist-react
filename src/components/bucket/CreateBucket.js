@@ -1,0 +1,32 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import {createBucketOnServer} from "../../actions/buckets";
+
+class CreateBucket extends React.Component {
+
+  onCreate = (event) => {
+    event.preventDefault();
+    this.props.dispatch(createBucketOnServer(this.name.value, this.props.isAuthenticated))
+    this.name = ''
+  };
+
+  render() {
+    return (
+        <div className="col-sm-5 mx-sm-auto">
+          <form className="form-inline" onSubmit={this.onCreate}>
+            <div className="form-group">
+              <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineCreateBucketFormInput"
+                     placeholder="Travel" ref={input => this.name = input} required/>
+              <input type="submit" className="btn btn-primary" value="Create Bucket"/>
+            </div>
+          </form>
+        </div>);
+  }
+}
+
+CreateBucket.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+};
+
+export default CreateBucket

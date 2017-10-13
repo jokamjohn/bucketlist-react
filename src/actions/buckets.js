@@ -1,7 +1,6 @@
 import * as BucketActionTypes from '../actiontypes/bucket';
-import {AUTH_TOKEN, BASE_URL, BUCKETLIST_URL, LOCAL_BUCKET_URL, RESPONSE_OK} from "../utilities/Constants";
+import {AUTH_TOKEN, BUCKETLIST_POST_URL, BUCKETLIST_URL, LOCAL_BUCKET_URL, RESPONSE_OK} from "../utilities/Constants";
 import axios from 'axios';
-import {BUCKETS_REQUEST_URL} from "../actiontypes/bucket";
 
 export const receiveBuckets = data => {
   return {
@@ -25,10 +24,20 @@ export const deleteBucket = index => {
   }
 };
 
+export const createBucket = bucket => {
+  return {
+    type: BucketActionTypes.BUCKET_CREATION,
+    name: bucket.name,
+    createdAt: bucket.createdAt,
+    modifiedAt: bucket.modifiedAt,
+    id: bucket.id
+  }
+};
+
 /**
  * Make an Http request to fetch the user Buckets from the API.
  * @param url Bucket Url
- * @param isAuthenticated
+ * @param isAuthenticated Boolean
  * @returns {function(*)}
  */
 export const getBuckets = (url, isAuthenticated) => {
@@ -58,6 +67,13 @@ export const getBuckets = (url, isAuthenticated) => {
   }
 };
 
+/**
+ * Delete a Bucket from the API database.
+ * @param id Bucket Id
+ * @param index Bucket Id in the array
+ * @param isAuthenticated Boolean to show if a user is authenticated
+ * @returns {function(*)}
+ */
 export const deleteBucketFromServer = (id, index, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
@@ -82,5 +98,37 @@ export const deleteBucketFromServer = (id, index, isAuthenticated) => {
           }
         })
         .catch(error => console.log(error))
+  }
+};
+
+export const createBucketOnServer = (name, isAuthenticated) => {
+  const token = localStorage.getItem(AUTH_TOKEN) || null;
+  let config = {};
+
+  if (isAuthenticated) {
+    if (token) {
+      config = {
+        method: 'POST',
+        url: "http://kbucket-api.herokuapp.com/bucketlists/",
+        data: {name: name},
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          "content-type": "application/json"
+        }
+      };
+    } else {
+      throw "No token saved!!!"
+    }
+  }
+
+  console.log('config ', config)
+
+  return dispatch => {
+    return axios(config)
+        .then(response => {
+          console.log('response ', response.data);
+          dispatch(createBucket(response.data))
+        })
+        .catch(error => console.log(error.response))
   }
 };

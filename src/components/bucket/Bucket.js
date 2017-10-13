@@ -22,7 +22,7 @@ Bucket.propTypes = {
   modifiedAt: PropTypes.string,
   index: PropTypes.number,
   id: PropTypes.number,
-  isAuthenticated: PropTypes.func,
+  isAuthenticated: PropTypes.bool,
   dispatch: PropTypes.func,
 };
 
