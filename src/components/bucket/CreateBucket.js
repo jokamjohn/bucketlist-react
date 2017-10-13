@@ -7,7 +7,7 @@ class CreateBucket extends React.Component {
   onCreate = (event) => {
     event.preventDefault();
     this.props.dispatch(createBucketOnServer(this.name.value, this.props.isAuthenticated))
-    this.name = ''
+    this.name.value = ''
   };
 
   render() {
@@ -16,7 +16,7 @@ class CreateBucket extends React.Component {
           <form className="form-inline" onSubmit={this.onCreate}>
             <div className="form-group">
               <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineCreateBucketFormInput"
-                     placeholder="Travel" ref={input => this.name = input} required/>
+                     placeholder="Travel" ref={input => this.name = input}  required/>
               <input type="submit" className="btn btn-primary" value="Create Bucket"/>
             </div>
           </form>
