@@ -3,7 +3,7 @@ import Breadcrumb from './Breadcrumb'
 import Bucket from './Bucket'
 import PropTypes from 'prop-types';
 import {getBuckets} from "../../actions/buckets";
-import {formatDate, parseISOString} from "../../utilities/Utils";
+import {formatDate} from "../../utilities/Utils";
 import Pagination from "../pagination/Pagination";
 import CreateBucket from "./CreateBucket";
 import BucketSearch from "./BucketSearch";
@@ -11,7 +11,7 @@ import BucketSearch from "./BucketSearch";
 class Buckets extends React.Component {
 
   componentDidMount() {
-    this.props.dispatch(getBuckets(this.props.bucketUrl, this.props.isAuthenticated))
+    this.props.dispatch(getBuckets(this.props.bucketUrl, this.props.isAuthenticated, this.props.buckets.search.isSearch))
   }
 
   render() {
@@ -21,6 +21,8 @@ class Buckets extends React.Component {
     const isAuth = this.props.isAuthenticated;
     const dispatch = this.props.dispatch;
     const bucketUrl = this.props.bucketUrl;
+    const isSearch = this.props.buckets.search.isSearch;
+    const query = this.props.buckets.search.query;
 
     return (
         <div className="container main-content">
@@ -47,7 +49,7 @@ class Buckets extends React.Component {
               ''
           }
           <Pagination count={count} next={next} previous={previous} bucketUrl={bucketUrl} dispatch={dispatch}
-                      isAuthenticated={isAuth}/>
+                      isAuthenticated={isAuth} isSearch={isSearch} query={query}/>
         </div>
     );
   }
@@ -58,6 +60,8 @@ Buckets.propTypes = {
   isAuthenticated: PropTypes.bool,
   buckets: PropTypes.object,
   bucketUrl: PropTypes.string,
+  isSearch: PropTypes.bool,
+  query: PropTypes.string,
 };
 
 

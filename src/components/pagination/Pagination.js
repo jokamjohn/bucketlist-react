@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {BASE_URL, NUMBER_OF_ITEMS_PER_PAGE_FROM_API} from "../../utilities/Constants";
 import Direction from "./Direction";
-import {changeBucketUrl, getBuckets} from "../../actions/buckets";
+import {getBuckets} from "../../actions/buckets";
 
 
 class Pagination extends React.Component {
@@ -18,14 +18,22 @@ class Pagination extends React.Component {
     return [...Array(pages).keys()].slice(1)
   };
 
+  /**
+   * Fetch the Buckets at the provided URL when a pagination number is clicked.
+   * @param url Buckets URL
+   */
   onChangeUrl = url => {
-    this.props.dispatch(getBuckets(url, this.props.isAuthenticated))
+    this.props.dispatch(getBuckets(url, this.props.isAuthenticated, this.props.isSearch))
   };
 
   render() {
-    const url = BASE_URL + "bucketlists/?page=";
+    let url = BASE_URL + "bucketlists/?page=";
+    if (this.props.isSearch && this.props.query) {
+      url = BASE_URL + `bucketlists/?q=${this.props.query}&page=`;
+    }
     const count = this.props.count;
     const isAuthenticated = this.props.isAuthenticated;
+
     return (
         <div className="container main-content">
           {count
@@ -56,7 +64,9 @@ Pagination.propTypes = {
   previous: PropTypes.string,
   isAuthenticated: PropTypes.bool,
   dispatch: PropTypes.func,
-  bucketUrl: PropTypes.string
+  bucketUrl: PropTypes.string,
+  isSearch: PropTypes.bool,
+  query: PropTypes.string,
 };
 
 export default Pagination

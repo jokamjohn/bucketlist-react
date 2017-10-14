@@ -28,7 +28,8 @@ class Application extends React.Component {
                      render={() => <Register dispatch={dispatch} message={message} isRegistered={isRegistered}/>}/>
               <Route exact path="/logout" render={() => <Logout dispatch={dispatch}/>}/>
               <Route exact path="/buckets"
-                     render={() => <Buckets dispatch={dispatch} isAuthenticated={isAuthenticated} buckets={buckets} bucketUrl={bucketUrl}/>}/>
+                     render={() => <Buckets dispatch={dispatch} isAuthenticated={isAuthenticated} buckets={buckets}
+                                            bucketUrl={bucketUrl}/>}/>
               <Route path="/buckets/:bucketId/items" component={Items}/>
               <Route component={NotFound}/>
             </Switch>

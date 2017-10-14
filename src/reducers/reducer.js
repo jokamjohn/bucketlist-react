@@ -9,7 +9,10 @@ const initialState = {
   isAuthenticated: localStorage.getItem(AUTH_TOKEN) ? true : false,
   bucketUrl: localStorage.getItem(LOCAL_BUCKET_URL) || BUCKETLIST_URL,
   buckets: {
-    buckets: []
+    buckets: [],
+    search: {
+      isSearch: false
+    }
   }
 };
 
@@ -99,6 +102,7 @@ export default function (state = initialState, action) {
         ...state,
         isFetching: false,
         buckets: {
+          ...state.buckets,
           buckets: action.data.buckets,
           count: action.data.count,
           next: action.data.next,
@@ -143,8 +147,26 @@ export default function (state = initialState, action) {
           buckets: action.data.buckets,
           count: action.data.count,
           next: action.data.next,
-          previous: action.data.previous
+          previous: action.data.previous,
+          search: {
+            isSearch: action.isSearch,
+            query: action.query
+          }
         }
+      };
+
+    case BucketActionTypes.BUCKET_SEARCH_CLEAR:
+      return {
+        ...state,
+        isFetching: false,
+        buckets: {
+          ...state.buckets,
+          search: {
+            isSearch: action.isSearch,
+            query: action.query
+          }
+        }
+
       };
 
     default:

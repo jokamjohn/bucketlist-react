@@ -5,6 +5,11 @@ import {
 } from "../utilities/Constants";
 import axios from 'axios';
 
+/**
+ * Action to add the user Buckets to state.
+ * @param data
+ * @returns {{type, data: *, isFetching: boolean}}
+ */
 export const receiveBuckets = data => {
   return {
     type: BucketActionTypes.BUCKET_SUCCESS,
@@ -13,6 +18,12 @@ export const receiveBuckets = data => {
   }
 };
 
+/**
+ * Action to remove a Bucket from state after it has been
+ * deleted form the server.
+ * @param index
+ * @returns {{type, index: *}}
+ */
 export const deleteBucket = index => {
   return {
     type: BucketActionTypes.BUCKET_DELETE,
@@ -20,6 +31,12 @@ export const deleteBucket = index => {
   }
 };
 
+/**
+ * Action to add a newly created Bucket to state after it has been
+ * saved in the database.
+ * @param bucket Bucket
+ * @returns {{type, name, createdAt: *, modifiedAt: *, id}}
+ */
 export const createBucket = bucket => {
   return {
     type: BucketActionTypes.BUCKET_CREATION,
@@ -30,11 +47,38 @@ export const createBucket = bucket => {
   }
 };
 
-export const searchBucket = data => {
+/**
+ * Get the Buckets a user has searched for and store them in the data
+ * parameter. Also add the name of the Bucket as the search query
+ * in state and set the isSearch to true to indicate that a
+ * user is currently searching for a bucket.
+ * @param data Buckets returned from the API
+ * @param query Search query
+ * @param isSearch Search mode Boolean
+ * @returns {{type, data: *, isSearch: *, query: *, isFetching: boolean}}
+ */
+export const searchBucket = (data, query, isSearch) => {
   return {
     type: BucketActionTypes.BUCKET_SEARCH,
     data: data,
+    isSearch: isSearch,
+    query: query,
     isFetching: false
+  }
+};
+
+/**
+ * This action clears the search query in state and also sets the
+ * isSearch variable to false. So that when a page loads
+ * initially or refreshed the search values/buckets
+ * are not fetched but rather all the buckets.
+ * @returns {{type, isSearch: boolean, query: string}}
+ */
+export const clearSearchMode = () => {
+  return {
+    type: BucketActionTypes.BUCKET_SEARCH_CLEAR,
+    isSearch: false,
+    query: '',
   }
 };
 
@@ -44,9 +88,10 @@ export const searchBucket = data => {
  * the URL is got from local storage through the state and the page is populated.
  * @param url Bucket Url
  * @param isAuthenticated Boolean
+ * @param isSearchMode Boolean to check if a Bucket is being searched for or not
  * @returns {function(*)}
  */
-export const getBuckets = (url, isAuthenticated) => {
+export const getBuckets = (url, isAuthenticated, isSearchMode) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
 
@@ -66,8 +111,11 @@ export const getBuckets = (url, isAuthenticated) => {
     return axios(config)
         .then(response => response.data)
         .then(data => {
-          localStorage.setItem(LOCAL_BUCKET_URL, url);
-          dispatch(receiveBuckets(data))
+          dispatch(receiveBuckets(data));
+          if (!isSearchMode) {
+            localStorage.setItem(LOCAL_BUCKET_URL, url);
+            dispatch(clearSearchMode())
+          }
         })
         .catch(error => console.log(error))
   }
@@ -170,7 +218,7 @@ export const searchForBucket = (name, isAuthenticated) => {
     return axios(config)
         .then(response => response.data)
         .then(data => {
-          dispatch(searchBucket(data))
+          dispatch(searchBucket(data, name, true))
         })
         .catch(error => console.log(error))
   }
