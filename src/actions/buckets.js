@@ -40,6 +40,8 @@ export const searchBucket = data => {
 
 /**
  * Make an Http request to fetch the user Buckets from the API.
+ * Save the current URL in local storage so that when the page is refreshed
+ * the URL is got from local storage through the state and the page is populated.
  * @param url Bucket Url
  * @param isAuthenticated Boolean
  * @returns {function(*)}
@@ -105,6 +107,14 @@ export const deleteBucketFromServer = (id, index, isAuthenticated) => {
   }
 };
 
+/**
+ * Create a Bucket on the server using the name provided in the UI.
+ * Then update the state with the Bucket information returned by
+ * the API
+ * @param name
+ * @param isAuthenticated
+ * @returns {function(*)}
+ */
 export const createBucketOnServer = (name, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
@@ -113,7 +123,7 @@ export const createBucketOnServer = (name, isAuthenticated) => {
     if (token) {
       config = {
         method: 'POST',
-        url: "http://kbucket-api.herokuapp.com/bucketlists/",
+        url: BUCKETLIST_POST_URL,
         data: {name: name},
         headers: {
           'Authorization': `Bearer ${token}`,
