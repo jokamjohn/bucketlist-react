@@ -19,7 +19,6 @@ class Pagination extends React.Component {
   };
 
   onChangeUrl = url => {
-    this.props.dispatch(changeBucketUrl(url));
     this.props.dispatch(getBuckets(url, this.props.isAuthenticated))
   };
 

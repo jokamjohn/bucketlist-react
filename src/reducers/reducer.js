@@ -106,12 +106,6 @@ export default function (state = initialState, action) {
         }
       };
 
-    case BucketActionTypes.BUCKET_CHANGE_URL:
-      return {
-        ...state,
-        bucketUrl: action.url
-      };
-
     case BucketActionTypes.BUCKET_DELETE:
       return {
         ...state,
@@ -138,6 +132,18 @@ export default function (state = initialState, action) {
               id: action.id
             }
           ]
+        }
+      };
+
+    case BucketActionTypes.BUCKET_SEARCH:
+      return {
+        ...state,
+        isFetching: false,
+        buckets: {
+          buckets: action.data.buckets,
+          count: action.data.count,
+          next: action.data.next,
+          previous: action.data.previous
         }
       };
 

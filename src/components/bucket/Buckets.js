@@ -6,6 +6,7 @@ import {getBuckets} from "../../actions/buckets";
 import {formatDate, parseISOString} from "../../utilities/Utils";
 import Pagination from "../pagination/Pagination";
 import CreateBucket from "./CreateBucket";
+import BucketSearch from "./BucketSearch";
 
 class Buckets extends React.Component {
 
@@ -26,22 +27,12 @@ class Buckets extends React.Component {
 
           <Breadcrumb/>
 
-          {/*Create Bucket */}
           <div className="row">
-
             <CreateBucket dispatch={this.props.dispatch} isAuthenticated={this.props.isAuthenticated}/>
 
-            {/*Search for a Bucket*/}
-            <div className="col-sm-5 mx-sm-auto">
-              <form className="form-inline">
-                <div className="form-group">
-                  <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineSearchFormInput"
-                         placeholder="Search" required/>
-                  <input type="submit" className="btn btn-secondary" value="Search"/>
-                </div>
-              </form>
-            </div>
+            <BucketSearch dispatch={this.props.dispatch} isAuthenticated={this.props.isAuthenticated}/>
           </div>
+
           <hr></hr>
 
           {this.props.buckets

@@ -1,5 +1,8 @@
 import * as BucketActionTypes from '../actiontypes/bucket';
-import {AUTH_TOKEN, BUCKETLIST_POST_URL, BUCKETLIST_URL, LOCAL_BUCKET_URL, RESPONSE_OK} from "../utilities/Constants";
+import {
+  AUTH_TOKEN, BUCKETLIST_POST_URL, BUCKETLIST_SEARCH_URL, BUCKETLIST_URL, LOCAL_BUCKET_URL,
+  RESPONSE_OK
+} from "../utilities/Constants";
 import axios from 'axios';
 
 export const receiveBuckets = data => {
@@ -7,13 +10,6 @@ export const receiveBuckets = data => {
     type: BucketActionTypes.BUCKET_SUCCESS,
     data: data,
     isFetching: false
-  }
-};
-
-export const changeBucketUrl = url => {
-  return {
-    type: BucketActionTypes.BUCKET_CHANGE_URL,
-    url: url
   }
 };
 
@@ -31,6 +27,14 @@ export const createBucket = bucket => {
     createdAt: bucket.createdAt,
     modifiedAt: bucket.modifiedAt,
     id: bucket.id
+  }
+};
+
+export const searchBucket = data => {
+  return {
+    type: BucketActionTypes.BUCKET_SEARCH,
+    data: data,
+    isFetching: false
   }
 };
 
@@ -121,14 +125,43 @@ export const createBucketOnServer = (name, isAuthenticated) => {
     }
   }
 
-  console.log('config ', config)
-
   return dispatch => {
     return axios(config)
         .then(response => {
-          console.log('response ', response.data);
           dispatch(createBucket(response.data))
         })
         .catch(error => console.log(error.response))
+  }
+};
+
+/**
+ * Search for a Bucket(s) using its name.
+ * @param name Bucket Name
+ * @param isAuthenticated User is signed in/not
+ * @returns {function(*)}
+ */
+export const searchForBucket = (name, isAuthenticated) => {
+  const token = localStorage.getItem(AUTH_TOKEN) || null;
+  let config = {};
+
+  if (isAuthenticated) {
+    if (token) {
+      config = {
+        method: 'GET',
+        url: BUCKETLIST_SEARCH_URL + name,
+        headers: {'Authorization': `Bearer ${token}`}
+      };
+    } else {
+      throw "No token saved!!!"
+    }
+  }
+
+  return dispatch => {
+    return axios(config)
+        .then(response => response.data)
+        .then(data => {
+          dispatch(searchBucket(data))
+        })
+        .catch(error => console.log(error))
   }
 };

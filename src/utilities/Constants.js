@@ -7,6 +7,7 @@ export const USER_EMAIL = "user_email";
 export const LOCAL_BUCKET_URL = "bucket_url";
 
 export const BUCKETLIST_URL = BASE_URL + "bucketlists/";
+export const BUCKETLIST_SEARCH_URL = BASE_URL + "bucketlists/?q=";
 export const BUCKETLIST_POST_URL = BASE_URL + "bucketlists";
 export const NUMBER_OF_ITEMS_PER_PAGE_FROM_API = 4;
 
