@@ -15,7 +15,6 @@ class Login extends React.Component {
 
   render() {
     if (this.props.isAuthenticated) {
-      console.log('authenticated')
       this.props.history.push("buckets");
     }
 

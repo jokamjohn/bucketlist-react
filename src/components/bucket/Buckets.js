@@ -46,7 +46,9 @@ class Buckets extends React.Component {
                 )}
               </div>
               :
-              ''
+              <div className="row">
+                <p>Looks like you do not have Buckets yet!</p>
+              </div>
           }
           <Pagination count={count} next={next} previous={previous} bucketUrl={bucketUrl} dispatch={dispatch}
                       isAuthenticated={isAuth} isSearch={isSearch} query={query}/>

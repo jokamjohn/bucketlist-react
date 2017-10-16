@@ -166,7 +166,20 @@ export default function (state = initialState, action) {
             query: action.query
           }
         }
+      };
 
+    case BucketActionTypes.BUCKET_EDIT:
+      return {
+        ...state,
+        isFetching: false,
+        buckets: {
+          ...state.buckets,
+          buckets: state.buckets.buckets.map((bucket, index) => index === action.index ? {
+            ...bucket,
+            name: action.name,
+            modifiedAt: action.modifiedAt
+          } : bucket)
+        }
       };
 
     default:

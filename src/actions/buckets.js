@@ -82,6 +82,17 @@ export const clearSearchMode = () => {
   }
 };
 
+export const editBucket = (bucket, index) => {
+  return {
+    type: BucketActionTypes.BUCKET_EDIT,
+    id: bucket.id,
+    name: bucket.name,
+    createdAt: bucket.createdAt,
+    modifiedAt: bucket.modifiedAt,
+    index: index
+  }
+};
+
 /**
  * Make an Http request to fetch the user Buckets from the API.
  * Save the current URL in local storage so that when the page is refreshed
@@ -220,6 +231,34 @@ export const searchForBucket = (name, isAuthenticated) => {
         .then(data => {
           dispatch(searchBucket(data, name, true))
         })
+        .catch(error => console.log(error))
+  }
+};
+
+export const editBucketOnServer = (name, id, index, isAuthenticated) => {
+  const token = localStorage.getItem(AUTH_TOKEN) || null;
+  let config = {};
+
+  if (isAuthenticated) {
+    if (token) {
+      config = {
+        method: 'PUT',
+        url: BUCKETLIST_URL + id,
+        data: {name: name},
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "content-type": "application/json"
+        }
+      };
+    } else {
+      throw "No token saved!!!"
+    }
+  }
+
+  return dispatch => {
+    return axios(config)
+        .then(response => response.data)
+        .then(data => dispatch(editBucket(data, index)))
         .catch(error => console.log(error))
   }
 };
