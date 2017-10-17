@@ -10,7 +10,6 @@ import Footer from '../components/Footer'
 import Buckets from '../components/bucket/Buckets'
 import Items from '../components/items/Items'
 import NotFound from '../components/NotFound'
-import Pagination from "../components/pagination/Pagination";
 
 class Application extends React.Component {
 

@@ -4,6 +4,7 @@ import {
   RESPONSE_OK
 } from "../utilities/Constants";
 import axios from 'axios';
+import {logoutUser} from "./logout";
 
 /**
  * Action to add the user Buckets to state.
@@ -82,6 +83,12 @@ export const clearSearchMode = () => {
   }
 };
 
+/**
+ * This action provides the Bucket updated attributes.
+ * @param bucket Bucket
+ * @param index Index of the Bucket
+ * @returns {{type, id, name, createdAt: *, modifiedAt: *, index: *}}
+ */
 export const editBucket = (bucket, index) => {
   return {
     type: BucketActionTypes.BUCKET_EDIT,
@@ -128,7 +135,9 @@ export const getBuckets = (url, isAuthenticated, isSearchMode) => {
             dispatch(clearSearchMode())
           }
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          logoutOnTokenExpired(dispatch, error);
+        })
   }
 };
 
@@ -162,7 +171,7 @@ export const deleteBucketFromServer = (id, index, isAuthenticated) => {
             dispatch(deleteBucket(index))
           }
         })
-        .catch(error => console.log(error))
+        .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };
 
@@ -170,8 +179,8 @@ export const deleteBucketFromServer = (id, index, isAuthenticated) => {
  * Create a Bucket on the server using the name provided in the UI.
  * Then update the state with the Bucket information returned by
  * the API
- * @param name
- * @param isAuthenticated
+ * @param name Bucket Name
+ * @param isAuthenticated User is signed in/not
  * @returns {function(*)}
  */
 export const createBucketOnServer = (name, isAuthenticated) => {
@@ -199,7 +208,7 @@ export const createBucketOnServer = (name, isAuthenticated) => {
         .then(response => {
           dispatch(createBucket(response.data))
         })
-        .catch(error => console.log(error.response))
+        .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };
 
@@ -231,10 +240,19 @@ export const searchForBucket = (name, isAuthenticated) => {
         .then(data => {
           dispatch(searchBucket(data, name, true))
         })
-        .catch(error => console.log(error))
+        .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };
 
+/**
+ * Function to Edit the Bucket name and save the changes to both
+ * the server and state.
+ * @param name Bucket Name
+ * @param id Bucket Id
+ * @param index Bucket Index in the Buckets state array
+ * @param isAuthenticated Boolean to determine whether s user is signed in/not.
+ * @returns {function(*=)}
+ */
 export const editBucketOnServer = (name, id, index, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
@@ -259,6 +277,19 @@ export const editBucketOnServer = (name, id, index, isAuthenticated) => {
     return axios(config)
         .then(response => response.data)
         .then(data => dispatch(editBucket(data, index)))
-        .catch(error => console.log(error))
+        .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };
+
+/**
+ * Function to logout a user/delete local storage variables when a 401 error occurs
+ * @param dispatch
+ * @param error Http Error
+ */
+function logoutOnTokenExpired(dispatch, error) {
+  if (error.response) {
+    if (error.response.status === 401) {
+      dispatch(logoutUser())
+    }
+  }
+}

@@ -2,6 +2,10 @@ import * as LogoutActionTypes from '../actiontypes/logout';
 import {AUTH_TOKEN, LOCAL_BUCKET_URL, LOGOUT_URL, USER_EMAIL} from "../utilities/Constants";
 import axios from 'axios';
 
+/**
+ * Action to change state during a user Login request
+ * @returns {{type, isFetching: boolean, isAuthenticated: boolean}}
+ */
 export const requestLogout = () => {
   return {
     type: LogoutActionTypes.LOGOUT_REQUEST,
@@ -10,6 +14,11 @@ export const requestLogout = () => {
   }
 };
 
+/**
+ * Action to change state when a user signs In successfully.
+ * @param message Login success message
+ * @returns {{type, isFetching: boolean, isAuthenticated: boolean, message: *}}
+ */
 export const receiveLogout = (message) => {
   return {
     type: LogoutActionTypes.LOGOUT_SUCCESS,
@@ -19,6 +28,12 @@ export const receiveLogout = (message) => {
   }
 };
 
+/**
+ * Action to change state when a user encounters an error when they are trying to
+ * login the application.
+ * @param message
+ * @returns {{type, isFetching: boolean, isAuthenticated: boolean, message: *}}
+ */
 export const logoutError = (message) => {
   return {
     type: LogoutActionTypes.LOGOUT_FAILURE,
@@ -28,6 +43,20 @@ export const logoutError = (message) => {
   }
 };
 
+/**
+ * Function to clear the Local storage.
+ */
+function clearLocalStorage() {
+  localStorage.removeItem(AUTH_TOKEN);
+  localStorage.removeItem(USER_EMAIL);
+  localStorage.removeItem(LOCAL_BUCKET_URL);
+}
+
+/**
+ * Function to log out a user from the application.
+ * Also clear local storage.
+ * @returns {function(*)}
+ */
 export const logoutUser = () => {
   const token = localStorage.getItem(AUTH_TOKEN);
   const config = {
@@ -40,20 +69,17 @@ export const logoutUser = () => {
     dispatch(requestLogout());
     return axios(config)
         .then(response => {
-          console.log('response ', response);
           return response.data
         })
         .then(info => {
           dispatch(receiveLogout(info.message));
-          localStorage.removeItem(AUTH_TOKEN);
-          localStorage.removeItem(USER_EMAIL);
-          localStorage.removeItem(LOCAL_BUCKET_URL);
+          clearLocalStorage();
         })
         .catch(error => {
+          clearLocalStorage();
           if (error.response) {
             dispatch(logoutError(error.response.message))
           }
         })
   }
-
 };

@@ -7,6 +7,7 @@ import {formatDate} from "../../utilities/Utils";
 import Pagination from "../pagination/Pagination";
 import CreateBucket from "./CreateBucket";
 import BucketSearch from "./BucketSearch";
+import {withRouter} from 'react-router-dom';
 
 class Buckets extends React.Component {
 
@@ -23,6 +24,10 @@ class Buckets extends React.Component {
     const bucketUrl = this.props.bucketUrl;
     const isSearch = this.props.buckets.search.isSearch;
     const query = this.props.buckets.search.query;
+
+    if (!this.props.isAuthenticated) {
+      this.props.history.push("login");
+    }
 
     return (
         <div className="container main-content">
@@ -67,4 +72,4 @@ Buckets.propTypes = {
 };
 
 
-export default Buckets
+export default withRouter(Buckets)
