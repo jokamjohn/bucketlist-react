@@ -6,18 +6,19 @@ import thunk from 'redux-thunk';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.css'
 import './css/index.css'
+import 'bootstrap/dist/js/bootstrap.min'
 import './containers/Application'
 import Application from './containers/Application'
-import AuthReducer from './reducers/auth'
+import reducer from './reducers/reducer';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 
-const store = createStore(AuthReducer, enhancer);
+const store = createStore(reducer, enhancer);
 
 ReactDOM.render(
     <Provider store={store}>
-        <Application/>
+      <Application/>
     </Provider>,
     document.getElementById('root')
 );

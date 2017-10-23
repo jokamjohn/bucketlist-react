@@ -1,42 +1,75 @@
 import React from 'react'
 import Breadcrumb from './Breadcrumb'
 import Bucket from './Bucket'
+import PropTypes from 'prop-types';
+import {getBuckets} from "../../actions/buckets";
+import {formatDate} from "../../utilities/Utils";
+import Pagination from "../pagination/Pagination";
+import CreateBucket from "./CreateBucket";
+import BucketSearch from "./BucketSearch";
+import {withRouter} from 'react-router-dom';
 
-const Buckets = () =>
-  <div className="container main-content">
+class Buckets extends React.Component {
 
-    <Breadcrumb/>
+  componentDidMount() {
+    this.props.dispatch(getBuckets(this.props.bucketUrl, this.props.isAuthenticated, this.props.buckets.search.isSearch))
+  }
 
-    {/*Create Bucket */}
-    <div className="row">
-      <div className="col-sm-5 mx-sm-auto">
-        <form className="form-inline">
-          <div className="form-group">
-            <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineCreateBucketFormInput"
-                   placeholder="Travel" required/>
-            <input type="submit" className="btn btn-primary" value="Create Bucket"/>
+  render() {
+    const count = this.props.buckets.count;
+    const next = this.props.buckets.next;
+    const previous = this.props.buckets.previous;
+    const isAuth = this.props.isAuthenticated;
+    const dispatch = this.props.dispatch;
+    const bucketUrl = this.props.bucketUrl;
+    const isSearch = this.props.buckets.search.isSearch;
+    const query = this.props.buckets.search.query;
+
+    if (!this.props.isAuthenticated) {
+      this.props.history.push("login");
+    }
+
+    return (
+        <div className="container main-content">
+
+          <Breadcrumb/>
+
+          <div className="row">
+            <CreateBucket dispatch={this.props.dispatch} isAuthenticated={this.props.isAuthenticated}/>
+
+            <BucketSearch dispatch={this.props.dispatch} isAuthenticated={this.props.isAuthenticated}/>
           </div>
-        </form>
-      </div>
 
-      {/*Search for a Bucket*/}
-      <div className="col-sm-5 mx-sm-auto">
-        <form className="form-inline">
-          <div className="form-group">
-            <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineSearchFormInput"
-                   placeholder="Search" required/>
-            <input type="submit" className="btn btn-secondary" value="Search"/>
-          </div>
-        </form>
-      </div>
-    </div>
-    <hr></hr>
+          <hr></hr>
 
-    <div className="row">
-      <Bucket name="Travel" createdAt="Monday 23, 2017" modifiedAt="Tuesday 30, 2017"/>
-      <Bucket name="Dancing" createdAt="Monday 24, 2017" modifiedAt="Tuesday 31, 2017"/>
-      <Bucket name="Touring" createdAt="Monday 25, 2017" modifiedAt="Tuesday 1, 2017"/>
-    </div>
-  </div>
+          {this.props.buckets
+              ?
+              <div className="row">
+                {this.props.buckets.buckets.map((bucket, index) =>
+                    <Bucket key={bucket.id} index={index} id={bucket.id} name={bucket.name} dispatch={dispatch}
+                            isAuthenticated={isAuth} modifiedAt={formatDate(bucket.modifiedAt)}/>
+                )}
+              </div>
+              :
+              <div className="row">
+                <p>Looks like you do not have Buckets yet!</p>
+              </div>
+          }
+          <Pagination count={count} next={next} previous={previous} bucketUrl={bucketUrl} dispatch={dispatch}
+                      isAuthenticated={isAuth} isSearch={isSearch} query={query}/>
+        </div>
+    );
+  }
+}
 
-export default Buckets
+Buckets.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+  buckets: PropTypes.object,
+  bucketUrl: PropTypes.string,
+  isSearch: PropTypes.bool,
+  query: PropTypes.string,
+};
+
+
+export default withRouter(Buckets)

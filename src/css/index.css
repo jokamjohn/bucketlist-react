@@ -8,4 +8,10 @@
 
 .bucket-card {
     width: 20rem;
+    margin-bottom: 10px;
 }
+
+.bucket-links {
+    margin-right: 10px;
+}
+

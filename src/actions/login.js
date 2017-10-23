@@ -8,12 +8,12 @@ import axios from 'axios';
  * @returns {{type, isAuthenticated: boolean, isFetching: boolean, credentials: *}}
  */
 export const requestLogin = credentials => {
-    return {
-        type: LoginActionTypes.LOGIN_REQUEST,
-        isAuthenticated: false,
-        isFetching: true,
-        credentials
-    }
+  return {
+    type: LoginActionTypes.LOGIN_REQUEST,
+    isAuthenticated: false,
+    isFetching: true,
+    credentials
+  }
 };
 
 /**
@@ -22,12 +22,12 @@ export const requestLogin = credentials => {
  * @returns {{type, isAuthenticated: boolean, isFetching: boolean, idToken: *}}
  */
 export const receiveLogin = user => {
-    return {
-        type: LoginActionTypes.LOGIN_SUCCESS,
-        isAuthenticated: true,
-        isFetching: false,
-        idToken: user.auth_token
-    }
+  return {
+    type: LoginActionTypes.LOGIN_SUCCESS,
+    isAuthenticated: true,
+    isFetching: false,
+    idToken: user.auth_token
+  }
 };
 
 /**
@@ -36,12 +36,12 @@ export const receiveLogin = user => {
  * @returns {{type, isAuthenticated: boolean, isFetching: boolean, message: *}}
  */
 export const loginError = message => {
-    return {
-        type: LoginActionTypes.LOGIN_FAILURE,
-        isAuthenticated: false,
-        isFetching: false,
-        message
-    }
+  return {
+    type: LoginActionTypes.LOGIN_FAILURE,
+    isAuthenticated: false,
+    isFetching: false,
+    message
+  }
 };
 
 /**
@@ -51,34 +51,34 @@ export const loginError = message => {
  * @returns {function(*)}
  */
 export const loginUser = credentials => {
-    const config = {
-        method: 'POST',
-        url: LOGIN_URL,
-        headers: {'content-type': 'application/json'},
-        data: {
-            email: `${credentials.email}`, password: `${credentials.password}`
-        }
-    };
-
-    return dispatch => {
-        dispatch(requestLogin(credentials));
-        return axios(config)
-            .then(response => {
-                if (response.status !== 200) {
-                    dispatch(loginError('Failed, try again'))
-                }
-                return response.data
-            })
-            .then(user => {
-                localStorage.setItem(AUTH_TOKEN, user.auth_token);
-                localStorage.setItem(USER_EMAIL, credentials.email);
-                dispatch(receiveLogin(user));
-            })
-            .catch(error => {
-                if (error.response) {
-                    dispatch(loginError(error.response.data.message))
-                }
-            })
+  const config = {
+    method: 'POST',
+    url: LOGIN_URL,
+    headers: {'content-type': 'application/json'},
+    data: {
+      email: `${credentials.email}`, password: `${credentials.password}`
     }
+  };
+
+  return dispatch => {
+    dispatch(requestLogin(credentials));
+    return axios(config)
+        .then(response => {
+          if (response.status !== 200) {
+            dispatch(loginError('Failed, try again'))
+          }
+          return response.data
+        })
+        .then(user => {
+          localStorage.setItem(AUTH_TOKEN, user.auth_token);
+          localStorage.setItem(USER_EMAIL, credentials.email);
+          dispatch(receiveLogin(user));
+        })
+        .catch(error => {
+          if (error.response) {
+            dispatch(loginError(error.response.data.message))
+          }
+        })
+  }
 };
 

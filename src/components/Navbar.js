@@ -51,7 +51,7 @@ class Navbar extends React.Component {
 }
 
 Navbar.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
 };
 
