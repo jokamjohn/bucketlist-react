@@ -16,7 +16,7 @@ const Item = props =>
 
 Item.propTypes = {
   name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   modifiedAt: PropTypes.string.isRequired
 };
 

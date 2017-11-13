@@ -1,11 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import {withRouter} from 'react-router-dom';
+import {createItem} from "../../actions/items";
 
 class AddItemModal extends React.Component {
 
-  onSubmit = () => {
-
-    console.log('name ', this.name.value)
-    console.log('description ', this.description.value)
+  onSubmit = (event) => {
+    event.preventDefault();
+    const name = this.name.value;
+    const description = this.description.value;
+    const authenticated = this.props.isAuthenticated;
+    let bucketId = this.props.bucketId;
+    this.props.dispatch(createItem(bucketId, name, description, authenticated,
+        () => window.location.reload()))
   };
 
   render() {
@@ -43,5 +50,11 @@ class AddItemModal extends React.Component {
   }
 }
 
+AddItemModal.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  bucketId: PropTypes.string.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+};
 
-export default AddItemModal
+
+export default withRouter(AddItemModal)

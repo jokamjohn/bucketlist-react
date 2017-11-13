@@ -31,6 +31,8 @@ class Items extends React.Component {
 
   render() {
     const items = this.props.items.items;
+    const bucketId = this.props.match.params.bucketId;
+    const isAuth = this.props.isAuthenticated;
     return (
         <div className="container main-content">
           <Breadcrumb/>
@@ -52,7 +54,7 @@ class Items extends React.Component {
                 <EmptyBucketMessage/>
               </div>
           }
-          <AddItemModal/>
+          <AddItemModal bucketId={bucketId} isAuthenticated={isAuth} dispatch={this.props.dispatch}/>
         </div>
     );
   }
