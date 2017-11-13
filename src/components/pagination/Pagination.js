@@ -40,7 +40,6 @@ Pagination.propTypes = {
   previous: PropTypes.string,
   isAuthenticated: PropTypes.bool,
   dispatch: PropTypes.func,
-  bucketUrl: PropTypes.string,
   onChangeUrl: PropTypes.func.isRequired,
 };
 

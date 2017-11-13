@@ -24,6 +24,12 @@ class Buckets extends React.Component {
     this.props.dispatch(getBuckets(url, this.props.isAuthenticated, this.props.isSearch))
   };
 
+  /**
+   * This function constructs an appropriate url to attach to the paginator.
+   * The url changes and includes the search query if the search results
+   * require pagination
+   * @returns {string}
+   */
   paginationUrl = () => {
     let url = BASE_URL + "bucketlists/?page=";
     if (this.props.isSearch && this.props.query) {
@@ -38,7 +44,6 @@ class Buckets extends React.Component {
     const previous = this.props.buckets.previous;
     const isAuth = this.props.isAuthenticated;
     const dispatch = this.props.dispatch;
-    const bucketUrl = this.props.bucketUrl;
 
     if (!this.props.isAuthenticated) {
       this.props.history.push("login");
@@ -70,8 +75,8 @@ class Buckets extends React.Component {
                 <p>Looks like you do not have Buckets yet!</p>
               </div>
           }
-          <Pagination count={count} next={next} previous={previous} bucketUrl={bucketUrl} dispatch={dispatch}
-                      isAuthenticated={isAuth}  onChangeUrl={this.onChangeUrl} paginationUrl={this.paginationUrl}/>
+          <Pagination count={count} next={next} previous={previous} dispatch={dispatch}
+                      isAuthenticated={isAuth} onChangeUrl={this.onChangeUrl} paginationUrl={this.paginationUrl}/>
         </div>
     );
   }
