@@ -8,12 +8,29 @@ import Pagination from "../pagination/Pagination";
 import CreateBucket from "./CreateBucket";
 import BucketSearch from "./BucketSearch";
 import {withRouter} from 'react-router-dom';
+import {BASE_URL} from "../../utilities/Constants";
 
 class Buckets extends React.Component {
 
   componentDidMount() {
     this.props.dispatch(getBuckets(this.props.bucketUrl, this.props.isAuthenticated, this.props.buckets.search.isSearch))
   }
+
+  /**
+   * Fetch the Buckets at the provided URL when a pagination number is clicked.
+   * @param url Buckets URL
+   */
+  onChangeUrl = url => {
+    this.props.dispatch(getBuckets(url, this.props.isAuthenticated, this.props.isSearch))
+  };
+
+  paginationUrl = () => {
+    let url = BASE_URL + "bucketlists/?page=";
+    if (this.props.isSearch && this.props.query) {
+      url = BASE_URL + `bucketlists/?q=${this.props.query}&page=`;
+    }
+    return url
+  };
 
   render() {
     const count = this.props.buckets.count;
@@ -22,8 +39,6 @@ class Buckets extends React.Component {
     const isAuth = this.props.isAuthenticated;
     const dispatch = this.props.dispatch;
     const bucketUrl = this.props.bucketUrl;
-    const isSearch = this.props.buckets.search.isSearch;
-    const query = this.props.buckets.search.query;
 
     if (!this.props.isAuthenticated) {
       this.props.history.push("login");
@@ -56,7 +71,7 @@ class Buckets extends React.Component {
               </div>
           }
           <Pagination count={count} next={next} previous={previous} bucketUrl={bucketUrl} dispatch={dispatch}
-                      isAuthenticated={isAuth} isSearch={isSearch} query={query}/>
+                      isAuthenticated={isAuth}  onChangeUrl={this.onChangeUrl} paginationUrl={this.paginationUrl}/>
         </div>
     );
   }

@@ -68,6 +68,15 @@ export const getItems = (bucketId, url, isAuthenticated, isSearchMode) => {
   }
 };
 
+/**
+ * Add an item to a Bucket.
+ * @param bucketId Bucket Id
+ * @param name Item name
+ * @param description Item Description
+ * @param isAuthenticated
+ * @param callback Function to refresh the items page after successful addition of the item.
+ * @returns {function(*=)}
+ */
 export const createItem = (bucketId, name, description = null, isAuthenticated, callback) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
