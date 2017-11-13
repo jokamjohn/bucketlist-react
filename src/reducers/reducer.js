@@ -3,6 +3,7 @@ import * as LogoutActionTypes from '../actiontypes/logout';
 import * as RegisterActionTypes from '../actiontypes/register';
 import {AUTH_TOKEN, BUCKETLIST_URL, LOCAL_BUCKET_URL} from "../utilities/Constants";
 import * as BucketActionTypes from "../actiontypes/bucket";
+import * as ItemActionTypes from '../actiontypes/items';
 
 const initialState = {
   isFetching: false,
@@ -12,6 +13,12 @@ const initialState = {
     buckets: [],
     search: {
       isSearch: false
+    }
+  },
+  items: {
+    items: [],
+    search: {
+      isItemSearch: false
     }
   }
 };
@@ -179,6 +186,19 @@ export default function (state = initialState, action) {
             name: action.name,
             modifiedAt: action.modifiedAt
           } : bucket)
+        }
+      };
+
+    case ItemActionTypes.ITEMS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        items: {
+          ...state.items,
+          items: action.items,
+          count: action.count,
+          next: action.next,
+          previous: action.previous
         }
       };
 

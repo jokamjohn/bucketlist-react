@@ -53,6 +53,8 @@ export const createBucket = bucket => {
  * parameter. Also add the name of the Bucket as the search query
  * in state and set the isSearch to true to indicate that a
  * user is currently searching for a bucket.
+ * The isSearch is used in the Pagination component to construct
+ * the urls.
  * @param data Buckets returned from the API
  * @param query Search query
  * @param isSearch Search mode Boolean
@@ -286,7 +288,7 @@ export const editBucketOnServer = (name, id, index, isAuthenticated) => {
  * @param dispatch
  * @param error Http Error
  */
-function logoutOnTokenExpired(dispatch, error) {
+export function logoutOnTokenExpired(dispatch, error) {
   if (error.response) {
     if (error.response.status === 401) {
       dispatch(logoutUser())

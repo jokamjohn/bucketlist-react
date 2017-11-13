@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {getBuckets} from "../../actions/buckets";
 
 /**
  * This component holds the pagination directions (<< >>);
