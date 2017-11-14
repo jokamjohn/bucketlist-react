@@ -3,6 +3,7 @@ import {AUTH_TOKEN, BUCKETLIST_URL} from "../utilities/Constants";
 import axios from "axios";
 import {logoutOnTokenExpired} from "./buckets";
 import {logoutUser} from "./logout";
+import {TokenException} from "../utilities/Utils";
 
 /**
  * Action to hold the data successfully returned from the Bucket-Items API
@@ -75,7 +76,7 @@ export const getItems = (bucketId, url, isAuthenticated, isSearchMode) => {
         headers: {'Authorization': `Bearer ${token}`}
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -122,7 +123,7 @@ export const createItem = (bucketId, name, description = null, isAuthenticated, 
         }
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -158,7 +159,7 @@ export const deleteItem = (bucketId, itemId, itemIndex, isAuthenticated) => {
       headers: {'Authorization': `Bearer ${token}`}
     };
   } else {
-    throw "No token saved!!!"
+    throw new TokenException()
   }
 
   return dispatch => {
@@ -200,7 +201,7 @@ export const editItem = (bucketId, itemId, itemIndex, name, description = null, 
       }
     };
   } else {
-    throw "No token saved!!!"
+    throw new TokenException()
   }
 
   return dispatch => {

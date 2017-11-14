@@ -8,11 +8,11 @@ import PropTypes from 'prop-types';
  */
 const Direction = props => (
     <li className={props.action ? "page-item" : "page-item disabled"}>
-      <a className="page-link" href="#" aria-label="Previous">
+      <label className="page-link" aria-label="Previous">
         <span aria-hidden="true"
               onClick={() => props.onChangeUrl(props.action)}>{props.direction}</span>
         <span className="sr-only">{props.sr}</span>
-      </a>
+      </label>
     </li>
 );
 

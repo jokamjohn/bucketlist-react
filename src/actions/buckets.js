@@ -5,6 +5,7 @@ import {
 } from "../utilities/Constants";
 import axios from 'axios';
 import {logoutUser} from "./logout";
+import {TokenException} from "../utilities/Utils";
 
 /**
  * Action to add the user Buckets to state.
@@ -123,7 +124,7 @@ export const getBuckets = (url, isAuthenticated, isSearchMode) => {
         headers: {'Authorization': `Bearer ${token}`}
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -162,7 +163,7 @@ export const deleteBucketFromServer = (id, index, isAuthenticated) => {
         headers: {'Authorization': `Bearer ${token}`}
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -201,7 +202,7 @@ export const createBucketOnServer = (name, isAuthenticated) => {
         }
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -232,7 +233,7 @@ export const searchForBucket = (name, isAuthenticated) => {
         headers: {'Authorization': `Bearer ${token}`}
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -271,7 +272,7 @@ export const editBucketOnServer = (name, id, index, isAuthenticated) => {
         }
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 

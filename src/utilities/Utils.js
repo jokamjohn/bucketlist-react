@@ -8,3 +8,15 @@ import moment from 'moment';
 export const formatDate = date => {
   return moment(date).from(moment());
 };
+
+/**
+ * TokenException function.
+ * @constructor
+ */
+export function TokenException() {
+  this.name = "Token missing or invalid";
+  this.message = "The authentication token is either missing or invalid"
+  this.toString = function () {
+    return this.name + this.message
+  }
+}
