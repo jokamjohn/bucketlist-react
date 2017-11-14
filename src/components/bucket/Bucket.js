@@ -39,13 +39,15 @@ class Bucket extends React.Component {
                 <small>Last Modified: {this.props.modifiedAt}</small>
               </p>
               {this.state.isEditing ?
-                  <a href="#" className="btn btn-primary bucket-links" onClick={this.onSaving}>Save</a>
+                  <button className="btn btn-primary bucket-links" onClick={this.onSaving}>Save</button>
                   :
-                  <a href="#" className="btn btn-primary bucket-links" onClick={this.onEditing}>Edit</a>
+                  <button className="btn btn-primary bucket-links" onClick={this.onEditing}>Edit</button>
               }
-              <a href="#" className="btn btn-danger"
-                 onClick={() => this.props.dispatch(deleteBucketFromServer(this.props.id, this.props.index,
-                     this.props.isAuthenticated))}>Delete</a>
+              <button className="btn btn-danger"
+                      onClick={() => this.props.dispatch(deleteBucketFromServer(this.props.id, this.props.index,
+                          this.props.isAuthenticated))}>
+                Delete
+              </button>
 
             </div>
           </div>
