@@ -202,6 +202,19 @@ export default function (state = initialState, action) {
         }
       };
 
+    case ItemActionTypes.ITEMS_DELETION:
+      return {
+        ...state,
+        isFetching: false,
+        items: {
+          ...state.items,
+          items: [
+            ...state.items.items.slice(0, action.itemIndex),
+            ...state.items.items.slice(action.itemIndex + 1)
+          ]
+        }
+      };
+
     default:
       return state;
   }

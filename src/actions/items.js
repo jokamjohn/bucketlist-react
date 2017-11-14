@@ -2,6 +2,7 @@ import * as ItemActionTypes from '../actiontypes/items';
 import {AUTH_TOKEN, BUCKETLIST_URL} from "../utilities/Constants";
 import axios from "axios";
 import {logoutOnTokenExpired} from "./buckets";
+import {logoutUser} from "./logout";
 
 /**
  * Action to hold the data successfully returned from the Bucket-Items API
@@ -17,6 +18,13 @@ export const receiveItems = (bucketId, data) => {
     count: data.count,
     next: data.next,
     previous: data.previous
+  }
+};
+
+export const removeItem = itemIndex => {
+  return {
+    type: ItemActionTypes.ITEMS_DELETION,
+    itemIndex
   }
 };
 
@@ -105,6 +113,39 @@ export const createItem = (bucketId, name, description = null, isAuthenticated, 
         .catch(error => {
           logoutOnTokenExpired(dispatch, error);
         })
+  }
+};
+
+/**
+ * Delete an Item from the Bucket using an API call to the Backend
+ * @param bucketId Bucket Id
+ * @param itemId Item Id
+ * @param itemIndex Item Index in the state items array.
+ * @param isAuthenticated
+ * @returns {*}
+ */
+export const deleteItem = (bucketId, itemId, itemIndex,isAuthenticated) => {
+  const token = localStorage.getItem(AUTH_TOKEN) || null;
+  let config = {};
+
+  if (!isAuthenticated) {
+    return dispatch => dispatch(logoutUser())
+  }
+
+  if (token) {
+    config = {
+      method: 'DELETE',
+      url: `${BUCKETLIST_URL}${bucketId}/items/${itemId}/`,
+      headers: {'Authorization': `Bearer ${token}`}
+    };
+  } else {
+    throw "No token saved!!!"
+  }
+
+  return dispatch => {
+    return axios(config)
+        .then(response => dispatch(removeItem(itemIndex)))
+        .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };
 

@@ -9,6 +9,7 @@ import {EmptyBucketMessage} from "./EmptyBucketMessage";
 import {ItemSearch} from "./ItemSearch";
 import {ShowItems} from "./ShowItems";
 import Pagination from "../pagination/Pagination";
+import {Redirect} from 'react-router-dom';
 
 class Items extends React.Component {
 
@@ -62,7 +63,12 @@ class Items extends React.Component {
     const next = this.props.items.next;
     const previous = this.props.items.previous;
     const dispatch = this.props.dispatch;
-    const count = this.props.items.count
+    const count = this.props.items.count;
+
+    if (!isAuth) {
+      return <Redirect to="/login"/>
+    }
+
     return (
         <div className="container main-content">
           <Breadcrumb/>
@@ -76,7 +82,9 @@ class Items extends React.Component {
 
                 <hr></hr>
 
-                <ShowItems items={items}/>
+                <ShowItems items={items} dispatch={dispatch} bucketId={bucketId} isAuthenticated={isAuth}/>
+                <Pagination count={count} next={next} previous={previous} dispatch={dispatch} isAuthenticated={isAuth}
+                            onChangeUrl={this.onChangeUrl} paginationUrl={this.paginationUrl}/>
               </div>
               :
               <div>
@@ -85,8 +93,6 @@ class Items extends React.Component {
               </div>
           }
           <AddItemModal bucketId={bucketId} isAuthenticated={isAuth} dispatch={this.props.dispatch}/>
-          <Pagination count={count} next={next} previous={previous} dispatch={dispatch} isAuthenticated={isAuth}
-                      onChangeUrl={this.onChangeUrl} paginationUrl={this.paginationUrl}/>
         </div>
     );
   }
