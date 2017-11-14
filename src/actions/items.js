@@ -21,10 +21,29 @@ export const receiveItems = (bucketId, data) => {
   }
 };
 
+/**
+ * Action to remove a deleted item from the Redux store.
+ * @param itemIndex Item index
+ * @returns {{type, itemIndex: *}}
+ */
 export const removeItem = itemIndex => {
   return {
     type: ItemActionTypes.ITEMS_DELETION,
     itemIndex
+  }
+};
+
+/**
+ * Action to update the updated item in the redux store.
+ * @param index
+ * @param data
+ * @returns {{type, index: *, data: *}}
+ */
+export const updateItem = (index, data) => {
+  return {
+    type: ItemActionTypes.ITEMS_EDIT,
+    index,
+    data
   }
 };
 
@@ -124,7 +143,7 @@ export const createItem = (bucketId, name, description = null, isAuthenticated, 
  * @param isAuthenticated
  * @returns {*}
  */
-export const deleteItem = (bucketId, itemId, itemIndex,isAuthenticated) => {
+export const deleteItem = (bucketId, itemId, itemIndex, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
 
@@ -145,6 +164,48 @@ export const deleteItem = (bucketId, itemId, itemIndex,isAuthenticated) => {
   return dispatch => {
     return axios(config)
         .then(response => dispatch(removeItem(itemIndex)))
+        .catch(error => logoutOnTokenExpired(dispatch, error))
+  }
+};
+
+/**
+ * Edit an item in the bucket using the API.
+ * @param bucketId Bucket Id
+ * @param itemId Item Id
+ * @param itemIndex Item index
+ * @param name Item name
+ * @param description Item description
+ * @param isAuthenticated
+ * @returns {*}
+ */
+export const editItem = (bucketId, itemId, itemIndex, name, description = null, isAuthenticated) => {
+  const token = localStorage.getItem(AUTH_TOKEN) || null;
+  let config = {};
+
+  if (!isAuthenticated) {
+    return dispatch => dispatch(logoutUser())
+  }
+
+  if (token) {
+    config = {
+      method: 'PUT',
+      url: `${BUCKETLIST_URL}${bucketId}/items/${itemId}/`,
+      data: {
+        name: name,
+        description: description
+      },
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        "content-type": "application/json"
+      }
+    };
+  } else {
+    throw "No token saved!!!"
+  }
+
+  return dispatch => {
+    return axios(config)
+        .then(response => dispatch(updateItem(itemIndex, response.data.item)))
         .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };

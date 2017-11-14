@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {deleteItem} from "../../actions/items";
+import {deleteItem, editItem} from "../../actions/items";
 
 class Item extends React.Component {
 
@@ -19,7 +19,12 @@ class Item extends React.Component {
 
   onEditing = () => this.setState({isEditing: true});
 
-  onSaving = () => this.setState({isEditing: false});
+  onSaving = () => {
+    this.setState({isEditing: false});
+    this.props.dispatch(editItem(this.props.bucketId, this.props.itemId, this.props.index, this.state.name,
+        this.state.description, this.props.isAuthenticated))
+
+  };
 
   onCancel = () => this.setState({isEditing: false});
 

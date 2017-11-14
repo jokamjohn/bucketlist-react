@@ -215,6 +215,21 @@ export default function (state = initialState, action) {
         }
       };
 
+    case ItemActionTypes.ITEMS_EDIT:
+      return {
+        ...state,
+        isFetching: false,
+        items: {
+          ...state.buckets,
+          items: state.items.items.map((item, index) => index === action.index ? {
+            ...item,
+            name: action.data.name,
+            description: action.data.description,
+            modifiedAt: action.data.modifiedAt
+          } : item)
+        }
+      };
+
     default:
       return state;
   }
