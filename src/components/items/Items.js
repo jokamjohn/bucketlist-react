@@ -1,44 +1,108 @@
 import React from 'react'
-import Item from './Item'
+import PropTypes from 'prop-types';
 import Breadcrumb from './Breadcrumb'
+import {getItems, receiveItems} from "../../actions/items";
+import {BASE_URL, BUCKETLIST_URL} from "../../utilities/Constants";
+import AddItemModal from "./AddItemModal";
+import {AddItemButton} from "./AddItemButton";
+import {EmptyBucketMessage} from "./EmptyBucketMessage";
+import {ShowItems} from "./ShowItems";
+import Pagination from "../pagination/Pagination";
+import {Redirect} from 'react-router-dom';
+import ItemSearch from "./ItemSearch";
 
-const Items = () =>
-  <div className="container main-content">
+class Items extends React.Component {
 
-    <Breadcrumb/>
+  /*
+   * Dispatch an action to get the current Bucket items.
+   */
+  componentDidMount() {
+    const bucketId = this.props.match.params.bucketId;
+    const isSearch = this.props.items.search.isItemSearch;
+    const url = `${BUCKETLIST_URL}${bucketId}/items/`;
+    this.props.dispatch(getItems(bucketId, url, this.props.isAuthenticated, isSearch))
+  }
 
-    <div className="row">
-      <div className="col-sm-5 mx-sm-auto">
-        <form className="form-inline">
-          <div className="form-group">
-            <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0"
-                   placeholder="Kampala" required/>
-            <input type="submit" className="btn btn-primary" value="Add Item"/>
-          </div>
-        </form>
-      </div>
+  /**
+   * Remove the Bucket items when the component unmounts.
+   */
+  componentWillUnmount() {
+    const bucketId = this.props.match.params.bucketId;
+    this.props.dispatch(receiveItems(bucketId, {items: []}))
+  }
 
-      <div className="col-sm-5 mx-sm-auto">
-        <form className="form-inline">
-          <div className="form-group">
-            <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0"
-                   placeholder="Search" required/>
-            <input type="submit" className="btn btn-secondary" value="Search"/>
-          </div>
-        </form>
-      </div>
-    </div>
-    <hr></hr>
+  /**
+   * Fetch the Buckets at the provided URL when a pagination number is clicked.
+   * @param url Buckets URL
+   */
+  onChangeUrl = url => {
+    const bucketId = this.props.match.params.bucketId;
+    const isSearch = this.props.items.search.isItemSearch;
+    this.props.dispatch(getItems(bucketId, url, this.props.isAuthenticated, isSearch))
+  };
 
-    <div className="row">
-      <Item name="Nairobi" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            modifiedAt="Monday 23, 2017"/>
-      <Item name="Mombasa" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            modifiedAt="Monday 24, 2017"/>
-      <Item name="Nakuru" description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            modifiedAt="Monday 25, 2017"/>
-    </div>
+  /**
+   * This function constructs an appropriate url to attach to the paginator.
+   * The url changes and includes the search query if the search results
+   * require pagination
+   * @returns {string}
+   */
+  paginationUrl = () => {
+    const bucketId = this.props.match.params.bucketId;
+    let url = BASE_URL + `bucketlists/${bucketId}/items/?page=`;
+    if (this.props.isSearch && this.props.query) {
+      url = BASE_URL + `bucketlists/${bucketId}/items/?q=${this.props.query}&page=`;
+    }
+    return url
+  };
 
-  </div>
+  render() {
+    const items = this.props.items.items;
+    const bucketId = this.props.match.params.bucketId;
+    const isAuth = this.props.isAuthenticated;
+    const next = this.props.items.next;
+    const previous = this.props.items.previous;
+    const dispatch = this.props.dispatch;
+    const count = this.props.items.count;
+
+    if (!isAuth) {
+      return <Redirect to="/login"/>
+    }
+
+    return (
+        <div className="container main-content">
+          <Breadcrumb/>
+          {items.length
+              ?
+              <div>
+                <div className="row">
+                  <AddItemButton/>
+                  <ItemSearch isAuthenticated={isAuth} bucketId={bucketId} dispatch={dispatch}/>
+                </div>
+
+                <hr></hr>
+
+                <ShowItems items={items} dispatch={dispatch} bucketId={bucketId} isAuthenticated={isAuth}/>
+                <Pagination count={count} next={next} previous={previous} dispatch={dispatch} isAuthenticated={isAuth}
+                            onChangeUrl={this.onChangeUrl} paginationUrl={this.paginationUrl}/>
+              </div>
+              :
+              <div>
+                <AddItemButton/>
+                <EmptyBucketMessage/>
+              </div>
+          }
+          <AddItemModal bucketId={bucketId} isAuthenticated={isAuth} dispatch={this.props.dispatch}/>
+        </div>
+    );
+  }
+}
+
+Items.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+  items: PropTypes.object.isRequired,
+};
+
 
 export default Items

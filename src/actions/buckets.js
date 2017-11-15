@@ -5,6 +5,7 @@ import {
 } from "../utilities/Constants";
 import axios from 'axios';
 import {logoutUser} from "./logout";
+import {TokenException} from "../utilities/Utils";
 
 /**
  * Action to add the user Buckets to state.
@@ -53,6 +54,8 @@ export const createBucket = bucket => {
  * parameter. Also add the name of the Bucket as the search query
  * in state and set the isSearch to true to indicate that a
  * user is currently searching for a bucket.
+ * The isSearch is used in the Pagination component to construct
+ * the urls.
  * @param data Buckets returned from the API
  * @param query Search query
  * @param isSearch Search mode Boolean
@@ -104,6 +107,8 @@ export const editBucket = (bucket, index) => {
  * Make an Http request to fetch the user Buckets from the API.
  * Save the current URL in local storage so that when the page is refreshed
  * the URL is got from local storage through the state and the page is populated.
+ * If the state is in search mode, do not store the url in local storage since
+ * we do not want to get searched data when a page is refreshed.
  * @param url Bucket Url
  * @param isAuthenticated Boolean
  * @param isSearchMode Boolean to check if a Bucket is being searched for or not
@@ -121,7 +126,7 @@ export const getBuckets = (url, isAuthenticated, isSearchMode) => {
         headers: {'Authorization': `Bearer ${token}`}
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -160,7 +165,7 @@ export const deleteBucketFromServer = (id, index, isAuthenticated) => {
         headers: {'Authorization': `Bearer ${token}`}
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -199,7 +204,7 @@ export const createBucketOnServer = (name, isAuthenticated) => {
         }
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -214,11 +219,11 @@ export const createBucketOnServer = (name, isAuthenticated) => {
 
 /**
  * Search for a Bucket(s) using its name.
- * @param name Bucket Name
+ * @param query Search query {Bucket Name}
  * @param isAuthenticated User is signed in/not
  * @returns {function(*)}
  */
-export const searchForBucket = (name, isAuthenticated) => {
+export const searchForBucket = (query, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
 
@@ -226,11 +231,11 @@ export const searchForBucket = (name, isAuthenticated) => {
     if (token) {
       config = {
         method: 'GET',
-        url: BUCKETLIST_SEARCH_URL + name,
+        url: BUCKETLIST_SEARCH_URL + query,
         headers: {'Authorization': `Bearer ${token}`}
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -238,7 +243,7 @@ export const searchForBucket = (name, isAuthenticated) => {
     return axios(config)
         .then(response => response.data)
         .then(data => {
-          dispatch(searchBucket(data, name, true))
+          dispatch(searchBucket(data, query, true))
         })
         .catch(error => logoutOnTokenExpired(dispatch, error))
   }
@@ -269,7 +274,7 @@ export const editBucketOnServer = (name, id, index, isAuthenticated) => {
         }
       };
     } else {
-      throw "No token saved!!!"
+      throw new TokenException()
     }
   }
 
@@ -286,7 +291,7 @@ export const editBucketOnServer = (name, id, index, isAuthenticated) => {
  * @param dispatch
  * @param error Http Error
  */
-function logoutOnTokenExpired(dispatch, error) {
+export function logoutOnTokenExpired(dispatch, error) {
   if (error.response) {
     if (error.response.status === 401) {
       dispatch(logoutUser())

@@ -3,6 +3,7 @@ import * as LogoutActionTypes from '../actiontypes/logout';
 import * as RegisterActionTypes from '../actiontypes/register';
 import {AUTH_TOKEN, BUCKETLIST_URL, LOCAL_BUCKET_URL} from "../utilities/Constants";
 import * as BucketActionTypes from "../actiontypes/bucket";
+import * as ItemActionTypes from '../actiontypes/items';
 
 const initialState = {
   isFetching: false,
@@ -12,6 +13,12 @@ const initialState = {
     buckets: [],
     search: {
       isSearch: false
+    }
+  },
+  items: {
+    items: [],
+    search: {
+      isItemSearch: false
     }
   }
 };
@@ -179,6 +186,62 @@ export default function (state = initialState, action) {
             name: action.name,
             modifiedAt: action.modifiedAt
           } : bucket)
+        }
+      };
+
+    case ItemActionTypes.ITEMS_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        items: {
+          ...state.items,
+          items: action.items,
+          count: action.count,
+          next: action.next,
+          previous: action.previous
+        }
+      };
+
+    case ItemActionTypes.ITEMS_DELETION:
+      return {
+        ...state,
+        isFetching: false,
+        items: {
+          ...state.items,
+          items: [
+            ...state.items.items.slice(0, action.itemIndex),
+            ...state.items.items.slice(action.itemIndex + 1)
+          ]
+        }
+      };
+
+    case ItemActionTypes.ITEMS_EDIT:
+      return {
+        ...state,
+        isFetching: false,
+        items: {
+          ...state.buckets,
+          items: state.items.items.map((item, index) => index === action.index ? {
+            ...item,
+            name: action.data.name,
+            description: action.data.description,
+            modifiedAt: action.data.modifiedAt
+          } : item)
+        }
+      };
+
+    case ItemActionTypes.ITEMS_SEARCH:
+      return {
+        ...state,
+        isFetching: false,
+        items: {
+          items: action.data.items,
+          count: action.data.count,
+          next: action.data.next,
+          previous: action.data.previous,
+          search: {
+            isItemSearch: action.isSearch
+          }
         }
       };
 
