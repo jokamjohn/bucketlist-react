@@ -46,7 +46,7 @@ export const logoutError = (message) => {
 /**
  * Function to clear the Local storage.
  */
-function clearLocalStorage() {
+export function clearLocalStorage() {
   localStorage.removeItem(AUTH_TOKEN);
   localStorage.removeItem(USER_EMAIL);
   localStorage.removeItem(LOCAL_BUCKET_URL);

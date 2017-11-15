@@ -230,6 +230,21 @@ export default function (state = initialState, action) {
         }
       };
 
+    case ItemActionTypes.ITEMS_SEARCH:
+      return {
+        ...state,
+        isFetching: false,
+        items: {
+          items: action.data.items,
+          count: action.data.count,
+          next: action.data.next,
+          previous: action.data.previous,
+          search: {
+            isItemSearch: action.isSearch
+          }
+        }
+      };
+
     default:
       return state;
   }

@@ -6,10 +6,10 @@ import {BASE_URL, BUCKETLIST_URL} from "../../utilities/Constants";
 import AddItemModal from "./AddItemModal";
 import {AddItemButton} from "./AddItemButton";
 import {EmptyBucketMessage} from "./EmptyBucketMessage";
-import {ItemSearch} from "./ItemSearch";
 import {ShowItems} from "./ShowItems";
 import Pagination from "../pagination/Pagination";
 import {Redirect} from 'react-router-dom';
+import ItemSearch from "./ItemSearch";
 
 class Items extends React.Component {
 
@@ -77,7 +77,7 @@ class Items extends React.Component {
               <div>
                 <div className="row">
                   <AddItemButton/>
-                  <ItemSearch/>
+                  <ItemSearch isAuthenticated={isAuth} bucketId={bucketId} dispatch={dispatch}/>
                 </div>
 
                 <hr></hr>

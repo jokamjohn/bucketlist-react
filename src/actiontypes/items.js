@@ -5,4 +5,5 @@ export const ITEMS_SEARCH_CLEAR = "ITEMS_SEARCH_CLEAR";
 export const ITEMS_CREATION = "ITEM_CREATION";
 export const ITEMS_DELETION = "ITEM_DELETION";
 export const ITEMS_EDIT = "ITEM_EDIT";
+export const ITEMS_SEARCH = "ITEM_SEARCH";
 

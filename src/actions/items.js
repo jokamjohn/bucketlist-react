@@ -2,7 +2,7 @@ import * as ItemActionTypes from '../actiontypes/items';
 import {AUTH_TOKEN, BUCKETLIST_URL} from "../utilities/Constants";
 import axios from "axios";
 import {logoutOnTokenExpired} from "./buckets";
-import {logoutUser} from "./logout";
+import {clearLocalStorage, logoutUser} from "./logout";
 import {TokenException} from "../utilities/Utils";
 
 /**
@@ -48,13 +48,22 @@ export const updateItem = (index, data) => {
   }
 };
 
-export const clearSearchMode = () => {
+/**
+ *
+ * @param query item search query
+ * @param data successful search response data
+ * @param isSearch boolean to show whether item(s) have been searched for.
+ * @returns {{type, data: *, query: *, isSearch: *}}
+ */
+export const itemSearch = (query, data, isSearch) => {
   return {
-    type: ItemActionTypes.ITEMS_SEARCH_CLEAR,
-    isSearch: false,
-    query: '',
+    type: ItemActionTypes.ITEMS_SEARCH,
+    data,
+    query,
+    isSearch
   }
 };
+
 
 /**
  *
@@ -207,6 +216,40 @@ export const editItem = (bucketId, itemId, itemIndex, name, description = null, 
   return dispatch => {
     return axios(config)
         .then(response => dispatch(updateItem(itemIndex, response.data.item)))
+        .catch(error => logoutOnTokenExpired(dispatch, error))
+  }
+};
+
+/**
+ *
+ * @param query item name search query
+ * @param bucketId Bucket id to which the item belongs to.
+ * @param isAuthenticated
+ * @returns {*}
+ */
+export const searchForItem = (query, bucketId, isAuthenticated) => {
+  const token = localStorage.getItem(AUTH_TOKEN) || null;
+  let config = {};
+
+  if (!isAuthenticated) {
+    return clearLocalStorage();
+  }
+
+  if (token) {
+    config = {
+      method: 'GET',
+      url: `${BUCKETLIST_URL}${bucketId}/items/?q=${query}`,
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    };
+  } else {
+    throw new TokenException()
+  }
+
+  return dispatch => {
+    return axios(config)
+        .then(response => dispatch(itemSearch(query, response.data, true)))
         .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };

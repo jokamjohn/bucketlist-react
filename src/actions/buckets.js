@@ -107,6 +107,8 @@ export const editBucket = (bucket, index) => {
  * Make an Http request to fetch the user Buckets from the API.
  * Save the current URL in local storage so that when the page is refreshed
  * the URL is got from local storage through the state and the page is populated.
+ * If the state is in search mode, do not store the url in local storage since
+ * we do not want to get searched data when a page is refreshed.
  * @param url Bucket Url
  * @param isAuthenticated Boolean
  * @param isSearchMode Boolean to check if a Bucket is being searched for or not
@@ -217,11 +219,11 @@ export const createBucketOnServer = (name, isAuthenticated) => {
 
 /**
  * Search for a Bucket(s) using its name.
- * @param name Bucket Name
+ * @param query Search query {Bucket Name}
  * @param isAuthenticated User is signed in/not
  * @returns {function(*)}
  */
-export const searchForBucket = (name, isAuthenticated) => {
+export const searchForBucket = (query, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
 
@@ -229,7 +231,7 @@ export const searchForBucket = (name, isAuthenticated) => {
     if (token) {
       config = {
         method: 'GET',
-        url: BUCKETLIST_SEARCH_URL + name,
+        url: BUCKETLIST_SEARCH_URL + query,
         headers: {'Authorization': `Bearer ${token}`}
       };
     } else {
@@ -241,7 +243,7 @@ export const searchForBucket = (name, isAuthenticated) => {
     return axios(config)
         .then(response => response.data)
         .then(data => {
-          dispatch(searchBucket(data, name, true))
+          dispatch(searchBucket(data, query, true))
         })
         .catch(error => logoutOnTokenExpired(dispatch, error))
   }
