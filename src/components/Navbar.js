@@ -23,7 +23,10 @@ class Navbar extends React.Component {
                     <NavLink className="nav-link" exact to="/">Home</NavLink>
                   </li>
                   <li className="nav-item">
-                    <NavLink exact className="nav-link" to="/buckets">{email}</NavLink>
+                    <NavLink exact className="nav-link" to="/buckets">Buckets</NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink exact className="nav-link" to="/auth/password/reset">resetPassword</NavLink>
                   </li>
                   <li className="nav-item">
                     <NavLink exact className="nav-link" to="/logout">logout</NavLink>
