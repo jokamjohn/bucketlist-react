@@ -18,5 +18,6 @@ export const PrivateRoute = ({component: Component, isAuthenticated, ...rest}) =
 PrivateRoute.propTypes = {
   path: PropTypes.string.isRequired,
   component: PropTypes.any.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 

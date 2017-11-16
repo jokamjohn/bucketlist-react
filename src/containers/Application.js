@@ -16,7 +16,7 @@ import {PrivateRoute} from "../components/auth/PrivateRoute";
 class Application extends React.Component {
 
   render() {
-    const {dispatch, isAuthenticated, message, isRegistered, passwordReset} = this.props;
+    const {dispatch, isAuthenticated, message, isRegistered} = this.props;
     return (
         <BrowserRouter>
           <div>
@@ -30,9 +30,7 @@ class Application extends React.Component {
               <Route exact path="/logout" render={() => <Logout dispatch={dispatch}/>}/>
               <PrivateRoute path="/buckets/:bucketId/items" component={Items} isAuthenticated={isAuthenticated}/>
               <PrivateRoute path="/buckets" component={Buckets} isAuthenticated={isAuthenticated}/>
-              <Route path="/auth/password/reset"
-                     render={props => <PasswordReset dispatch={dispatch} isAuthenticated={isAuthenticated}
-                                                     passwordReset={passwordReset}/>}/>
+              <PrivateRoute path="/auth/password/reset" component={PasswordReset} isAuthenticated={isAuthenticated}/>
               <Route component={NotFound}/>
             </Switch>
             <Footer/>
@@ -43,13 +41,12 @@ class Application extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const {isAuthenticated, isFetching, message, isRegistered, passwordReset} = state;
+  const {isAuthenticated, isFetching, message, isRegistered} = state;
   return {
     isAuthenticated,
     isFetching,
     isRegistered,
     message,
-    passwordReset
   }
 };
 
