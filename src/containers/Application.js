@@ -11,11 +11,12 @@ import Buckets from '../components/bucket/Buckets'
 import Items from '../components/items/Items'
 import NotFound from '../components/NotFound'
 import PasswordReset from "../components/auth/PasswordReset";
+import {PrivateRoute} from "../components/auth/PrivateRoute";
 
 class Application extends React.Component {
 
   render() {
-    const {dispatch, isAuthenticated, message, isRegistered, buckets, bucketUrl, items, passwordReset} = this.props;
+    const {dispatch, isAuthenticated, message, isRegistered, items, passwordReset} = this.props;
     return (
         <BrowserRouter>
           <div>
@@ -27,9 +28,7 @@ class Application extends React.Component {
               <Route exact path="/signup"
                      render={() => <Register dispatch={dispatch} message={message} isRegistered={isRegistered}/>}/>
               <Route exact path="/logout" render={() => <Logout dispatch={dispatch}/>}/>
-              <Route exact path="/buckets"
-                     render={() => <Buckets dispatch={dispatch} isAuthenticated={isAuthenticated} buckets={buckets}
-                                            bucketUrl={bucketUrl}/>}/>
+              <PrivateRoute path="/buckets" component={Buckets} isAuthenticated={isAuthenticated}/>
               <Route path="/buckets/:bucketId/items"
                      render={(props) => <Items {...props} dispatch={dispatch} isAuthenticated={isAuthenticated}
                                                items={items}/>}/>
@@ -46,14 +45,12 @@ class Application extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const {isAuthenticated, isFetching, message, isRegistered, buckets, bucketUrl, items, passwordReset} = state;
+  const {isAuthenticated, isFetching, message, isRegistered, items, passwordReset} = state;
   return {
     isAuthenticated,
     isFetching,
     isRegistered,
     message,
-    buckets,
-    bucketUrl,
     items,
     passwordReset
   }

@@ -7,8 +7,8 @@ import {formatDate} from "../../utilities/Utils";
 import Pagination from "../pagination/Pagination";
 import CreateBucket from "./CreateBucket";
 import BucketSearch from "./BucketSearch";
-import {withRouter} from 'react-router-dom';
 import {BASE_URL} from "../../utilities/Constants";
+import {connect} from 'react-redux';
 
 class Buckets extends React.Component {
 
@@ -44,10 +44,6 @@ class Buckets extends React.Component {
     const previous = this.props.buckets.previous;
     const isAuth = this.props.isAuthenticated;
     const dispatch = this.props.dispatch;
-
-    if (!this.props.isAuthenticated) {
-      this.props.history.push("login");
-    }
 
     return (
         <div className="container main-content">
@@ -91,5 +87,14 @@ Buckets.propTypes = {
   query: PropTypes.string,
 };
 
+const mapStateToProps = state => {
+  const {isAuthenticated, buckets, bucketUrl} = state;
+  return {
+    isAuthenticated,
+    buckets,
+    bucketUrl,
+  }
+};
 
-export default withRouter(Buckets)
+
+export default connect(mapStateToProps)(Buckets)
