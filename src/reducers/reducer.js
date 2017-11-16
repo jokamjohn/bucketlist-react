@@ -20,6 +20,9 @@ const initialState = {
     search: {
       isItemSearch: false
     }
+  },
+  passwordReset: {
+    message: ''
   }
 };
 
@@ -242,6 +245,15 @@ export default function (state = initialState, action) {
           search: {
             isItemSearch: action.isSearch
           }
+        }
+      };
+
+    case LoginActionTypes.PASSWORD_RESET:
+      return {
+        ...state,
+        isFetching: false,
+        passwordReset: {
+          message: action.message
         }
       };
 

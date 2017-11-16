@@ -10,11 +10,12 @@ import Footer from '../components/Footer'
 import Buckets from '../components/bucket/Buckets'
 import Items from '../components/items/Items'
 import NotFound from '../components/NotFound'
+import PasswordReset from "../components/auth/PasswordReset";
 
 class Application extends React.Component {
 
   render() {
-    const {dispatch, isAuthenticated, message, isRegistered, buckets, bucketUrl, items} = this.props;
+    const {dispatch, isAuthenticated, message, isRegistered, buckets, bucketUrl, items, passwordReset} = this.props;
     return (
         <BrowserRouter>
           <div>
@@ -32,6 +33,9 @@ class Application extends React.Component {
               <Route path="/buckets/:bucketId/items"
                      render={(props) => <Items {...props} dispatch={dispatch} isAuthenticated={isAuthenticated}
                                                items={items}/>}/>
+              <Route path="/auth/password/reset"
+                     render={props => <PasswordReset dispatch={dispatch} isAuthenticated={isAuthenticated}
+                                                     passwordReset={passwordReset}/>}/>
               <Route component={NotFound}/>
             </Switch>
             <Footer/>
@@ -42,7 +46,7 @@ class Application extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const {isAuthenticated, isFetching, message, isRegistered, buckets, bucketUrl, items} = state;
+  const {isAuthenticated, isFetching, message, isRegistered, buckets, bucketUrl, items, passwordReset} = state;
   return {
     isAuthenticated,
     isFetching,
@@ -50,7 +54,8 @@ const mapStateToProps = state => {
     message,
     buckets,
     bucketUrl,
-    items
+    items,
+    passwordReset
   }
 };
 
