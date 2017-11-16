@@ -1,12 +1,10 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import {USER_EMAIL} from "../utilities/Constants";
 
 class Navbar extends React.Component {
 
   render() {
-    const email = localStorage.getItem(USER_EMAIL);
     return (
         <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
           <NavLink className="navbar-brand" exact to="/">BucketList</NavLink>

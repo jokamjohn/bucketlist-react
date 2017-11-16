@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Home from '../components/home/Home'
 import Login from '../components/auth/Login'
-import Logout from '../components/auth/Logout'
 import Register from '../components/auth/Register'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -11,11 +10,13 @@ import Buckets from '../components/bucket/Buckets'
 import Items from '../components/items/Items'
 import NotFound from '../components/NotFound'
 import PasswordReset from "../components/auth/PasswordReset";
+import {PrivateRoute} from "../components/auth/PrivateRoute";
+import {LogoutRoute} from "../components/auth/LogoutRoute";
 
 class Application extends React.Component {
 
   render() {
-    const {dispatch, isAuthenticated, message, isRegistered, buckets, bucketUrl, items, passwordReset} = this.props;
+    const {dispatch, isAuthenticated, message, isRegistered} = this.props;
     return (
         <BrowserRouter>
           <div>
@@ -26,16 +27,10 @@ class Application extends React.Component {
                      render={() => <Login dispatch={dispatch} isAuthenticated={isAuthenticated}/>}/>
               <Route exact path="/signup"
                      render={() => <Register dispatch={dispatch} message={message} isRegistered={isRegistered}/>}/>
-              <Route exact path="/logout" render={() => <Logout dispatch={dispatch}/>}/>
-              <Route exact path="/buckets"
-                     render={() => <Buckets dispatch={dispatch} isAuthenticated={isAuthenticated} buckets={buckets}
-                                            bucketUrl={bucketUrl}/>}/>
-              <Route path="/buckets/:bucketId/items"
-                     render={(props) => <Items {...props} dispatch={dispatch} isAuthenticated={isAuthenticated}
-                                               items={items}/>}/>
-              <Route path="/auth/password/reset"
-                     render={props => <PasswordReset dispatch={dispatch} isAuthenticated={isAuthenticated}
-                                                     passwordReset={passwordReset}/>}/>
+              <PrivateRoute path="/buckets/:bucketId/items" component={Items} isAuthenticated={isAuthenticated}/>
+              <PrivateRoute path="/buckets" component={Buckets} isAuthenticated={isAuthenticated}/>
+              <PrivateRoute path="/auth/password/reset" component={PasswordReset} isAuthenticated={isAuthenticated}/>
+              <LogoutRoute path="/logout" isAuthenticated={isAuthenticated} dispatch={dispatch}/>
               <Route component={NotFound}/>
             </Switch>
             <Footer/>
@@ -46,16 +41,12 @@ class Application extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const {isAuthenticated, isFetching, message, isRegistered, buckets, bucketUrl, items, passwordReset} = state;
+  const {isAuthenticated, isFetching, message, isRegistered} = state;
   return {
     isAuthenticated,
     isFetching,
     isRegistered,
     message,
-    buckets,
-    bucketUrl,
-    items,
-    passwordReset
   }
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withRouter} from 'react-router-dom';
+import {Redirect, withRouter} from 'react-router-dom';
 import {loginUser} from "../../actions/login";
 
 class Login extends React.Component {
@@ -14,8 +14,12 @@ class Login extends React.Component {
   };
 
   render() {
+    const {from} = this.props.location.state || {from: {pathname: '/buckets'}};
+
     if (this.props.isAuthenticated) {
-      this.props.history.push("buckets");
+      return (
+          <Redirect to={from}/>
+      );
     }
 
     return (
