@@ -16,7 +16,7 @@ import {PrivateRoute} from "../components/auth/PrivateRoute";
 class Application extends React.Component {
 
   render() {
-    const {dispatch, isAuthenticated, message, isRegistered, items, passwordReset} = this.props;
+    const {dispatch, isAuthenticated, message, isRegistered, passwordReset} = this.props;
     return (
         <BrowserRouter>
           <div>
@@ -28,10 +28,8 @@ class Application extends React.Component {
               <Route exact path="/signup"
                      render={() => <Register dispatch={dispatch} message={message} isRegistered={isRegistered}/>}/>
               <Route exact path="/logout" render={() => <Logout dispatch={dispatch}/>}/>
+              <PrivateRoute path="/buckets/:bucketId/items" component={Items} isAuthenticated={isAuthenticated}/>
               <PrivateRoute path="/buckets" component={Buckets} isAuthenticated={isAuthenticated}/>
-              <Route path="/buckets/:bucketId/items"
-                     render={(props) => <Items {...props} dispatch={dispatch} isAuthenticated={isAuthenticated}
-                                               items={items}/>}/>
               <Route path="/auth/password/reset"
                      render={props => <PasswordReset dispatch={dispatch} isAuthenticated={isAuthenticated}
                                                      passwordReset={passwordReset}/>}/>
@@ -45,13 +43,12 @@ class Application extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const {isAuthenticated, isFetching, message, isRegistered, items, passwordReset} = state;
+  const {isAuthenticated, isFetching, message, isRegistered, passwordReset} = state;
   return {
     isAuthenticated,
     isFetching,
     isRegistered,
     message,
-    items,
     passwordReset
   }
 };

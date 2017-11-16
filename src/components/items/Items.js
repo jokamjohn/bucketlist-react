@@ -10,6 +10,7 @@ import {ShowItems} from "./ShowItems";
 import Pagination from "../pagination/Pagination";
 import {Redirect} from 'react-router-dom';
 import ItemSearch from "./ItemSearch";
+import {connect} from 'react-redux';
 
 class Items extends React.Component {
 
@@ -104,5 +105,13 @@ Items.propTypes = {
   items: PropTypes.object.isRequired,
 };
 
+const mapStateToProps = state => {
+  const {isAuthenticated, items} = state;
+  return {
+    isAuthenticated,
+    items
+  }
+};
 
-export default Items
+
+export default connect(mapStateToProps)(Items)
