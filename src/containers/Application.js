@@ -9,7 +9,7 @@ import Footer from '../components/Footer'
 import Buckets from './Buckets'
 import Items from './Items'
 import NotFound from '../components/NotFound'
-import PasswordReset from "../components/auth/PasswordReset";
+import PasswordReset from "./PasswordReset";
 import {PrivateRoute} from "../components/auth/PrivateRoute";
 import {LogoutRoute} from "../components/auth/LogoutRoute";
 

@@ -6,7 +6,9 @@ class CreateBucket extends React.Component {
 
   onCreate = (event) => {
     event.preventDefault();
-    this.props.dispatch(createBucketOnServer(this.name.value, this.props.isAuthenticated))
+    const name = this.name.value;
+    const {isAuthenticated, dispatch} = this.props;
+    dispatch(createBucketOnServer(name, isAuthenticated));
     this.name.value = ''
   };
 

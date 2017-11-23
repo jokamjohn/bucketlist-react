@@ -7,7 +7,8 @@ class BucketSearch extends React.Component {
   onSubmit = event => {
     event.preventDefault();
     const query = this.search.value;
-    this.props.dispatch(searchForBucket(query, this.props.isAuthenticated));
+    const {dispatch, isAuthenticated} = this.props;
+    dispatch(searchForBucket(query, isAuthenticated));
   };
 
   render() {

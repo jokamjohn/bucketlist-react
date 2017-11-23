@@ -3,7 +3,6 @@ import Breadcrumb from '../components/bucket/Breadcrumb'
 import Bucket from '../components/bucket/Bucket'
 import PropTypes from 'prop-types';
 import {getBuckets} from "../actions/buckets";
-import {formatDate} from "../utilities/Utils";
 import Pagination from "../components/pagination/Pagination";
 import CreateBucket from "../components/bucket/CreateBucket";
 import BucketSearch from "../components/bucket/BucketSearch";
@@ -39,11 +38,8 @@ class Buckets extends React.Component {
   };
 
   render() {
-    const count = this.props.buckets.count;
-    const next = this.props.buckets.next;
-    const previous = this.props.buckets.previous;
-    const isAuth = this.props.isAuthenticated;
-    const dispatch = this.props.dispatch;
+    const {count, next, isAuthenticated: isAuth, buckets, dispatch} = this.props;
+    const previous = buckets.previous;
 
     return (
         <div className="container main-content">
@@ -51,9 +47,9 @@ class Buckets extends React.Component {
           <Breadcrumb/>
 
           <div className="row">
-            <CreateBucket dispatch={this.props.dispatch} isAuthenticated={this.props.isAuthenticated}/>
+            <CreateBucket dispatch={dispatch} isAuthenticated={isAuth}/>
 
-            <BucketSearch dispatch={this.props.dispatch} isAuthenticated={this.props.isAuthenticated}/>
+            <BucketSearch dispatch={dispatch} isAuthenticated={isAuth}/>
           </div>
 
           <hr></hr>
@@ -62,8 +58,7 @@ class Buckets extends React.Component {
               ?
               <div className="row">
                 {this.props.buckets.buckets.map((bucket, index) =>
-                    <Bucket key={bucket.id} index={index} id={bucket.id} name={bucket.name} dispatch={dispatch}
-                            isAuthenticated={isAuth} modifiedAt={formatDate(bucket.modifiedAt)}/>
+                    <Bucket key={bucket.id} index={index} {...bucket} dispatch={dispatch} isAuthenticated={isAuth}/>
                 )}
               </div>
               :

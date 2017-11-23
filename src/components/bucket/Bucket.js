@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {deleteBucketFromServer, editBucketOnServer} from "../../actions/buckets";
 import {Link} from 'react-router-dom';
+import {formatDate} from "../../utilities/Utils";
 
 
 class Bucket extends React.Component {
@@ -19,36 +20,36 @@ class Bucket extends React.Component {
   onEditing = () => this.setState({isEditing: true});
 
   onSaving = () => {
-    this.props.dispatch(editBucketOnServer(this.state.name, this.props.id, this.props.index,
-        this.props.isAuthenticated));
-
+    const {id, index, isAuthenticated, dispatch} = this.props;
+    dispatch(editBucketOnServer(this.state.name, id, index, isAuthenticated));
     this.setState({isEditing: false})
   };
 
   render() {
+    const {id, index, isAuthenticated, modifiedAt, dispatch} = this.props;
+    const {name, isEditing} = this.state;
     return (
         <div className="col-sm-4">
           <div className="card bucket-card">
             <div className="card-body">
-              {this.state.isEditing ?
-                  <input type="text" value={this.state.name} onChange={event => this.onChangeName(event.target.value)}/>
+              {isEditing ?
+                  <input type="text" value={name} onChange={event => this.onChangeName(event.target.value)}/>
                   :
-                  <h4 className="card-title"><Link to={`/buckets/${this.props.id}/items`}>{this.state.name}</Link></h4>
+                  <h4 className="card-title"><Link to={`/buckets/${id}/items`}>{name}</Link></h4>
               }
               <p className="card-text">
-                <small>Last Modified: {this.props.modifiedAt}</small>
+                <small>Last Modified: {formatDate(modifiedAt)}</small>
               </p>
-              {this.state.isEditing ?
+              {isEditing ?
                   <button className="btn btn-primary bucket-links" onClick={this.onSaving}>Save</button>
                   :
                   <button className="btn btn-primary bucket-links" onClick={this.onEditing}>Edit</button>
               }
               <button className="btn btn-danger"
-                      onClick={() => this.props.dispatch(deleteBucketFromServer(this.props.id, this.props.index,
-                          this.props.isAuthenticated))}>
+                      onClick={() => dispatch(deleteBucketFromServer(id, index, isAuthenticated))}
+              >
                 Delete
               </button>
-
             </div>
           </div>
         </div>

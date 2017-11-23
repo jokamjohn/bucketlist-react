@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Breadcrumb from "../bucket/Breadcrumb";
-import {resetPassword} from "../../actions/passwordreset";
-import {MINIMUM_PASSWORD_LENGTH} from "../../utilities/Constants";
+import Breadcrumb from "../components/bucket/Breadcrumb";
+import {resetPassword} from "../actions/passwordreset";
+import {MINIMUM_PASSWORD_LENGTH} from "../utilities/Constants";
 import {connect} from 'react-redux';
 
 class PasswordReset extends React.Component {
