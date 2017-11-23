@@ -17,13 +17,14 @@ class PasswordReset extends React.Component {
   onSubmit = event => {
     event.preventDefault();
     const oldPassword = this.oldPassword.value;
-    const newPassword = this.state.newPassword;
-    const newPasswordConfirmation = this.state.newPasswordConfirmation;
-    if (newPassword !== newPasswordConfirmation || newPassword.length <= MINIMUM_PASSWORD_LENGTH
+    const {newPassword, newPasswordConfirmation} = this.state;
+    const {dispatch, isAuthenticated} = this.props;
+    if (newPassword !== newPasswordConfirmation
+        || newPassword.length <= MINIMUM_PASSWORD_LENGTH
         || newPasswordConfirmation <= MINIMUM_PASSWORD_LENGTH
-        || oldPassword <= MINIMUM_PASSWORD_LENGTH) return;
-    const isAuthenticated = this.props.isAuthenticated;
-    this.props.dispatch(resetPassword(oldPassword, newPassword, newPasswordConfirmation, isAuthenticated))
+        || oldPassword <= MINIMUM_PASSWORD_LENGTH)
+      return;
+    dispatch(resetPassword(oldPassword, newPassword, newPasswordConfirmation, isAuthenticated))
   };
 
   onPasswordChange = event => {
@@ -72,6 +73,7 @@ class PasswordReset extends React.Component {
       </div>;
 
   render() {
+    const {newPassword, newPasswordConfirmation} = this.state;
     return (
         <div className="container main-content">
 
@@ -95,14 +97,14 @@ class PasswordReset extends React.Component {
                     <div className="form-group">
                       <label> New Password</label>
                       <input type="password" className="form-control" placeholder="Password"
-                             value={this.state.newPassword} required name="newPassword"
+                             value={newPassword} required name="newPassword"
                              onChange={event => this.onPasswordChange(event)}/>
                     </div>
 
                     <div className="form-group">
                       <label> New Password Confirmation</label>
                       <input type="password" className="form-control" placeholder="Password"
-                             value={this.state.newPasswordConfirmation} required name="newPasswordConfirmation"
+                             value={newPasswordConfirmation} required name="newPasswordConfirmation"
                              onChange={event => this.onPasswordChange(event)}/>
                     </div>
 
