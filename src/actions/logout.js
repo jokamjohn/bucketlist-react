@@ -62,7 +62,10 @@ export const logoutUser = () => {
   const config = {
     method: 'POST',
     url: LOGOUT_URL,
-    headers: {'content-type': 'application/json', 'Authorization': `Bearer ${token}`}
+    headers: {
+      'content-type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
   };
 
   return dispatch => {
