@@ -53,9 +53,12 @@ export const loginUser = credentials => {
   const config = {
     method: 'POST',
     url: LOGIN_URL,
-    headers: {'content-type': 'application/json'},
+    headers: {
+      'content-type': 'application/json'
+    },
     data: {
-      email: `${credentials.email}`, password: `${credentials.password}`
+      email: `${credentials.email}`,
+      password: `${credentials.password}`
     }
   };
 
@@ -63,12 +66,7 @@ export const loginUser = credentials => {
     dispatch(requestLogin());
     return axios(config)
         .then(response => {
-          if (response.status !== 200) {
-            dispatch(loginError('Failed, try again'))
-          }
-          return response.data
-        })
-        .then(user => {
+          const user = response.data;
           localStorage.setItem(AUTH_TOKEN, user.auth_token);
           localStorage.setItem(USER_EMAIL, credentials.email);
           dispatch(receiveLogin(user));
