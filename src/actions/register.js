@@ -60,9 +60,7 @@ export const registerUser = credentials => {
         .then(response => response.data)
         .then(info => dispatch(registerSuccess(info.message)))
         .catch(error => {
-          if (error.response) {
-            dispatch(registerFailure(error.response.message))
-          }
+          if (error.response) return dispatch(registerFailure(error.response.message))
         })
   }
 };
