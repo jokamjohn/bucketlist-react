@@ -41,11 +41,11 @@ class Application extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const {isAuthenticated, isFetching, message, isRegistered} = state;
+  const {auth, isFetching, message} = state;
   return {
-    isAuthenticated,
+    isAuthenticated: auth.isAuthenticated,
     isFetching,
-    isRegistered,
+    isRegistered: auth.isRegistered,
     message,
   }
 };

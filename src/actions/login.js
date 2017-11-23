@@ -7,12 +7,11 @@ import axios from 'axios';
  * @param credentials
  * @returns {{type, isAuthenticated: boolean, isFetching: boolean, credentials: *}}
  */
-export const requestLogin = credentials => {
+export const requestLogin = () => {
   return {
     type: LoginActionTypes.LOGIN_REQUEST,
     isAuthenticated: false,
     isFetching: true,
-    credentials
   }
 };
 
@@ -61,7 +60,7 @@ export const loginUser = credentials => {
   };
 
   return dispatch => {
-    dispatch(requestLogin(credentials));
+    dispatch(requestLogin());
     return axios(config)
         .then(response => {
           if (response.status !== 200) {

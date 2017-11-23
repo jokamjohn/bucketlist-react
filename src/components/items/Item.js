@@ -22,16 +22,15 @@ class Item extends React.Component {
 
   onSaving = () => {
     this.setState({isEditing: false});
-    const {bucketId, itemId, index, isAuthenticated, dispatch} = this.props;
+    const {bucketId, id: itemId, index, isAuthenticated, dispatch} = this.props;
     const {name, description} = this.state;
     dispatch(editItem(bucketId, itemId, index, name, description, isAuthenticated))
-
   };
 
   onCancel = () => this.setState({isEditing: false});
 
   onDelete = () => {
-    const {bucketId, itemId, index, isAuthenticated, dispatch} = this.props;
+    const {bucketId, id: itemId, index, isAuthenticated, dispatch} = this.props;
     dispatch(deleteItem(bucketId, itemId, index, isAuthenticated));
   };
 
@@ -45,9 +44,12 @@ class Item extends React.Component {
             <div className="card-body">
               {isEditing ?
                   <div>
-                    <input type="text" value={name}
-                           onChange={event => this.onChangeName(event.target.value)}/>
-                    <textarea className="form-control" rows="5"
+                    <input type="text"
+                           value={name}
+                           onChange={event => this.onChangeName(event.target.value)}
+                    />
+                    <textarea className="form-control"
+                              rows="5"
                               onChange={event => this.onChangeDescription(event.target.value)}
                               placeholder="Item Description" value={description}>
                     </textarea>
@@ -58,7 +60,9 @@ class Item extends React.Component {
                     <p className="card-text">{description}</p>
                   </div>
               }
-              <h6 className="card-subtitle mb-2 text-muted">{formatDate(modifiedAt)}</h6>
+              <h6 className="card-subtitle mb-2 text-muted">
+                {formatDate(modifiedAt)}
+              </h6>
               {isEditing ?
                   <div>
                     <button className="btn btn-primary bucket-links" onClick={this.onSaving}>Save</button>
@@ -82,7 +86,7 @@ Item.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string,
   modifiedAt: PropTypes.string.isRequired,
-  itemId: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
   bucketId: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   index: PropTypes.number.isRequired,

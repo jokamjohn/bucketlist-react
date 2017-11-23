@@ -8,7 +8,8 @@ export const ShowItems = props => (
           <Item key={item.id}
                 {...item}
                 bucketId={props.bucketId}
-                dispatch={props.dispatch} index={index}
+                dispatch={props.dispatch}
+                index={index}
                 isAuthenticated={props.isAuthenticated}
           />
       )}

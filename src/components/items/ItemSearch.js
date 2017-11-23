@@ -16,9 +16,18 @@ class ItemSearch extends React.Component {
         <div className="col-sm-5 mx-sm-auto">
           <form className="form-inline">
             <div className="form-group">
-              <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0" ref={input => this.query = input}
-                     placeholder="search items..." required/>
-              <input type="submit" className="btn btn-primary" value="Search" onClick={this.onSubmit}/>
+              <input type="text"
+                     className="form-control mb-2 mr-sm-2 mb-sm-0"
+                     ref={input => this.query = input}
+                     placeholder="search items..." required
+              />
+
+              <input type="submit"
+                     className="btn btn-primary"
+                     value="Search"
+                     onClick={this.onSubmit}
+              />
+
             </div>
           </form>
         </div>

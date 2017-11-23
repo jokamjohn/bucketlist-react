@@ -33,7 +33,7 @@ class Items extends React.Component {
   }
 
   /**
-   * Fetch the Buckets at the provided URL when a pagination number is clicked.
+   * Fetch the Bucket Items at the provided URL when a pagination number is clicked.
    * @param url Buckets URL
    */
   onChangeUrl = url => {
@@ -50,9 +50,10 @@ class Items extends React.Component {
    */
   paginationUrl = () => {
     const bucketId = this.props.match.params.bucketId;
+    const {isItemSearch, query} = this.props.items.search;
     let url = BASE_URL + `bucketlists/${bucketId}/items/?page=`;
-    if (this.props.isSearch && this.props.query) {
-      url = BASE_URL + `bucketlists/${bucketId}/items/?q=${this.props.query}&page=`;
+    if (isItemSearch && query) {
+      url = BASE_URL + `bucketlists/${bucketId}/items/?q=${query}&page=`;
     }
     return url
   };
@@ -82,9 +83,19 @@ class Items extends React.Component {
 
                 <hr></hr>
 
-                <ShowItems items={allItems} dispatch={dispatch} bucketId={bucketId} isAuthenticated={isAuth}/>
-                <Pagination count={count} next={next} previous={previous} dispatch={dispatch} isAuthenticated={isAuth}
-                            onChangeUrl={this.onChangeUrl} paginationUrl={this.paginationUrl}/>
+                <ShowItems items={allItems}
+                           dispatch={dispatch}
+                           bucketId={bucketId}
+                           isAuthenticated={isAuth}
+                />
+                <Pagination count={count}
+                            next={next}
+                            previous={previous}
+                            dispatch={dispatch}
+                            isAuthenticated={isAuth}
+                            onChangeUrl={this.onChangeUrl}
+                            paginationUrl={this.paginationUrl}
+                />
               </div>
               :
               <div>
@@ -105,9 +116,9 @@ Items.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const {isAuthenticated, items} = state;
+  const {auth, items} = state;
   return {
-    isAuthenticated,
+    isAuthenticated: auth.isAuthenticated,
     items
   }
 };

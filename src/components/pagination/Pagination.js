@@ -7,7 +7,7 @@ import {PageNumber} from "./PageNumber";
 class Pagination extends React.Component {
 
   render() {
-    const {count,isAuthenticated:isAuth,onChangeUrl,previous, next} = this.props;
+    const {count, isAuthenticated: isAuth, onChangeUrl, previous, next} = this.props;
     return (
         <div className="container main-content">
           {count

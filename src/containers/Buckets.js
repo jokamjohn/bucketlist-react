@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 class Buckets extends React.Component {
 
   componentDidMount() {
-    this.props.dispatch(getBuckets(this.props.bucketUrl, this.props.isAuthenticated, this.props.buckets.search.isSearch))
+    this.props.dispatch(getBuckets(this.props.bucketUrl, this.props.isAuthenticated, this.props.search.isSearch))
   }
 
   /**
@@ -20,7 +20,7 @@ class Buckets extends React.Component {
    * @param url Buckets URL
    */
   onChangeUrl = url => {
-    this.props.dispatch(getBuckets(url, this.props.isAuthenticated, this.props.isSearch))
+    this.props.dispatch(getBuckets(url, this.props.isAuthenticated, this.props.search.isSearch))
   };
 
   /**
@@ -38,8 +38,8 @@ class Buckets extends React.Component {
   };
 
   render() {
-    const {count, next, isAuthenticated: isAuth, buckets, dispatch} = this.props;
-    const previous = buckets.previous;
+    const {isAuthenticated: isAuth, buckets, dispatch} = this.props;
+    const {count, next, previous} = buckets;
 
     return (
         <div className="container main-content">
@@ -56,18 +56,33 @@ class Buckets extends React.Component {
 
           {this.props.buckets
               ?
-              <div className="row">
-                {this.props.buckets.buckets.map((bucket, index) =>
-                    <Bucket key={bucket.id} index={index} {...bucket} dispatch={dispatch} isAuthenticated={isAuth}/>
-                )}
+              <div>
+                <div className="row">
+                  {this.props.buckets.buckets.map((bucket, index) =>
+                      <Bucket key={bucket.id}
+                              index={index}
+                              {...bucket}
+                              dispatch={dispatch}
+                              isAuthenticated={isAuth}
+                      />
+                  )}
+                </div>
+                <Pagination count={count}
+                            next={next}
+                            previous={previous}
+                            dispatch={dispatch}
+                            isAuthenticated={isAuth}
+                            onChangeUrl={this.onChangeUrl}
+                            paginationUrl={this.paginationUrl}
+                />
               </div>
               :
               <div className="row">
-                <p>Looks like you do not have Buckets yet!</p>
+                <p>
+                  Looks like you do not have Buckets yet!
+                </p>
               </div>
           }
-          <Pagination count={count} next={next} previous={previous} dispatch={dispatch}
-                      isAuthenticated={isAuth} onChangeUrl={this.onChangeUrl} paginationUrl={this.paginationUrl}/>
         </div>
     );
   }
@@ -78,16 +93,17 @@ Buckets.propTypes = {
   isAuthenticated: PropTypes.bool,
   buckets: PropTypes.object,
   bucketUrl: PropTypes.string,
-  isSearch: PropTypes.bool,
+  search: PropTypes.object,
   query: PropTypes.string,
 };
 
 const mapStateToProps = state => {
-  const {isAuthenticated, buckets, bucketUrl} = state;
+  const {auth, buckets} = state;
   return {
-    isAuthenticated,
+    isAuthenticated: auth.isAuthenticated,
     buckets,
-    bucketUrl,
+    bucketUrl: buckets.bucketUrl,
+    search: buckets.search,
   }
 };
 

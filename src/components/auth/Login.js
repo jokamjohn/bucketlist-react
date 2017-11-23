@@ -16,11 +16,7 @@ class Login extends React.Component {
   render() {
     const {from} = this.props.location.state || {from: {pathname: '/buckets'}};
 
-    if (this.props.isAuthenticated) {
-      return (
-          <Redirect to={from}/>
-      );
-    }
+    if (this.props.isAuthenticated) return <Redirect to={from}/>;
 
     return (
         <div className="container main-content">

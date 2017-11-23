@@ -9,12 +9,12 @@ import './css/index.css'
 import 'bootstrap/dist/js/bootstrap.min'
 import './containers/Application'
 import Application from './containers/Application'
-import reducer from './reducers/reducer';
+import rootReducer from "./reducers/rootReducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancer = composeEnhancers(applyMiddleware(thunk));
 
-const store = createStore(reducer, enhancer);
+const store = createStore(rootReducer, enhancer);
 
 ReactDOM.render(
     <Provider store={store}>

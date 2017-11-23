@@ -89,23 +89,39 @@ class PasswordReset extends React.Component {
                   {this.passwordsDoNotMatch()}
                   <form onSubmit={this.onSubmit}>
                     <div className="form-group">
-                      <label> Old Password</label>
-                      <input type="password" className="form-control" placeholder="Password"
-                             ref={input => this.oldPassword = input} required/>
+                      <label>
+                        Old Password
+                      </label>
+                      <input type="password"
+                             className="form-control"
+                             placeholder="Password"
+                             ref={input => this.oldPassword = input}
+                             required
+                      />
                     </div>
 
                     <div className="form-group">
-                      <label> New Password</label>
-                      <input type="password" className="form-control" placeholder="Password"
-                             value={newPassword} required name="newPassword"
-                             onChange={event => this.onPasswordChange(event)}/>
+                      <label>
+                        New Password
+                      </label>
+                      <input type="password"
+                             className="form-control"
+                             placeholder="Password"
+                             value={newPassword}
+                             required name="newPassword"
+                             onChange={event => this.onPasswordChange(event)}
+                      />
                     </div>
 
                     <div className="form-group">
                       <label> New Password Confirmation</label>
-                      <input type="password" className="form-control" placeholder="Password"
-                             value={newPasswordConfirmation} required name="newPasswordConfirmation"
-                             onChange={event => this.onPasswordChange(event)}/>
+                      <input type="password"
+                             className="form-control"
+                             placeholder="Password"
+                             value={newPasswordConfirmation}
+                             required name="newPasswordConfirmation"
+                             onChange={event => this.onPasswordChange(event)}
+                      />
                     </div>
 
                     <button type="submit" className="btn btn-primary">
@@ -128,9 +144,9 @@ PasswordReset.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const {isAuthenticated, passwordReset} = state;
+  const {auth, passwordReset} = state;
   return {
-    isAuthenticated,
+    isAuthenticated: auth.isAuthenticated,
     passwordReset
   }
 };
