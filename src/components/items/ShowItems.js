@@ -1,14 +1,16 @@
 import React from 'react';
 import Item from "./Item";
 import PropTypes from 'prop-types';
-import {formatDate} from "../../utilities/Utils";
 
 export const ShowItems = props => (
     <div className="row">
       {props.items.map((item, index) =>
-          <Item key={item.id} name={item.name} description={item.description} itemId={item.id} bucketId={props.bucketId}
-                modifiedAt={formatDate(item.modifiedAt)} dispatch={props.dispatch} index={index}
-                isAuthenticated={props.isAuthenticated}/>
+          <Item key={item.id}
+                {...item}
+                bucketId={props.bucketId}
+                dispatch={props.dispatch} index={index}
+                isAuthenticated={props.isAuthenticated}
+          />
       )}
     </div>
 );

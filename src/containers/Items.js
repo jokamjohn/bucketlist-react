@@ -58,13 +58,12 @@ class Items extends React.Component {
   };
 
   render() {
-    const items = this.props.items.items;
-    const bucketId = this.props.match.params.bucketId;
-    const isAuth = this.props.isAuthenticated;
-    const next = this.props.items.next;
-    const previous = this.props.items.previous;
-    const dispatch = this.props.dispatch;
-    const count = this.props.items.count;
+    const {items, isAuthenticated: isAuth, match, dispatch} = this.props;
+    const allItems = items.items;
+    const bucketId = match.params.bucketId;
+    const next = items.next;
+    const previous = items.previous;
+    const count = items.count;
 
     if (!isAuth) {
       return <Redirect to="/login"/>
@@ -73,7 +72,7 @@ class Items extends React.Component {
     return (
         <div className="container main-content">
           <Breadcrumb/>
-          {items.length
+          {allItems.length
               ?
               <div>
                 <div className="row">
@@ -83,7 +82,7 @@ class Items extends React.Component {
 
                 <hr></hr>
 
-                <ShowItems items={items} dispatch={dispatch} bucketId={bucketId} isAuthenticated={isAuth}/>
+                <ShowItems items={allItems} dispatch={dispatch} bucketId={bucketId} isAuthenticated={isAuth}/>
                 <Pagination count={count} next={next} previous={previous} dispatch={dispatch} isAuthenticated={isAuth}
                             onChangeUrl={this.onChangeUrl} paginationUrl={this.paginationUrl}/>
               </div>
@@ -93,7 +92,7 @@ class Items extends React.Component {
                 <EmptyBucketMessage/>
               </div>
           }
-          <AddItemModal bucketId={bucketId} isAuthenticated={isAuth} dispatch={this.props.dispatch}/>
+          <AddItemModal bucketId={bucketId} isAuthenticated={isAuth} dispatch={dispatch}/>
         </div>
     );
   }

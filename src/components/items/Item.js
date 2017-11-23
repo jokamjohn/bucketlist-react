@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {deleteItem, editItem} from "../../actions/items";
+import {formatDate} from "../../utilities/Utils";
 
 class Item extends React.Component {
 
@@ -21,39 +22,44 @@ class Item extends React.Component {
 
   onSaving = () => {
     this.setState({isEditing: false});
-    this.props.dispatch(editItem(this.props.bucketId, this.props.itemId, this.props.index, this.state.name,
-        this.state.description, this.props.isAuthenticated))
+    const {bucketId, itemId, index, isAuthenticated, dispatch} = this.props;
+    const {name, description} = this.state;
+    dispatch(editItem(bucketId, itemId, index, name, description, isAuthenticated))
 
   };
 
   onCancel = () => this.setState({isEditing: false});
 
-  onDelete = () => this.props.dispatch(deleteItem(this.props.bucketId, this.props.itemId,
-      this.props.index, this.props.isAuthenticated));
+  onDelete = () => {
+    const {bucketId, itemId, index, isAuthenticated, dispatch} = this.props;
+    dispatch(deleteItem(bucketId, itemId, index, isAuthenticated));
+  };
 
 
   render() {
+    const {name, description, isEditing} = this.state;
+    const {modifiedAt} = this.props;
     return (
         <div className="col-sm-4 bucket-card">
           <div className="card">
             <div className="card-body">
-              {this.state.isEditing ?
+              {isEditing ?
                   <div>
-                    <input type="text" value={this.state.name}
+                    <input type="text" value={name}
                            onChange={event => this.onChangeName(event.target.value)}/>
                     <textarea className="form-control" rows="5"
                               onChange={event => this.onChangeDescription(event.target.value)}
-                              placeholder="Item Description" value={this.state.description}>
+                              placeholder="Item Description" value={description}>
                     </textarea>
                   </div>
                   :
                   <div>
-                    <h4 className="card-title">{this.props.name}</h4>
-                    <p className="card-text">{this.props.description}</p>
+                    <h4 className="card-title">{name}</h4>
+                    <p className="card-text">{description}</p>
                   </div>
               }
-              <h6 className="card-subtitle mb-2 text-muted">{this.props.modifiedAt}</h6>
-              {this.state.isEditing ?
+              <h6 className="card-subtitle mb-2 text-muted">{formatDate(modifiedAt)}</h6>
+              {isEditing ?
                   <div>
                     <button className="btn btn-primary bucket-links" onClick={this.onSaving}>Save</button>
                     <button className="btn btn-info" onClick={this.onCancel}>Cancel</button>

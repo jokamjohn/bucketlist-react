@@ -9,10 +9,8 @@ class AddItemModal extends React.Component {
     event.preventDefault();
     const name = this.name.value;
     const description = this.description.value;
-    const authenticated = this.props.isAuthenticated;
-    let bucketId = this.props.bucketId;
-    this.props.dispatch(createItem(bucketId, name, description, authenticated,
-        () => window.location.reload()))
+    const {isAuthenticated, bucketId, dispatch} = this.props;
+    dispatch(createItem(bucketId, name, description, isAuthenticated, () => window.location.reload()))
   };
 
   render() {

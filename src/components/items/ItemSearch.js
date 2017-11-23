@@ -7,7 +7,8 @@ class ItemSearch extends React.Component {
   onSubmit = event => {
     event.preventDefault();
     const query = this.query.value;
-    this.props.dispatch(searchForItem(query, this.props.bucketId, this.props.isAuthenticated))
+    const {bucketId, isAuthenticated, dispatch} = this.props;
+    dispatch(searchForItem(query, bucketId, isAuthenticated))
   };
 
   render() {
