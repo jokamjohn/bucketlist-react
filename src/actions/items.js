@@ -81,8 +81,10 @@ export const getItems = (bucketId, url, isAuthenticated, isSearchMode) => {
     if (token) {
       config = {
         method: 'GET',
-        url: url,
-        headers: {'Authorization': `Bearer ${token}`}
+        url,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       };
     } else {
       throw new TokenException()
