@@ -69,10 +69,7 @@ export const logoutUser = () => {
     dispatch(requestLogout());
     return axios(config)
         .then(response => {
-          return response.data
-        })
-        .then(info => {
-          dispatch(receiveLogout(info.message));
+          dispatch(receiveLogout(response.data.message));
           clearLocalStorage();
         })
         .catch(error => {

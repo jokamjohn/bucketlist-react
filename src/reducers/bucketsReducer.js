@@ -38,10 +38,10 @@ export default (state = initialState, action) => {
         buckets: [
           ...state.buckets,
           {
-            name: action.name,
-            createdAt: action.createdAt,
-            modifiedAt: action.modifiedAt,
-            id: action.id
+            name: action.bucket.name,
+            createdAt: action.bucket.createdAt,
+            modifiedAt: action.bucket.modifiedAt,
+            id: action.bucket.id
           }
         ]
       };
@@ -78,8 +78,8 @@ export default (state = initialState, action) => {
             ?
             {
               ...bucket,
-              name: action.name,
-              modifiedAt: action.modifiedAt
+              name: action.bucket.name,
+              modifiedAt: action.bucket.modifiedAt
             }
             :
             bucket
