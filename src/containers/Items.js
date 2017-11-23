@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import Breadcrumb from './Breadcrumb'
-import {getItems, receiveItems} from "../../actions/items";
-import {BASE_URL, BUCKETLIST_URL} from "../../utilities/Constants";
-import AddItemModal from "./AddItemModal";
-import {AddItemButton} from "./AddItemButton";
-import {EmptyBucketMessage} from "./EmptyBucketMessage";
-import {ShowItems} from "./ShowItems";
-import Pagination from "../pagination/Pagination";
+import Breadcrumb from '../components/items/Breadcrumb'
+import {getItems, receiveItems} from "../actions/items";
+import {BASE_URL, BUCKETLIST_URL} from "../utilities/Constants";
+import AddItemModal from "../components/items/AddItemModal";
+import {AddItemButton} from "../components/items/AddItemButton";
+import {EmptyBucketMessage} from "../components/items/EmptyBucketMessage";
+import {ShowItems} from "../components/items/ShowItems";
+import Pagination from "../components/pagination/Pagination";
 import {Redirect} from 'react-router-dom';
-import ItemSearch from "./ItemSearch";
+import ItemSearch from "../components/items/ItemSearch";
 import {connect} from 'react-redux';
 
 class Items extends React.Component {

@@ -6,8 +6,8 @@ import Login from '../components/auth/Login'
 import Register from '../components/auth/Register'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import Buckets from '../components/bucket/Buckets'
-import Items from '../components/items/Items'
+import Buckets from './Buckets'
+import Items from './Items'
 import NotFound from '../components/NotFound'
 import PasswordReset from "../components/auth/PasswordReset";
 import {PrivateRoute} from "../components/auth/PrivateRoute";

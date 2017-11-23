@@ -1,13 +1,13 @@
 import React from 'react'
-import Breadcrumb from './Breadcrumb'
-import Bucket from './Bucket'
+import Breadcrumb from '../components/bucket/Breadcrumb'
+import Bucket from '../components/bucket/Bucket'
 import PropTypes from 'prop-types';
-import {getBuckets} from "../../actions/buckets";
-import {formatDate} from "../../utilities/Utils";
-import Pagination from "../pagination/Pagination";
-import CreateBucket from "./CreateBucket";
-import BucketSearch from "./BucketSearch";
-import {BASE_URL} from "../../utilities/Constants";
+import {getBuckets} from "../actions/buckets";
+import {formatDate} from "../utilities/Utils";
+import Pagination from "../components/pagination/Pagination";
+import CreateBucket from "../components/bucket/CreateBucket";
+import BucketSearch from "../components/bucket/BucketSearch";
+import {BASE_URL} from "../utilities/Constants";
 import {connect} from 'react-redux';
 
 class Buckets extends React.Component {
