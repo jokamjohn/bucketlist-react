@@ -4,27 +4,24 @@ import axios from 'axios';
 
 /**
  * Action for when a user is logging In
- * @param credentials
- * @returns {{type, isAuthenticated: boolean, isFetching: boolean, credentials: *}}
+ * @returns {{type, isAuthenticated: boolean}}
  */
 export const requestLogin = () => {
   return {
     type: LoginActionTypes.LOGIN_REQUEST,
     isAuthenticated: false,
-    isFetching: true,
   }
 };
 
 /**
  * Action for when a user login is successful
  * @param user
- * @returns {{type, isAuthenticated: boolean, isFetching: boolean, idToken: *}}
+ * @returns {{type, isAuthenticated: boolean, idToken: *}}
  */
 export const receiveLogin = user => {
   return {
     type: LoginActionTypes.LOGIN_SUCCESS,
     isAuthenticated: true,
-    isFetching: false,
     idToken: user.auth_token
   }
 };
@@ -32,13 +29,12 @@ export const receiveLogin = user => {
 /**
  * Action for when a login error occurs.
  * @param message
- * @returns {{type, isAuthenticated: boolean, isFetching: boolean, message: *}}
+ * @returns {{type, isAuthenticated: boolean, message: *}}
  */
 export const loginError = message => {
   return {
     type: LoginActionTypes.LOGIN_FAILURE,
     isAuthenticated: false,
-    isFetching: false,
     message
   }
 };

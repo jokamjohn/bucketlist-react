@@ -4,12 +4,11 @@ import axios from 'axios';
 
 /**
  * Action to change state during a user Login request
- * @returns {{type, isFetching: boolean, isAuthenticated: boolean}}
+ * @returns {{type, isAuthenticated: boolean}}
  */
 export const requestLogout = () => {
   return {
     type: LogoutActionTypes.LOGOUT_REQUEST,
-    isFetching: true,
     isAuthenticated: true
   }
 };
@@ -17,12 +16,11 @@ export const requestLogout = () => {
 /**
  * Action to change state when a user signs In successfully.
  * @param message Login success message
- * @returns {{type, isFetching: boolean, isAuthenticated: boolean, message: *}}
+ * @returns {{type, isAuthenticated: boolean, message: *}}
  */
 export const receiveLogout = (message) => {
   return {
     type: LogoutActionTypes.LOGOUT_SUCCESS,
-    isFetching: false,
     isAuthenticated: false,
     message
   }
@@ -32,12 +30,11 @@ export const receiveLogout = (message) => {
  * Action to change state when a user encounters an error when they are trying to
  * login the application.
  * @param message
- * @returns {{type, isFetching: boolean, isAuthenticated: boolean, message: *}}
+ * @returns {{type, isAuthenticated: boolean, message: *}}
  */
 export const logoutError = (message) => {
   return {
     type: LogoutActionTypes.LOGOUT_FAILURE,
-    isFetching: false,
     isAuthenticated: false,
     message
   }

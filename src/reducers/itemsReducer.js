@@ -6,7 +6,6 @@ export default (state = initialState.items, action) => {
     case ItemActionTypes.ITEMS_SUCCESS:
       return {
         ...state,
-        isFetching: false,
         items: action.items,
         count: action.count,
         next: action.next,
@@ -16,7 +15,6 @@ export default (state = initialState.items, action) => {
     case ItemActionTypes.ITEMS_DELETION:
       return {
         ...state,
-        isFetching: false,
         items: [
           ...state.items.slice(0, action.itemIndex),
           ...state.items.slice(action.itemIndex + 1)
@@ -26,7 +24,6 @@ export default (state = initialState.items, action) => {
     case ItemActionTypes.ITEMS_EDIT:
       return {
         ...state,
-        isFetching: false,
         items: [
           ...state.items.filter(item => item.id !== action.item.id),
           Object.assign({}, action.item)
@@ -36,7 +33,6 @@ export default (state = initialState.items, action) => {
     case ItemActionTypes.ITEMS_SEARCH:
       return {
         ...state,
-        isFetching: false,
         items: action.data.items,
         count: action.data.count,
         next: action.data.next,

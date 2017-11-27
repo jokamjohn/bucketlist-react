@@ -8,7 +8,6 @@ export default function (state = initialState.auth, action) {
     case RegisterActionTypes.REGISTER_SUCCESS:
       return {
         ...state,
-        isFetching: action.isFetching,
         isRegistered: action.isRegistered,
         message: action.message
       };
@@ -16,14 +15,12 @@ export default function (state = initialState.auth, action) {
     case RegisterActionTypes.REGISTER_REQUEST:
       return {
         ...state,
-        isFetching: action.isFetching,
         isRegistered: action.isRegistered,
       };
 
     case RegisterActionTypes.REGISTER_FAILURE:
       return {
         ...state,
-        isFetching: action.isFetching,
         isRegistered: action.isRegistered,
         message: action.message
       };
@@ -31,7 +28,6 @@ export default function (state = initialState.auth, action) {
     case RegisterActionTypes.REGISTER_PASSWORD_CONFIRMATION:
       return {
         ...state,
-        isFetching: action.isFetching,
         isRegistered: action.isRegistered,
         message: action.message
       };
@@ -39,7 +35,6 @@ export default function (state = initialState.auth, action) {
     case LoginActionTypes.LOGIN_SUCCESS:
       return {
         ...state,
-        isFetching: action.isFetching,
         isAuthenticated: action.isAuthenticated,
         idToken: action.idToken
       };
@@ -47,14 +42,12 @@ export default function (state = initialState.auth, action) {
     case LoginActionTypes.LOGIN_REQUEST:
       return {
         ...state,
-        isFetching: action.isFetching,
         isAuthenticated: action.isAuthenticated,
       };
 
     case LoginActionTypes.LOGIN_FAILURE:
       return {
         ...state,
-        isFetching: action.isFetching,
         isAuthenticated: action.isAuthenticated,
         message: action.message
       };
@@ -62,7 +55,6 @@ export default function (state = initialState.auth, action) {
     case LogoutActionTypes.LOGOUT_SUCCESS:
       return {
         ...state,
-        isFetching: action.isFetching,
         isAuthenticated: action.isAuthenticated,
         message: action.message
       };
@@ -70,14 +62,12 @@ export default function (state = initialState.auth, action) {
     case LogoutActionTypes.LOGOUT_REQUEST:
       return {
         ...state,
-        isFetching: action.isFetching,
         isAuthenticated: action.isAuthenticated
       };
 
     case LogoutActionTypes.LOGOUT_FAILURE:
       return {
         ...state,
-        isFetching: action.isFetching,
         isAuthenticated: action.isAuthenticated,
         message: action.message
       };

@@ -5,7 +5,6 @@ import {REGISTER_URL} from "../utilities/Constants";
 export const registerRequest = () => {
   return {
     type: RegisterActionTypes.REGISTER_REQUEST,
-    isFetching: true,
     isRegistered: false
   }
 };
@@ -13,7 +12,6 @@ export const registerRequest = () => {
 export const registerSuccess = message => {
   return {
     type: RegisterActionTypes.REGISTER_SUCCESS,
-    isFetching: false,
     isRegistered: true,
     message
   }
@@ -23,7 +21,6 @@ export const registerFailure = message => {
   return {
     type: RegisterActionTypes.REGISTER_FAILURE,
     isRegistered: false,
-    isFetching: false,
     message
   }
 };
@@ -31,7 +28,6 @@ export const registerFailure = message => {
 export const registerPasswordConfirmation = message => {
   return {
     type: RegisterActionTypes.REGISTER_PASSWORD_CONFIRMATION,
-    isFetching: false,
     isRegistered: false,
     message
   }

@@ -16,7 +16,6 @@ export const receiveBuckets = data => {
   return {
     type: BucketActionTypes.BUCKET_SUCCESS,
     data,
-    isFetching: false
   }
 };
 
@@ -64,7 +63,6 @@ export const searchBucket = (data, query, isSearch) => {
     data,
     isSearch,
     query,
-    isFetching: false
   }
 };
 

@@ -6,7 +6,6 @@ export default (state = initialState.buckets, action) => {
     case BucketActionTypes.BUCKET_SUCCESS:
       return {
         ...state,
-        isFetching: false,
         buckets: action.data.buckets,
         count: action.data.count,
         next: action.data.next,
@@ -34,7 +33,6 @@ export default (state = initialState.buckets, action) => {
     case BucketActionTypes.BUCKET_SEARCH:
       return {
         ...state,
-        isFetching: false,
         buckets: action.data.buckets,
         count: action.data.count,
         next: action.data.next,
@@ -48,7 +46,6 @@ export default (state = initialState.buckets, action) => {
     case BucketActionTypes.BUCKET_SEARCH_CLEAR:
       return {
         ...state,
-        isFetching: false,
         search: {
           isSearch: action.isSearch,
           query: action.query
@@ -58,7 +55,6 @@ export default (state = initialState.buckets, action) => {
     case BucketActionTypes.BUCKET_EDIT:
       return {
         ...state,
-        isFetching: false,
         buckets: [
           ...state.buckets.filter(bucket => bucket.id !== action.bucket.id),
           Object.assign({}, action.bucket)
