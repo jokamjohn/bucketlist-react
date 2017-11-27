@@ -20,8 +20,8 @@ class Bucket extends React.Component {
   onEditing = () => this.setState({isEditing: true});
 
   onSaving = () => {
-    const {id, index, isAuthenticated, dispatch} = this.props;
-    dispatch(editBucketOnServer(this.state.name, id, index, isAuthenticated));
+    const {id, isAuthenticated, dispatch} = this.props;
+    dispatch(editBucketOnServer(this.state.name, id, isAuthenticated));
     this.setState({isEditing: false})
   };
 

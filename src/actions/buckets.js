@@ -86,14 +86,12 @@ export const clearSearchMode = () => {
 /**
  * This action provides the Bucket updated attributes.
  * @param bucket Bucket
- * @param index Index of the Bucket
  * @returns {{type, id, name, createdAt: *, modifiedAt: *, index: *}}
  */
-export const editBucket = (bucket, index) => {
+export const editBucket = bucket => {
   return {
     type: BucketActionTypes.BUCKET_EDIT,
-    bucket,
-    index
+    bucket
   }
 };
 
@@ -244,11 +242,10 @@ export const searchForBucket = (query, isAuthenticated) => {
  * the server and state.
  * @param name Bucket Name
  * @param id Bucket Id
- * @param index Bucket Index in the Buckets state array
  * @param isAuthenticated Boolean to determine whether s user is signed in/not.
  * @returns {function(*=)}
  */
-export const editBucketOnServer = (name, id, index, isAuthenticated) => {
+export const editBucketOnServer = (name, id, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
 
@@ -270,7 +267,7 @@ export const editBucketOnServer = (name, id, index, isAuthenticated) => {
 
   return dispatch => {
     return axios(config)
-        .then(response => dispatch(editBucket(response.data, index)))
+        .then(response => dispatch(editBucket(response.data)))
         .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };

@@ -22,9 +22,9 @@ class Item extends React.Component {
 
   onSaving = () => {
     this.setState({isEditing: false});
-    const {bucketId, id: itemId, index, isAuthenticated, dispatch} = this.props;
+    const {bucketId, id: itemId, isAuthenticated, dispatch} = this.props;
     const {name, description} = this.state;
-    dispatch(editItem(bucketId, itemId, index, name, description, isAuthenticated))
+    dispatch(editItem(bucketId, itemId, name, description, isAuthenticated))
   };
 
   onCancel = () => this.setState({isEditing: false});

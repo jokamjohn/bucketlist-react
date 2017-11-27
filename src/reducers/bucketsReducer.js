@@ -59,16 +59,10 @@ export default (state = initialState.buckets, action) => {
       return {
         ...state,
         isFetching: false,
-        buckets: state.buckets.map((bucket, index) => index === action.index
-            ?
-            {
-              ...bucket,
-              name: action.bucket.name,
-              modifiedAt: action.bucket.modifiedAt
-            }
-            :
-            bucket
-        )
+        buckets: [
+          ...state.buckets.filter(bucket => bucket.id !== action.bucket.id),
+          Object.assign({}, action.bucket)
+        ]
       };
 
     default:

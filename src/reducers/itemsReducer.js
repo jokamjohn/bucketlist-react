@@ -27,17 +27,10 @@ export default (state = initialState.items, action) => {
       return {
         ...state,
         isFetching: false,
-        items: state.items.map((item, index) => index === action.index
-            ?
-            {
-              ...item,
-              name: action.data.name,
-              description: action.data.description,
-              modifiedAt: action.data.modifiedAt
-            }
-            :
-            item
-        )
+        items: [
+          ...state.items.filter(item => item.id !== action.item.id),
+          Object.assign({}, action.item)
+        ]
       };
 
     case ItemActionTypes.ITEMS_SEARCH:
