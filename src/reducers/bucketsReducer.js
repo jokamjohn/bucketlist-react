@@ -37,12 +37,7 @@ export default (state = initialState, action) => {
         ...state,
         buckets: [
           ...state.buckets,
-          {
-            name: action.bucket.name,
-            createdAt: action.bucket.createdAt,
-            modifiedAt: action.bucket.modifiedAt,
-            id: action.bucket.id
-          }
+          Object.assign({}, action.bucket)
         ]
       };
 

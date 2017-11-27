@@ -15,7 +15,10 @@ class AddItemModal extends React.Component {
 
   render() {
     return (
-        <div className="modal fade mx-auto" id="addItemModal" tabIndex="-1" role="dialog"
+        <div className="modal fade mx-auto"
+             id="addItemModal"
+             tabIndex="-1"
+             role="dialog"
              aria-labelledby="addItemModalLabel"
              aria-hidden="true">
           <div className="modal-dialog" role="document">
@@ -29,12 +32,17 @@ class AddItemModal extends React.Component {
               <div className="modal-body">
                 <form onSubmit={this.onSubmit}>
                   <div className="form-group">
-                    <input type="text" className="form-control mb-2 mb-sm-0"
-                           placeholder="Item Name" ref={input => this.name = input} required/>
+                    <input type="text"
+                           className="form-control mb-2 mb-sm-0"
+                           placeholder="Item Name"
+                           ref={input => this.name = input} required/>
                   </div>
                   <div className="form-group">
-                    <textarea className="form-control" rows="5" placeholder="Item Description"
-                              ref={input => this.description = input}></textarea>
+                    <textarea className="form-control"
+                              rows="5"
+                              placeholder="Item Description"
+                              ref={input => this.description = input}>
+                    </textarea>
                   </div>
                   <div className="form-group">
                     <input type="submit" className="btn btn-primary form-control" value="Save"/>

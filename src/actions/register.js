@@ -48,7 +48,6 @@ export const registerUser = credentials => {
       password: `${credentials.password}`
     }
   };
-  console.log(config);
 
   return dispatch => {
     if (credentials.password !== credentials.passwordConfirmation) {

@@ -1,7 +1,7 @@
 import * as BucketActionTypes from '../actiontypes/bucket';
 import {
-  AUTH_TOKEN, BUCKETLIST_POST_URL, BUCKETLIST_SEARCH_URL, BUCKETLIST_URL, LOCAL_BUCKET_URL,
-  RESPONSE_OK
+  AUTH_TOKEN, BUCKETLIST_POST_URL, BUCKETLIST_SEARCH_URL, BUCKETLIST_URL,
+  LOCAL_BUCKET_URL,
 } from "../utilities/Constants";
 import axios from 'axios';
 import {logoutUser} from "./logout";
