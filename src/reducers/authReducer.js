@@ -1,15 +1,9 @@
 import * as RegisterActionTypes from '../actiontypes/register';
 import * as LoginActionTypes from '../actiontypes/login'
 import * as LogoutActionTypes from '../actiontypes/logout';
-import {AUTH_TOKEN} from "../utilities/Constants";
+import initialState from "./initialState";
 
-const initialState = {
-  isFetching: false,
-  isAuthenticated: localStorage.getItem(AUTH_TOKEN) ? true : false,
-};
-
-
-export default function (state = initialState, action) {
+export default function (state = initialState.auth, action) {
   switch (action.type) {
     case RegisterActionTypes.REGISTER_SUCCESS:
       return {

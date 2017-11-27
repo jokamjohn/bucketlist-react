@@ -1,15 +1,15 @@
 import {combineReducers} from 'redux';
-import bucketReducer from './bucketsReducer';
-import itemsReducer from './itemsReducer';
+import buckets from './bucketsReducer';
+import items from './itemsReducer';
 import auth from './authReducer';
-import passwordResetReducer from './passwordResetReducer';
+import passwordReset from './passwordResetReducer';
 
 
 const rootReducer = combineReducers({
-  buckets: bucketReducer,
-  items: itemsReducer,
+  buckets,
+  items,
   auth,
-  passwordReset: passwordResetReducer
+  passwordReset
 });
 
 export default rootReducer

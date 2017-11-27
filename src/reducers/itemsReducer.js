@@ -1,15 +1,7 @@
 import * as ItemActionTypes from '../actiontypes/items';
+import initialState from "./initialState";
 
-const initialState = {
-  isFetching: false,
-  items: [],
-  search: {
-    isItemSearch: false
-  }
-};
-
-
-export default (state = initialState, action) => {
+export default (state = initialState.items, action) => {
   switch (action.type) {
     case ItemActionTypes.ITEMS_SUCCESS:
       return {

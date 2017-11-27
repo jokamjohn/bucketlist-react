@@ -1,17 +1,7 @@
-import {BUCKETLIST_URL, LOCAL_BUCKET_URL} from "../utilities/Constants";
 import * as BucketActionTypes from "../actiontypes/bucket";
+import initialState from "./initialState";
 
-const initialState = {
-  isFetching: false,
-  bucketUrl: localStorage.getItem(LOCAL_BUCKET_URL) || BUCKETLIST_URL,
-  buckets: [],
-  search: {
-    isSearch: false
-  }
-};
-
-
-export default (state = initialState, action) => {
+export default (state = initialState.buckets, action) => {
   switch (action.type) {
     case BucketActionTypes.BUCKET_SUCCESS:
       return {
