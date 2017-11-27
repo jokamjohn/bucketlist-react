@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Breadcrumb from '../components/items/Breadcrumb'
 import {getItems, receiveItems} from "../actions/items";
 import {BASE_URL, BUCKETLIST_URL} from "../utilities/Constants";
-import AddItemModal from "../components/items/AddItemModal";
+import AddItemModal from "../components/items/AddItem";
 import {AddItemButton} from "../components/items/AddItemButton";
 import {EmptyBucketMessage} from "../components/items/EmptyBucketMessage";
 import {ShowItems} from "../components/items/ShowItems";

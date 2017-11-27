@@ -41,7 +41,6 @@ class Bucket extends React.Component {
 
   onUpdateSuccess = () => {
     showToast("Bucket Updated successfully");
-    this.setState({deleting: false});
     this.setState({updating: false});
   };
 
