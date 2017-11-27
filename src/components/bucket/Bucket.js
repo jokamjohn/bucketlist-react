@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {editBucketOnServer} from "../../actions/buckets";
+import {deleteBucketFromServer, editBucketOnServer} from "../../actions/buckets";
 import {BucketCard} from "./BucketCard";
 import {bucketType} from "../../types/index";
+import {handleError, showToast} from "../../utilities/Utils";
 
 
 class Bucket extends React.Component {
@@ -11,17 +12,46 @@ class Bucket extends React.Component {
     super(props);
     this.state = {
       name: props.name,
-      isEditing: false
+      isEditing: false,
+      deleting: false,
+      updating: false,
     }
   }
 
-  onChangeName = (value) => this.setState({name: value});
+  onChange = (value) => this.setState({name: value});
 
   onEditing = () => this.setState({isEditing: true});
 
-  onSaving = () => {
+  onSave = () => {
+    this.setState({updating: true});
     const {id, isAuthenticated, dispatch} = this.props;
-    dispatch(editBucketOnServer(this.state.name, id, isAuthenticated));
+    dispatch(editBucketOnServer(this.state.name, id, isAuthenticated))
+        .then(() => this.onUpdateSuccess())
+        .catch(error => handleError(error));
+    this.setState({isEditing: false})
+  };
+
+  onDelete = () => {
+    this.setState({deleting: true});
+    const {dispatch, id, index, isAuthenticated} = this.props;
+    dispatch(deleteBucketFromServer(id, index, isAuthenticated))
+        .then(() => showToast("Bucket Successfully Deleted"))
+        .catch(error => this.onHandleError(error))
+  };
+
+  onUpdateSuccess = () => {
+    showToast("Bucket Updated successfully");
+    this.setState({deleting: false});
+    this.setState({updating: false});
+  };
+
+  onHandleError = error => {
+    handleError(error);
+    this.setState({deleting: false});
+    this.setState({updating: false});
+  };
+
+  onCancel = () => {
     this.setState({isEditing: false})
   };
 
@@ -29,9 +59,11 @@ class Bucket extends React.Component {
     return <BucketCard
         {...this.props}
         {...this.state}
-        onChangeName={this.onChangeName}
-        onSaving={this.onSaving}
+        onChange={this.onChange}
+        onSave={this.onSave}
         onEditing={this.onEditing}
+        onDelete={this.onDelete}
+        onCancel={this.onCancel}
     />
   }
 }
