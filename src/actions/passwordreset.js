@@ -6,13 +6,11 @@ import {PASSWORD_RESET} from "../actiontypes/login";
 
 /**
  * Action to change state after a password reset.
- * @param message
  * @returns {{type, message: *}}
  */
-export const passwordReset = message => {
+export const passwordReset = () => {
   return {
-    type: PASSWORD_RESET,
-    message
+    type: PASSWORD_RESET
   }
 };
 
@@ -52,9 +50,6 @@ export const resetPassword = (oldPassword, newPassword, passwordConfirmation, is
 
   return dispatch => {
     return axios(config)
-        .then(response => dispatch(passwordReset(response.data.message)))
-        .catch(error => {
-          if (error.response) return dispatch(passwordReset(error.response.data.message))
-        });
+        .then(response => dispatch(passwordReset()));
   }
 };

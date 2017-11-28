@@ -4,11 +4,14 @@ import Breadcrumb from "../components/bucket/Breadcrumb";
 import {resetPassword} from "../actions/passwordreset";
 import {MINIMUM_PASSWORD_LENGTH} from "../utilities/Constants";
 import {connect} from 'react-redux';
+import {handleAPIError, showErrorToast, showToast} from "../utilities/Utils";
+import {ResetPasswordCard} from "../components/auth/ResetPasswordCard";
 
 class PasswordReset extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      oldPassword: '',
       newPassword: '',
       newPasswordConfirmation: '',
     }
@@ -16,15 +19,23 @@ class PasswordReset extends React.Component {
 
   onSubmit = event => {
     event.preventDefault();
-    const oldPassword = this.oldPassword.value;
-    const {newPassword, newPasswordConfirmation} = this.state;
+    event.persist();
+    const {oldPassword, newPassword, newPasswordConfirmation} = this.state;
     const {dispatch, isAuthenticated} = this.props;
-    if (newPassword !== newPasswordConfirmation
-        || newPassword.length <= MINIMUM_PASSWORD_LENGTH
+    if (newPassword !== newPasswordConfirmation) return showErrorToast("New password does not match");
+    if (newPassword.length <= MINIMUM_PASSWORD_LENGTH
         || newPasswordConfirmation <= MINIMUM_PASSWORD_LENGTH
         || oldPassword <= MINIMUM_PASSWORD_LENGTH)
-      return;
+      return showErrorToast("Password must be a minimum of 5 characters");
+
     dispatch(resetPassword(oldPassword, newPassword, newPasswordConfirmation, isAuthenticated))
+        .then(() => this.onPasswordResetSuccess(event))
+        .catch(error => handleAPIError(error))
+  };
+
+  onPasswordResetSuccess = event => {
+    event.target.reset();
+    showToast("Successful Password Reset");
   };
 
   onPasswordChange = event => {
@@ -34,104 +45,18 @@ class PasswordReset extends React.Component {
     this.setState({[name]: value})
   };
 
-  /**
-   * This is the message that is shown after the password reset API call.
-   */
-  passwordResetResponse = () =>
-      <div>
-        {this.props.passwordReset.message ?
-            <div className="alert alert-warning" role="alert">
-              {this.props.passwordReset.message}
-            </div>
-            :
-            ''
-        }
-      </div>;
-
-  passwordsDoNotMatch = () =>
-      <div>
-        {this.state.newPassword !== this.state.newPasswordConfirmation ?
-            <div className="alert alert-warning" role="alert">
-              Passwords do not match
-            </div>
-            :
-            ''
-        }
-      </div>;
-
-  invalidPasswordCharacters = () =>
-      <div>
-        {this.state.newPassword.length <= MINIMUM_PASSWORD_LENGTH
-        || this.state.newPasswordConfirmation.length <= MINIMUM_PASSWORD_LENGTH
-        || this.oldPassword.value.length <= MINIMUM_PASSWORD_LENGTH ?
-            <div className="alert alert-warning" role="alert">
-              Password must be more than 4 characters
-            </div>
-            :
-            ''
-        }
-      </div>;
-
   render() {
-    const {newPassword, newPasswordConfirmation} = this.state;
+    const {oldPassword, newPassword, newPasswordConfirmation: newPasswordConf} = this.state;
     return (
         <div className="container main-content">
-
           <Breadcrumb/>
-
-          <div className="row">
-            <div className="col-md-6 mx-auto">
-              <div className="card">
-                <h4 className="card-header text-muted">Password Reset</h4>
-                <div className="card-body">
-                  {this.passwordResetResponse()}
-                  {this.invalidPasswordCharacters()}
-                  {this.passwordsDoNotMatch()}
-                  <form onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                      <label>
-                        Old Password
-                      </label>
-                      <input type="password"
-                             className="form-control"
-                             placeholder="Password"
-                             ref={input => this.oldPassword = input}
-                             required
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label>
-                        New Password
-                      </label>
-                      <input type="password"
-                             className="form-control"
-                             placeholder="Password"
-                             value={newPassword}
-                             required name="newPassword"
-                             onChange={event => this.onPasswordChange(event)}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label> New Password Confirmation</label>
-                      <input type="password"
-                             className="form-control"
-                             placeholder="Password"
-                             value={newPasswordConfirmation}
-                             required name="newPasswordConfirmation"
-                             onChange={event => this.onPasswordChange(event)}
-                      />
-                    </div>
-
-                    <button type="submit" className="btn btn-primary">
-                      Reset Password
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ResetPasswordCard
+              onPasswordChange={this.onPasswordChange}
+              onSubmit={this.onSubmit}
+              oldPassword={oldPassword}
+              newPassword={newPassword}
+              newPasswordConf={newPasswordConf}
+          />
         </div>
     );
   }
@@ -140,14 +65,12 @@ class PasswordReset extends React.Component {
 PasswordReset.propTypes = {
   dispatch: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
-  passwordReset: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => {
-  const {auth, passwordReset} = state;
+  const {auth} = state;
   return {
     isAuthenticated: auth.isAuthenticated,
-    passwordReset
   }
 };
 

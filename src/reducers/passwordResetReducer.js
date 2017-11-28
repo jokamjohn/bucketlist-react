@@ -6,7 +6,6 @@ export default function (state = initialState.passwordReset, action) {
     case LoginActionTypes.PASSWORD_RESET:
       return {
         ...state,
-        message: action.message
       };
 
     default:
