@@ -30,18 +30,7 @@ class Login extends React.Component {
     const name = target.name;
     this.setState({[name]: value})
   };
-
-  onPasswordCharacterCountMessage = () =>
-      <div>
-        {this.state.password.length <= 4 ?
-            <small className="form-text text-muted">
-              Password must be 5 characters and above
-            </small>
-            :
-            ''
-        }
-      </div>;
-
+  
   render() {
     const {from} = this.props.location.state || {from: {pathname: '/buckets'}};
 
@@ -50,7 +39,7 @@ class Login extends React.Component {
     return <LoginCard
         onSubmit={this.onSubmit}
         onChange={this.onChange}
-        onPasswordCharacterCountMessage={this.onPasswordCharacterCountMessage}
+        password={this.state.password}
     />
   }
 }

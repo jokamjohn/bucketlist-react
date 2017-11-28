@@ -20,5 +20,4 @@ Logout.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
 };
 
-
 export default Logout
