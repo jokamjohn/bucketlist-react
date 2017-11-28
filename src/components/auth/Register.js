@@ -1,91 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Redirect, withRouter} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import {registerUser} from "../../actions/register";
+import {handleAPIError, showErrorToast, showToast} from "../../utilities/Utils";
+import {RegisterCard} from "./RegisterCard";
 
 class Register extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+      passwordConfirmation: '',
+    };
+  }
+
   onRegister = event => {
     event.preventDefault();
-    const email = this.email.value;
-    const password = this.password.value;
-    const passwordConfirmation = this.password_confirmation.value;
+    const {email, password, passwordConfirmation} = this.state;
+    if (password !== passwordConfirmation) return showErrorToast("Passwords do not match");
     const credentials = {
       email,
       password,
       passwordConfirmation
     };
-    this.props.dispatch(registerUser(credentials));
+    this.props.dispatch(registerUser(credentials))
+        .then(() => showToast("Registered successfully, Sign in to access your account"))
+        .catch(error => handleAPIError(error))
+  };
+
+  onChange = event => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({[name]: value});
   };
 
   render() {
     if (this.props.isRegistered) return <Redirect to="/login"/>;
 
-    const message = this.props.message;
-    return (
-        <div className="container main-content">
-          <div className="row">
-            <div className=" col-sm-5 mx-sm-auto">
-              <div className="card auth-card">
-                <div className="card-body">
-                  <h4 className="card-title">Sign Up</h4>
-                  <form onSubmit={this.onRegister}>
-                    <div className="form-group">
-                      <input type="email"
-                             className="form-control"
-                             aria-describedby="emailHelp"
-                             placeholder="Email address"
-                             ref={(input) => this.email = input}
-                             required
-                      />
-                      <small id="emailHelp"
-                             className="form-text text-muted">
-                        We'll never share your email with anyone else.
-                      </small>
-                    </div>
-                    <div className="form-group">
-                      <input type="password"
-                             className="form-control"
-                             id="password"
-                             placeholder="Password"
-                             ref={(input) => this.password = input}
-                             required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <input type="password"
-                             className="form-control"
-                             id="confirm_password"
-                             placeholder="Confirm Password"
-                             ref={(input) => this.password_confirmation = input}
-                             required
-                      />
-                      {message
-                          ?
-                          <small className="text-danger">{message}</small>
-                          :
-                          ''
-                      }
-                    </div>
-                    <div className="text-center">
-                      <input type="submit" value="Create Account" className="btn btn-primary"/>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    )
+    const {password, passwordConfirmation} = this.state;
+
+    return <RegisterCard
+        onRegister={this.onRegister}
+        onChange={this.onChange}
+        password={password}
+        passwordConf={passwordConfirmation}
+    />
   }
 }
 
 Register.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  message: PropTypes.string,
   isRegistered: PropTypes.bool
 };
 
 
-export default withRouter(Register)
+export default Register
 

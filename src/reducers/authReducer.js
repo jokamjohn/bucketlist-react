@@ -9,7 +9,6 @@ export default function (state = initialState.auth, action) {
       return {
         ...state,
         isRegistered: action.isRegistered,
-        message: action.message
       };
 
     case RegisterActionTypes.REGISTER_REQUEST:

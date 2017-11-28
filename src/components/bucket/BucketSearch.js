@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {searchForBucket} from "../../actions/buckets";
 import {BucketSearchForm} from "./BucketSearchForm";
-import {handleError, showToast} from "../../utilities/Utils";
+import {handleAPIError, showToast} from "../../utilities/Utils";
 
 class BucketSearch extends React.Component {
 
@@ -30,7 +30,7 @@ class BucketSearch extends React.Component {
   };
 
   onHandleError = error => {
-    handleError(error);
+    handleAPIError(error);
     this.setState({searching: false});
   };
 

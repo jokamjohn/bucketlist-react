@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 import {createItem} from "../../actions/items";
-import {handleError} from "../../utilities/Utils";
+import {handleAPIError} from "../../utilities/Utils";
 import {Modal} from "./Modal";
 
 class AddItemModal extends React.Component {
@@ -27,7 +27,7 @@ class AddItemModal extends React.Component {
   };
 
   onHandleError = error => {
-    handleError(error);
+    handleAPIError(error);
     this.setState({saving: false});
   };
 

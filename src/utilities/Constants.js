@@ -13,5 +13,5 @@ export const NUMBER_OF_ITEMS_PER_PAGE_FROM_API = 4;
 
 export const PASSWORD_RESET_URL = "http://kbucket-api.herokuapp.com/v1/auth/reset/password";
 
-export const MINIMUM_PASSWORD_LENGTH = 4;
+export const MINIMUM_PASSWORD_LENGTH = 5;
 

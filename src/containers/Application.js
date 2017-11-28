@@ -16,7 +16,7 @@ import {LogoutRoute} from "../components/auth/LogoutRoute";
 class Application extends React.Component {
 
   render() {
-    const {dispatch, isAuthenticated, message, isRegistered} = this.props;
+    const {dispatch, isAuthenticated, isRegistered} = this.props;
     return (
         <BrowserRouter>
           <div>
@@ -26,7 +26,7 @@ class Application extends React.Component {
               <Route exact path="/login"
                      render={() => <Login dispatch={dispatch} isAuthenticated={isAuthenticated}/>}/>
               <Route exact path="/signup"
-                     render={() => <Register dispatch={dispatch} message={message} isRegistered={isRegistered}/>}/>
+                     render={() => <Register dispatch={dispatch} isRegistered={isRegistered}/>}/>
               <PrivateRoute path="/buckets/:bucketId/items" component={Items} isAuthenticated={isAuthenticated}/>
               <PrivateRoute path="/buckets" component={Buckets} isAuthenticated={isAuthenticated}/>
               <PrivateRoute path="/auth/password/reset" component={PasswordReset} isAuthenticated={isAuthenticated}/>
@@ -41,12 +41,11 @@ class Application extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const {auth, isFetching, message} = state;
+  const {auth, isFetching} = state;
   return {
     isAuthenticated: auth.isAuthenticated,
     isFetching,
     isRegistered: auth.isRegistered,
-    message,
   }
 };
 

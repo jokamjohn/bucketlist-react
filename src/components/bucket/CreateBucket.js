@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {createBucketOnServer} from "../../actions/buckets";
-import {handleError, showToast} from "../../utilities/Utils";
+import {handleAPIError, showToast} from "../../utilities/Utils";
 import {BucketForm} from "./BucketForm";
 
 
@@ -34,7 +34,7 @@ class CreateBucket extends React.Component {
   };
 
   onHandleError = error => {
-    handleError(error);
+    handleAPIError(error);
     this.setState({saving: false})
   };
 

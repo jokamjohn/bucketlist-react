@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {deleteItem, editItem} from "../../actions/items";
 import {ItemCard} from "./ItemCard";
-import {handleError, showToast} from "../../utilities/Utils";
+import {handleAPIError, showToast} from "../../utilities/Utils";
 
 class Item extends React.Component {
 
@@ -52,7 +52,7 @@ class Item extends React.Component {
   };
 
   onHandleError = error => {
-    handleError(error);
+    handleAPIError(error);
     this.setState({updating: false});
     this.setState({deleting: false});
   };

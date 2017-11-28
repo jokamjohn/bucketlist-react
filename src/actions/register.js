@@ -17,23 +17,6 @@ export const registerSuccess = message => {
   }
 };
 
-export const registerFailure = message => {
-  return {
-    type: RegisterActionTypes.REGISTER_FAILURE,
-    isRegistered: false,
-    message
-  }
-};
-
-export const registerPasswordConfirmation = message => {
-  return {
-    type: RegisterActionTypes.REGISTER_PASSWORD_CONFIRMATION,
-    isRegistered: false,
-    message
-  }
-};
-
-
 export const registerUser = credentials => {
   const config = {
     method: 'POST',
@@ -46,16 +29,8 @@ export const registerUser = credentials => {
   };
 
   return dispatch => {
-    if (credentials.password !== credentials.passwordConfirmation) {
-      dispatch(registerPasswordConfirmation("Passwords do not match"));
-      return
-    }
     dispatch(registerRequest());
     return axios(config)
-        .then(response => response.data)
-        .then(info => dispatch(registerSuccess(info.message)))
-        .catch(error => {
-          if (error.response) return dispatch(registerFailure(error.response.message))
-        })
+        .then(response => dispatch(registerSuccess(response.data.message)));
   }
 };

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {deleteBucketFromServer, editBucketOnServer} from "../../actions/buckets";
 import {BucketCard} from "./BucketCard";
 import {bucketType} from "../../types/index";
-import {handleError, showToast} from "../../utilities/Utils";
+import {handleAPIError, showToast} from "../../utilities/Utils";
 
 
 class Bucket extends React.Component {
@@ -27,7 +27,7 @@ class Bucket extends React.Component {
     const {id, isAuthenticated, dispatch} = this.props;
     dispatch(editBucketOnServer(this.state.name, id, isAuthenticated))
         .then(() => this.onUpdateSuccess())
-        .catch(error => handleError(error));
+        .catch(error => handleAPIError(error));
     this.setState({isEditing: false})
   };
 
@@ -45,7 +45,7 @@ class Bucket extends React.Component {
   };
 
   onHandleError = error => {
-    handleError(error);
+    handleAPIError(error);
     this.setState({deleting: false});
     this.setState({updating: false});
   };

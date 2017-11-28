@@ -26,18 +26,23 @@ export function TokenException() {
  * Show a toast after a successful event
  * @param message Success Message
  */
-export const showToast = message => {
-  toastr.success(message);
-};
+export const showToast = message => toastr.success(message);
 
 /**
  * show a toast with an error message when an error occurs
  * @param error Error
  */
-export const handleError = error => {
+export const handleAPIError = (error) => {
   if (error.response) {
     toastr.error(error.response.data.message)
   } else {
     toastr.error("Error occurred, Try again")
   }
 };
+
+/**
+ * Show an error toast.
+ * @param message Error Message
+ * @constructor
+ */
+export const showErrorToast = message => toastr.error(message);

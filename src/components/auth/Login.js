@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Redirect, withRouter} from 'react-router-dom';
 import {loginUser} from "../../actions/login";
-import {handleError, showToast} from "../../utilities/Utils";
+import {handleAPIError, showToast} from "../../utilities/Utils";
 import {LoginCard} from "./LoginCard";
 
 class Login extends React.Component {
@@ -21,7 +21,7 @@ class Login extends React.Component {
     const credentials = {email: email, password: password};
     this.props.dispatch(loginUser(credentials))
         .then(() => showToast("Welcome back!"))
-        .catch(error => handleError(error))
+        .catch(error => handleAPIError(error))
   };
 
   onChange = event => {
