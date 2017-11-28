@@ -2,54 +2,56 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Redirect, withRouter} from 'react-router-dom';
 import {loginUser} from "../../actions/login";
+import {handleError, showToast} from "../../utilities/Utils";
+import {LoginCard} from "./LoginCard";
 
 class Login extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+    }
+  }
+
   onSubmit = event => {
     event.preventDefault();
-    const email = this.email.value.trim();
-    const password = this.password.value.trim();
+    const {email, password} = this.state;
     const credentials = {email: email, password: password};
-    this.props.dispatch(loginUser(credentials));
+    this.props.dispatch(loginUser(credentials))
+        .then(() => showToast("Welcome back!"))
+        .catch(error => handleError(error))
   };
+
+  onChange = event => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({[name]: value})
+  };
+
+  onPasswordCharacterCountMessage = () =>
+      <div>
+        {this.state.password.length <= 4 ?
+            <small className="form-text text-muted">
+              Password must be 5 characters and above
+            </small>
+            :
+            ''
+        }
+      </div>;
 
   render() {
     const {from} = this.props.location.state || {from: {pathname: '/buckets'}};
 
     if (this.props.isAuthenticated) return <Redirect to={from}/>;
 
-    return (
-        <div className="container main-content">
-          <div className="row">
-            <div className="col-sm-5 mx-sm-auto">
-              <div className="card auth-card">
-                <div className="card-body">
-                  <h4 className="card-title">Login</h4>
-                  <form onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                      <input type="email" className="form-control" aria-describedby="emailHelp"
-                             placeholder="Email address" ref={(input) => this.email = input}
-                             required/>
-                      <small id="emailHelp" className="form-text text-muted">We'll never share your
-                        email
-                        with anyone
-                        else.
-                      </small>
-                    </div>
-                    <div className="form-group">
-                      <input type="password" className="form-control" placeholder="Password"
-                             ref={(input) => this.password = input} required/>
-                    </div>
-                    <div className="text-center">
-                      <input type="submit" value="Log In" className="btn btn-primary"/>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-    )
+    return <LoginCard
+        onSubmit={this.onSubmit}
+        onChange={this.onChange}
+        onPasswordCharacterCountMessage={this.onPasswordCharacterCountMessage}
+    />
   }
 }
 

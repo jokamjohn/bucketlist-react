@@ -15,4 +15,3 @@ export const PASSWORD_RESET_URL = "http://kbucket-api.herokuapp.com/v1/auth/rese
 
 export const MINIMUM_PASSWORD_LENGTH = 4;
 
-export const RESPONSE_OK = 200;
