@@ -17,20 +17,6 @@ export default function (state = initialState.auth, action) {
         isRegistered: action.isRegistered,
       };
 
-    case RegisterActionTypes.REGISTER_FAILURE:
-      return {
-        ...state,
-        isRegistered: action.isRegistered,
-        message: action.message
-      };
-
-    case RegisterActionTypes.REGISTER_PASSWORD_CONFIRMATION:
-      return {
-        ...state,
-        isRegistered: action.isRegistered,
-        message: action.message
-      };
-
     case LoginActionTypes.LOGIN_SUCCESS:
       return {
         ...state,

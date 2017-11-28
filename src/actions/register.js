@@ -9,11 +9,10 @@ export const registerRequest = () => {
   }
 };
 
-export const registerSuccess = message => {
+export const registerSuccess = () => {
   return {
     type: RegisterActionTypes.REGISTER_SUCCESS,
     isRegistered: true,
-    message
   }
 };
 
@@ -31,6 +30,6 @@ export const registerUser = credentials => {
   return dispatch => {
     dispatch(registerRequest());
     return axios(config)
-        .then(response => dispatch(registerSuccess(response.data.message)));
+        .then(response => dispatch(registerSuccess()));
   }
 };
