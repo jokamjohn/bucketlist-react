@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const Modal = ({onSubmit, onChange}) => (
+export const Modal = ({onSubmit, onChange, saving}) => (
     <div className="modal fade mx-auto"
          id="addItemModal"
          tabIndex="-1"
@@ -35,7 +35,7 @@ export const Modal = ({onSubmit, onChange}) => (
                     </textarea>
               </div>
               <div className="form-group">
-                <input type="submit" className="btn btn-primary form-control" value="Save"/>
+                <input type="submit" className="btn btn-primary form-control" value={saving ? "Saving" : "Save"}/>
               </div>
             </form>
           </div>
@@ -47,4 +47,5 @@ export const Modal = ({onSubmit, onChange}) => (
 Modal.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  saving: PropTypes.bool.isRequired,
 };

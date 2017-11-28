@@ -13,21 +13,23 @@ class Register extends React.Component {
       email: '',
       password: '',
       passwordConfirmation: '',
+      loading: false,
     };
   }
 
   onRegister = event => {
     event.preventDefault();
+    this.setState({loading: true});
     const {email, password, passwordConfirmation} = this.state;
-    if (password !== passwordConfirmation) return showErrorToast("Passwords do not match");
+    if (password !== passwordConfirmation) return this.onHandlePasswordError();
     const credentials = {
       email,
       password,
       passwordConfirmation
     };
     this.props.dispatch(registerUser(credentials))
-        .then(() => showToast("Registered successfully, Sign in to access your account"))
-        .catch(error => handleAPIError(error))
+        .then(() => this.onRegisterSuccess())
+        .catch(error => this.onHandleError(error))
   };
 
   onChange = event => {
@@ -37,16 +39,32 @@ class Register extends React.Component {
     this.setState({[name]: value});
   };
 
+  onRegisterSuccess = () => {
+    this.setState({loading: false});
+    showToast("Registered successfully, Sign in to access your account");
+  };
+
+  onHandleError = error => {
+    this.setState({loading: false});
+    handleAPIError(error)
+  };
+
+  onHandlePasswordError = () => {
+    this.setState({loading: false});
+    showErrorToast("Passwords do not match")
+  };
+
   render() {
     if (this.props.isRegistered) return <Redirect to="/login"/>;
 
-    const {password, passwordConfirmation} = this.state;
+    const {password, passwordConfirmation, loading} = this.state;
 
     return <RegisterCard
         onRegister={this.onRegister}
         onChange={this.onChange}
         password={password}
         passwordConf={passwordConfirmation}
+        loading={loading}
     />
   }
 }

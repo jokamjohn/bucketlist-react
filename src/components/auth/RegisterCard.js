@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {ErrorAlert} from "../ErrorAlert";
-import {MINIMUM_PASSWORD_LENGTH} from "../../utilities/Constants";
+import {DEFAULT_LOADER_COLOR, MINIMUM_PASSWORD_LENGTH} from "../../utilities/Constants";
+import Loader from "../Loader";
 
-export const RegisterCard = ({onRegister, onChange, password, passwordConf}) => (
+export const RegisterCard = ({onRegister, onChange, password, passwordConf, loading}) => (
     <div className="container main-content">
+      {loading && <Loader color={DEFAULT_LOADER_COLOR}/>}
       <div className="row">
         <div className=" col-sm-5 mx-sm-auto">
           <div className="card auth-card">
@@ -63,4 +65,5 @@ RegisterCard.propTypes = {
   onChange: PropTypes.func.isRequired,
   password: PropTypes.string,
   passwordConf: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
 };

@@ -39,7 +39,7 @@ class AddItemModal extends React.Component {
   };
 
   render() {
-    return <Modal onSubmit={this.onSubmit} onChange={this.onChange}/>
+    return <Modal onSubmit={this.onSubmit} onChange={this.onChange} saving={this.state.saving}/>
   }
 }
 

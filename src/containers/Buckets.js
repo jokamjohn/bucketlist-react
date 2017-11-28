@@ -6,13 +6,22 @@ import {getBuckets} from "../actions/buckets";
 import Pagination from "../components/pagination/Pagination";
 import CreateBucket from "../components/bucket/CreateBucket";
 import BucketSearch from "../components/bucket/BucketSearch";
-import {BASE_URL} from "../utilities/Constants";
+import {BASE_URL, DEFAULT_LOADER_COLOR} from "../utilities/Constants";
 import {connect} from 'react-redux';
+import Loader from "../components/Loader";
 
 class Buckets extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+    }
+  }
+
   componentDidMount() {
     this.props.dispatch(getBuckets(this.props.bucketUrl, this.props.isAuthenticated, this.props.search.isSearch))
+        .then(() => this.setState({loading: false}))
   }
 
   /**
@@ -20,7 +29,9 @@ class Buckets extends React.Component {
    * @param url Buckets URL
    */
   onChangeUrl = url => {
+    this.setState({loading: true});
     this.props.dispatch(getBuckets(url, this.props.isAuthenticated, this.props.search.isSearch))
+        .then(() => this.setState({loading: false}))
   };
 
   /**
@@ -40,10 +51,11 @@ class Buckets extends React.Component {
   render() {
     const {isAuthenticated: isAuth, buckets, dispatch} = this.props;
     const {count, next, previous} = buckets;
+    const {loading} = this.state;
 
     return (
         <div className="container main-content">
-
+          {loading && <Loader color={DEFAULT_LOADER_COLOR}/>}
           <Breadcrumb/>
 
           <div className="row">

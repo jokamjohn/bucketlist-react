@@ -12,16 +12,18 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      loading: false,
     }
   }
 
   onSubmit = event => {
     event.preventDefault();
+    this.setState({loading: true});
     const {email, password} = this.state;
     const credentials = {email: email, password: password};
     this.props.dispatch(loginUser(credentials))
-        .then(() => showToast("Welcome back!"))
-        .catch(error => handleAPIError(error))
+        .then(() => this.onLoginSuccess())
+        .catch(error => this.onHandleError(error))
   };
 
   onChange = event => {
@@ -30,16 +32,29 @@ class Login extends React.Component {
     const name = target.name;
     this.setState({[name]: value})
   };
-  
+
+  onLoginSuccess = () => {
+    showToast("Welcome back!");
+    this.setState({loading: false});
+  };
+
+  onHandleError = error => {
+    this.setState({loading: false});
+    handleAPIError(error)
+  };
+
   render() {
     const {from} = this.props.location.state || {from: {pathname: '/buckets'}};
 
     if (this.props.isAuthenticated) return <Redirect to={from}/>;
 
+    const {password, loading} = this.state;
+
     return <LoginCard
         onSubmit={this.onSubmit}
         onChange={this.onChange}
-        password={this.state.password}
+        password={password}
+        loading={loading}
     />
   }
 }

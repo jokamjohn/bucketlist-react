@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Breadcrumb from "../components/bucket/Breadcrumb";
 import {resetPassword} from "../actions/passwordreset";
-import {MINIMUM_PASSWORD_LENGTH} from "../utilities/Constants";
+import {DEFAULT_LOADER_COLOR, MINIMUM_PASSWORD_LENGTH} from "../utilities/Constants";
 import {connect} from 'react-redux';
 import {handleAPIError, showErrorToast, showToast} from "../utilities/Utils";
 import {ResetPasswordCard} from "../components/auth/ResetPasswordCard";
+import Loader from "../components/Loader";
 
 class PasswordReset extends React.Component {
   constructor(props) {
@@ -14,12 +15,14 @@ class PasswordReset extends React.Component {
       oldPassword: '',
       newPassword: '',
       newPasswordConfirmation: '',
+      loading: false,
     }
   }
 
   onSubmit = event => {
     event.preventDefault();
     event.persist();
+    this.setState({loading: true});
     const {oldPassword, newPassword, newPasswordConfirmation} = this.state;
     const {dispatch, isAuthenticated} = this.props;
     if (newPassword !== newPasswordConfirmation) return showErrorToast("New password does not match");
@@ -30,12 +33,18 @@ class PasswordReset extends React.Component {
 
     dispatch(resetPassword(oldPassword, newPassword, newPasswordConfirmation, isAuthenticated))
         .then(() => this.onPasswordResetSuccess(event))
-        .catch(error => handleAPIError(error))
+        .catch(error => this.onHandleError(error))
   };
 
   onPasswordResetSuccess = event => {
     event.target.reset();
+    this.setState({loading: false});
     showToast("Successful Password Reset");
+  };
+
+  onHandleError = error => {
+    this.setState({loading: false});
+    handleAPIError(error)
   };
 
   onPasswordChange = event => {
@@ -46,10 +55,11 @@ class PasswordReset extends React.Component {
   };
 
   render() {
-    const {oldPassword, newPassword, newPasswordConfirmation: newPasswordConf} = this.state;
+    const {oldPassword, newPassword, newPasswordConfirmation: newPasswordConf, loading} = this.state;
     return (
         <div className="container main-content">
           <Breadcrumb/>
+          {loading && <Loader color={DEFAULT_LOADER_COLOR}/>}
           <ResetPasswordCard
               onPasswordChange={this.onPasswordChange}
               onSubmit={this.onSubmit}

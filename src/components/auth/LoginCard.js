@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MINIMUM_PASSWORD_LENGTH} from "../../utilities/Constants";
+import {DEFAULT_LOADER_COLOR, MINIMUM_PASSWORD_LENGTH} from "../../utilities/Constants";
 import {FormTip} from "../FormTip";
+import Loader from "../Loader";
 
-export const LoginCard = ({onSubmit, onChange, password}) => (
+export const LoginCard = ({onSubmit, onChange, password, loading}) => (
     <div className="container main-content">
+      {loading && <Loader color={DEFAULT_LOADER_COLOR}/>}
       <div className="row">
         <div className="col-sm-5 mx-sm-auto">
           <div className="card auth-card">
@@ -48,4 +50,5 @@ LoginCard.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   password: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
 };

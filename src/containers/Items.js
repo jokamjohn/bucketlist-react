@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import Breadcrumb from '../components/items/Breadcrumb'
 import {getItems, receiveItems} from "../actions/items";
-import {BASE_URL, BUCKETLIST_URL} from "../utilities/Constants";
+import {BASE_URL, BUCKETLIST_URL, DEFAULT_LOADER_COLOR} from "../utilities/Constants";
 import AddItemModal from "../components/items/AddItem";
 import {AddItemButton} from "../components/items/AddItemButton";
 import {EmptyBucketMessage} from "../components/items/EmptyBucketMessage";
@@ -11,8 +11,16 @@ import Pagination from "../components/pagination/Pagination";
 import {Redirect} from 'react-router-dom';
 import ItemSearch from "../components/items/ItemSearch";
 import {connect} from 'react-redux';
+import Loader from "../components/Loader";
 
 class Items extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+    }
+  }
 
   /*
    * Dispatch an action to get the current Bucket items.
@@ -22,6 +30,7 @@ class Items extends React.Component {
     const isSearch = this.props.items.search.isItemSearch;
     const url = `${BUCKETLIST_URL}${bucketId}/items/`;
     this.props.dispatch(getItems(bucketId, url, this.props.isAuthenticated, isSearch))
+        .then(() => this.setState({loading: false}))
   }
 
   /**
@@ -37,9 +46,11 @@ class Items extends React.Component {
    * @param url Buckets URL
    */
   onChangeUrl = url => {
+    this.setState({loading: true});
     const bucketId = this.props.match.params.bucketId;
     const isSearch = this.props.items.search.isItemSearch;
     this.props.dispatch(getItems(bucketId, url, this.props.isAuthenticated, isSearch))
+        .then(() => this.setState({loading: false}))
   };
 
   /**
@@ -65,6 +76,7 @@ class Items extends React.Component {
     const next = items.next;
     const previous = items.previous;
     const count = items.count;
+    const {loading} = this.state;
 
     if (!isAuth) {
       return <Redirect to="/login"/>
@@ -73,6 +85,7 @@ class Items extends React.Component {
     return (
         <div className="container main-content">
           <Breadcrumb/>
+          {loading && <Loader color={DEFAULT_LOADER_COLOR}/>}
           {allItems.length
               ?
               <div>
