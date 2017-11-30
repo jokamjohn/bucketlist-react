@@ -1,18 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import Breadcrumb from './Breadcrumb'
-import {getItems, receiveItems} from "../../actions/items";
-import {BASE_URL, BUCKETLIST_URL} from "../../utilities/Constants";
-import AddItemModal from "./AddItemModal";
-import {AddItemButton} from "./AddItemButton";
-import {EmptyBucketMessage} from "./EmptyBucketMessage";
-import {ShowItems} from "./ShowItems";
-import Pagination from "../pagination/Pagination";
+import Breadcrumb from '../components/items/Breadcrumb'
+import {getItems, receiveItems} from "../actions/items";
+import {BASE_URL, BUCKETLIST_URL, DEFAULT_LOADER_COLOR} from "../utilities/Constants";
+import AddItemModal from "../components/items/AddItem";
+import {AddItemButton} from "../components/items/AddItemButton";
+import {EmptyBucketMessage} from "../components/items/EmptyBucketMessage";
+import {ShowItems} from "../components/items/ShowItems";
+import Pagination from "../components/pagination/Pagination";
 import {Redirect} from 'react-router-dom';
-import ItemSearch from "./ItemSearch";
+import ItemSearch from "../components/items/ItemSearch";
 import {connect} from 'react-redux';
+import Loader from "../components/Loader";
 
 class Items extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+    }
+  }
 
   /*
    * Dispatch an action to get the current Bucket items.
@@ -22,6 +30,7 @@ class Items extends React.Component {
     const isSearch = this.props.items.search.isItemSearch;
     const url = `${BUCKETLIST_URL}${bucketId}/items/`;
     this.props.dispatch(getItems(bucketId, url, this.props.isAuthenticated, isSearch))
+        .then(() => this.setState({loading: false}))
   }
 
   /**
@@ -33,13 +42,15 @@ class Items extends React.Component {
   }
 
   /**
-   * Fetch the Buckets at the provided URL when a pagination number is clicked.
+   * Fetch the Bucket Items at the provided URL when a pagination number is clicked.
    * @param url Buckets URL
    */
   onChangeUrl = url => {
+    this.setState({loading: true});
     const bucketId = this.props.match.params.bucketId;
     const isSearch = this.props.items.search.isItemSearch;
     this.props.dispatch(getItems(bucketId, url, this.props.isAuthenticated, isSearch))
+        .then(() => this.setState({loading: false}))
   };
 
   /**
@@ -50,21 +61,22 @@ class Items extends React.Component {
    */
   paginationUrl = () => {
     const bucketId = this.props.match.params.bucketId;
+    const {isItemSearch, query} = this.props.items.search;
     let url = BASE_URL + `bucketlists/${bucketId}/items/?page=`;
-    if (this.props.isSearch && this.props.query) {
-      url = BASE_URL + `bucketlists/${bucketId}/items/?q=${this.props.query}&page=`;
+    if (isItemSearch && query) {
+      url = BASE_URL + `bucketlists/${bucketId}/items/?q=${query}&page=`;
     }
     return url
   };
 
   render() {
-    const items = this.props.items.items;
-    const bucketId = this.props.match.params.bucketId;
-    const isAuth = this.props.isAuthenticated;
-    const next = this.props.items.next;
-    const previous = this.props.items.previous;
-    const dispatch = this.props.dispatch;
-    const count = this.props.items.count;
+    const {items, isAuthenticated: isAuth, match, dispatch} = this.props;
+    const allItems = items.items;
+    const bucketId = match.params.bucketId;
+    const next = items.next;
+    const previous = items.previous;
+    const count = items.count;
+    const {loading} = this.state;
 
     if (!isAuth) {
       return <Redirect to="/login"/>
@@ -73,7 +85,8 @@ class Items extends React.Component {
     return (
         <div className="container main-content">
           <Breadcrumb/>
-          {items.length
+          {loading && <Loader color={DEFAULT_LOADER_COLOR}/>}
+          {allItems.length
               ?
               <div>
                 <div className="row">
@@ -83,9 +96,19 @@ class Items extends React.Component {
 
                 <hr></hr>
 
-                <ShowItems items={items} dispatch={dispatch} bucketId={bucketId} isAuthenticated={isAuth}/>
-                <Pagination count={count} next={next} previous={previous} dispatch={dispatch} isAuthenticated={isAuth}
-                            onChangeUrl={this.onChangeUrl} paginationUrl={this.paginationUrl}/>
+                <ShowItems items={allItems}
+                           dispatch={dispatch}
+                           bucketId={bucketId}
+                           isAuthenticated={isAuth}
+                />
+                <Pagination count={count}
+                            next={next}
+                            previous={previous}
+                            dispatch={dispatch}
+                            isAuthenticated={isAuth}
+                            onChangeUrl={this.onChangeUrl}
+                            paginationUrl={this.paginationUrl}
+                />
               </div>
               :
               <div>
@@ -93,7 +116,7 @@ class Items extends React.Component {
                 <EmptyBucketMessage/>
               </div>
           }
-          <AddItemModal bucketId={bucketId} isAuthenticated={isAuth} dispatch={this.props.dispatch}/>
+          <AddItemModal bucketId={bucketId} isAuthenticated={isAuth} dispatch={dispatch}/>
         </div>
     );
   }
@@ -106,9 +129,9 @@ Items.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const {isAuthenticated, items} = state;
+  const {auth, items} = state;
   return {
-    isAuthenticated,
+    isAuthenticated: auth.isAuthenticated,
     items
   }
 };

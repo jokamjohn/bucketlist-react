@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {deleteBucketFromServer, editBucketOnServer} from "../../actions/buckets";
-import {Link} from 'react-router-dom';
+import {BucketCard} from "./BucketCard";
+import {bucketType} from "../../types/index";
+import {handleAPIError, showToast} from "../../utilities/Utils";
 
 
 class Bucket extends React.Component {
@@ -10,57 +12,64 @@ class Bucket extends React.Component {
     super(props);
     this.state = {
       name: props.name,
-      isEditing: false
+      isEditing: false,
+      deleting: false,
+      updating: false,
     }
   }
 
-  onChangeName = (value) => this.setState({name: value});
+  onChange = (value) => this.setState({name: value});
 
   onEditing = () => this.setState({isEditing: true});
 
-  onSaving = () => {
-    this.props.dispatch(editBucketOnServer(this.state.name, this.props.id, this.props.index,
-        this.props.isAuthenticated));
+  onSave = () => {
+    this.setState({updating: true});
+    const {id, isAuthenticated, dispatch} = this.props;
+    dispatch(editBucketOnServer(this.state.name, id, isAuthenticated))
+        .then(() => this.onUpdateSuccess())
+        .catch(error => handleAPIError(error));
+    this.setState({isEditing: false})
+  };
 
+  onDelete = () => {
+    this.setState({deleting: true});
+    const {dispatch, id, index, isAuthenticated} = this.props;
+    dispatch(deleteBucketFromServer(id, index, isAuthenticated))
+        .then(() => showToast("Bucket Successfully Deleted"))
+        .catch(error => this.onHandleError(error))
+  };
+
+  onUpdateSuccess = () => {
+    showToast("Bucket Updated successfully");
+    this.setState({updating: false});
+  };
+
+  onHandleError = error => {
+    handleAPIError(error);
+    this.setState({deleting: false});
+    this.setState({updating: false});
+  };
+
+  onCancel = () => {
     this.setState({isEditing: false})
   };
 
   render() {
-    return (
-        <div className="col-sm-4">
-          <div className="card bucket-card">
-            <div className="card-body">
-              {this.state.isEditing ?
-                  <input type="text" value={this.state.name} onChange={event => this.onChangeName(event.target.value)}/>
-                  :
-                  <h4 className="card-title"><Link to={`/buckets/${this.props.id}/items`}>{this.state.name}</Link></h4>
-              }
-              <p className="card-text">
-                <small>Last Modified: {this.props.modifiedAt}</small>
-              </p>
-              {this.state.isEditing ?
-                  <button className="btn btn-primary bucket-links" onClick={this.onSaving}>Save</button>
-                  :
-                  <button className="btn btn-primary bucket-links" onClick={this.onEditing}>Edit</button>
-              }
-              <button className="btn btn-danger"
-                      onClick={() => this.props.dispatch(deleteBucketFromServer(this.props.id, this.props.index,
-                          this.props.isAuthenticated))}>
-                Delete
-              </button>
-
-            </div>
-          </div>
-        </div>
-    );
+    return <BucketCard
+        {...this.props}
+        {...this.state}
+        onChange={this.onChange}
+        onSave={this.onSave}
+        onEditing={this.onEditing}
+        onDelete={this.onDelete}
+        onCancel={this.onCancel}
+    />
   }
 }
 
 Bucket.propTypes = {
-  name: PropTypes.string,
-  modifiedAt: PropTypes.string,
+  ...bucketType,
   index: PropTypes.number,
-  id: PropTypes.number,
   isAuthenticated: PropTypes.bool,
   dispatch: PropTypes.func,
 };

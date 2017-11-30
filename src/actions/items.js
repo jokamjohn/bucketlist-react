@@ -37,14 +37,13 @@ export const removeItem = itemIndex => {
 /**
  * Action to update the updated item in the redux store.
  * @param index
- * @param data
- * @returns {{type, index: *, data: *}}
+ * @param item
+ * @returns {{type, index: *, item: *}}
  */
-export const updateItem = (index, data) => {
+export const updateItem = item => {
   return {
     type: ItemActionTypes.ITEMS_EDIT,
-    index,
-    data
+    item
   }
 };
 
@@ -81,8 +80,10 @@ export const getItems = (bucketId, url, isAuthenticated, isSearchMode) => {
     if (token) {
       config = {
         method: 'GET',
-        url: url,
-        headers: {'Authorization': `Bearer ${token}`}
+        url,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       };
     } else {
       throw new TokenException()
@@ -114,7 +115,7 @@ export const getItems = (bucketId, url, isAuthenticated, isSearchMode) => {
  * @param callback Function to refresh the items page after successful addition of the item.
  * @returns {function(*=)}
  */
-export const createItem = (bucketId, name, description = null, isAuthenticated, callback) => {
+export const createItem = (bucketId, name, description = null, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
   if (isAuthenticated) {
@@ -138,7 +139,6 @@ export const createItem = (bucketId, name, description = null, isAuthenticated, 
 
   return dispatch => {
     return axios(config)
-        .then(response => callback())
         .catch(error => {
           logoutOnTokenExpired(dispatch, error);
         })
@@ -182,13 +182,12 @@ export const deleteItem = (bucketId, itemId, itemIndex, isAuthenticated) => {
  * Edit an item in the bucket using the API.
  * @param bucketId Bucket Id
  * @param itemId Item Id
- * @param itemIndex Item index
  * @param name Item name
  * @param description Item description
  * @param isAuthenticated
  * @returns {*}
  */
-export const editItem = (bucketId, itemId, itemIndex, name, description = null, isAuthenticated) => {
+export const editItem = (bucketId, itemId, name, description = null, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
 
@@ -215,7 +214,7 @@ export const editItem = (bucketId, itemId, itemIndex, name, description = null, 
 
   return dispatch => {
     return axios(config)
-        .then(response => dispatch(updateItem(itemIndex, response.data.item)))
+        .then(response => dispatch(updateItem(response.data.item)))
         .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };

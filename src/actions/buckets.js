@@ -1,7 +1,7 @@
 import * as BucketActionTypes from '../actiontypes/bucket';
 import {
-  AUTH_TOKEN, BUCKETLIST_POST_URL, BUCKETLIST_SEARCH_URL, BUCKETLIST_URL, LOCAL_BUCKET_URL,
-  RESPONSE_OK
+  AUTH_TOKEN, BUCKETLIST_POST_URL, BUCKETLIST_SEARCH_URL, BUCKETLIST_URL,
+  LOCAL_BUCKET_URL,
 } from "../utilities/Constants";
 import axios from 'axios';
 import {logoutUser} from "./logout";
@@ -15,8 +15,7 @@ import {TokenException} from "../utilities/Utils";
 export const receiveBuckets = data => {
   return {
     type: BucketActionTypes.BUCKET_SUCCESS,
-    data: data,
-    isFetching: false
+    data,
   }
 };
 
@@ -29,7 +28,7 @@ export const receiveBuckets = data => {
 export const deleteBucket = index => {
   return {
     type: BucketActionTypes.BUCKET_DELETE,
-    index: index
+    index
   }
 };
 
@@ -42,10 +41,7 @@ export const deleteBucket = index => {
 export const createBucket = bucket => {
   return {
     type: BucketActionTypes.BUCKET_CREATION,
-    name: bucket.name,
-    createdAt: bucket.createdAt,
-    modifiedAt: bucket.modifiedAt,
-    id: bucket.id
+    bucket
   }
 };
 
@@ -64,10 +60,9 @@ export const createBucket = bucket => {
 export const searchBucket = (data, query, isSearch) => {
   return {
     type: BucketActionTypes.BUCKET_SEARCH,
-    data: data,
-    isSearch: isSearch,
-    query: query,
-    isFetching: false
+    data,
+    isSearch,
+    query,
   }
 };
 
@@ -89,17 +84,12 @@ export const clearSearchMode = () => {
 /**
  * This action provides the Bucket updated attributes.
  * @param bucket Bucket
- * @param index Index of the Bucket
  * @returns {{type, id, name, createdAt: *, modifiedAt: *, index: *}}
  */
-export const editBucket = (bucket, index) => {
+export const editBucket = bucket => {
   return {
     type: BucketActionTypes.BUCKET_EDIT,
-    id: bucket.id,
-    name: bucket.name,
-    createdAt: bucket.createdAt,
-    modifiedAt: bucket.modifiedAt,
-    index: index
+    bucket
   }
 };
 
@@ -122,8 +112,10 @@ export const getBuckets = (url, isAuthenticated, isSearchMode) => {
     if (token) {
       config = {
         method: 'GET',
-        url: url,
-        headers: {'Authorization': `Bearer ${token}`}
+        url,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       };
     } else {
       throw new TokenException()
@@ -132,9 +124,8 @@ export const getBuckets = (url, isAuthenticated, isSearchMode) => {
 
   return dispatch => {
     return axios(config)
-        .then(response => response.data)
-        .then(data => {
-          dispatch(receiveBuckets(data));
+        .then(response => {
+          dispatch(receiveBuckets(response.data));
           if (!isSearchMode) {
             localStorage.setItem(LOCAL_BUCKET_URL, url);
             dispatch(clearSearchMode())
@@ -162,7 +153,9 @@ export const deleteBucketFromServer = (id, index, isAuthenticated) => {
       config = {
         method: 'DELETE',
         url: BUCKETLIST_URL + id,
-        headers: {'Authorization': `Bearer ${token}`}
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       };
     } else {
       throw new TokenException()
@@ -171,11 +164,7 @@ export const deleteBucketFromServer = (id, index, isAuthenticated) => {
 
   return dispatch => {
     return axios(config)
-        .then(response => {
-          if (response.status === RESPONSE_OK) {
-            dispatch(deleteBucket(index))
-          }
-        })
+        .then(response => dispatch(deleteBucket(index)))
         .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };
@@ -210,9 +199,7 @@ export const createBucketOnServer = (name, isAuthenticated) => {
 
   return dispatch => {
     return axios(config)
-        .then(response => {
-          dispatch(createBucket(response.data))
-        })
+        .then(response => dispatch(createBucket(response.data)))
         .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };
@@ -232,7 +219,9 @@ export const searchForBucket = (query, isAuthenticated) => {
       config = {
         method: 'GET',
         url: BUCKETLIST_SEARCH_URL + query,
-        headers: {'Authorization': `Bearer ${token}`}
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       };
     } else {
       throw new TokenException()
@@ -241,10 +230,7 @@ export const searchForBucket = (query, isAuthenticated) => {
 
   return dispatch => {
     return axios(config)
-        .then(response => response.data)
-        .then(data => {
-          dispatch(searchBucket(data, query, true))
-        })
+        .then(response => dispatch(searchBucket(response.data, query, true)))
         .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };
@@ -254,11 +240,10 @@ export const searchForBucket = (query, isAuthenticated) => {
  * the server and state.
  * @param name Bucket Name
  * @param id Bucket Id
- * @param index Bucket Index in the Buckets state array
  * @param isAuthenticated Boolean to determine whether s user is signed in/not.
  * @returns {function(*=)}
  */
-export const editBucketOnServer = (name, id, index, isAuthenticated) => {
+export const editBucketOnServer = (name, id, isAuthenticated) => {
   const token = localStorage.getItem(AUTH_TOKEN) || null;
   let config = {};
 
@@ -280,8 +265,7 @@ export const editBucketOnServer = (name, id, index, isAuthenticated) => {
 
   return dispatch => {
     return axios(config)
-        .then(response => response.data)
-        .then(data => dispatch(editBucket(data, index)))
+        .then(response => dispatch(editBucket(response.data)))
         .catch(error => logoutOnTokenExpired(dispatch, error))
   }
 };

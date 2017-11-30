@@ -12,7 +12,11 @@ export const PageNumber = props => {
   return getNumberOfPage(props.count).map((page, index) =>
       <li key={index} className="page-item">
         <a className="page-link"
-           onClick={() => props.onChangeUrl(props.paginationUrl() + page)}>{page}</a></li>
+           onClick={() => props.onChangeUrl(props.paginationUrl() + page)}
+        >
+          {page}
+        </a>
+      </li>
   )
 };
 

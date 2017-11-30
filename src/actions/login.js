@@ -4,28 +4,24 @@ import axios from 'axios';
 
 /**
  * Action for when a user is logging In
- * @param credentials
- * @returns {{type, isAuthenticated: boolean, isFetching: boolean, credentials: *}}
+ * @returns {{type, isAuthenticated: boolean}}
  */
-export const requestLogin = credentials => {
+export const requestLogin = () => {
   return {
     type: LoginActionTypes.LOGIN_REQUEST,
     isAuthenticated: false,
-    isFetching: true,
-    credentials
   }
 };
 
 /**
  * Action for when a user login is successful
  * @param user
- * @returns {{type, isAuthenticated: boolean, isFetching: boolean, idToken: *}}
+ * @returns {{type, isAuthenticated: boolean, idToken: *}}
  */
 export const receiveLogin = user => {
   return {
     type: LoginActionTypes.LOGIN_SUCCESS,
     isAuthenticated: true,
-    isFetching: false,
     idToken: user.auth_token
   }
 };
@@ -33,13 +29,12 @@ export const receiveLogin = user => {
 /**
  * Action for when a login error occurs.
  * @param message
- * @returns {{type, isAuthenticated: boolean, isFetching: boolean, message: *}}
+ * @returns {{type, isAuthenticated: boolean, message: *}}
  */
 export const loginError = message => {
   return {
     type: LoginActionTypes.LOGIN_FAILURE,
     isAuthenticated: false,
-    isFetching: false,
     message
   }
 };
@@ -54,22 +49,20 @@ export const loginUser = credentials => {
   const config = {
     method: 'POST',
     url: LOGIN_URL,
-    headers: {'content-type': 'application/json'},
+    headers: {
+      'content-type': 'application/json'
+    },
     data: {
-      email: `${credentials.email}`, password: `${credentials.password}`
+      email: `${credentials.email}`,
+      password: `${credentials.password}`
     }
   };
 
   return dispatch => {
-    dispatch(requestLogin(credentials));
+    dispatch(requestLogin());
     return axios(config)
         .then(response => {
-          if (response.status !== 200) {
-            dispatch(loginError('Failed, try again'))
-          }
-          return response.data
-        })
-        .then(user => {
+          const user = response.data;
           localStorage.setItem(AUTH_TOKEN, user.auth_token);
           localStorage.setItem(USER_EMAIL, credentials.email);
           dispatch(receiveLogin(user));

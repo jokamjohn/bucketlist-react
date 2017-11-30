@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {deleteItem, editItem} from "../../actions/items";
+import {ItemCard} from "./ItemCard";
+import {handleAPIError, showToast} from "../../utilities/Utils";
 
 class Item extends React.Component {
 
@@ -10,64 +12,61 @@ class Item extends React.Component {
       name: props.name,
       description: props.description,
       isEditing: false,
+      updating: false,
+      deleting: false,
     }
   }
 
-  onChangeName = value => this.setState({name: value});
-
-  onChangeDescription = value => this.setState({description: value});
+  onChange = event => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({[name]: value});
+  };
 
   onEditing = () => this.setState({isEditing: true});
 
-  onSaving = () => {
+  onUpdate = () => {
     this.setState({isEditing: false});
-    this.props.dispatch(editItem(this.props.bucketId, this.props.itemId, this.props.index, this.state.name,
-        this.state.description, this.props.isAuthenticated))
-
+    this.setState({updating: true});
+    const {bucketId, id: itemId, isAuthenticated, dispatch} = this.props;
+    const {name, description} = this.state;
+    dispatch(editItem(bucketId, itemId, name, description, isAuthenticated))
+        .then(() => this.onUpdateSuccess())
+        .catch(error => this.onHandleError(error))
   };
 
   onCancel = () => this.setState({isEditing: false});
 
-  onDelete = () => this.props.dispatch(deleteItem(this.props.bucketId, this.props.itemId,
-      this.props.index, this.props.isAuthenticated));
+  onDelete = () => {
+    this.setState({deleting: true});
+    const {bucketId, id: itemId, index, isAuthenticated, dispatch} = this.props;
+    dispatch(deleteItem(bucketId, itemId, index, isAuthenticated))
+        .then(() => showToast("Item Deleted Successfully"))
+        .catch(error => this.onHandleError(error))
+  };
 
+  onUpdateSuccess = () => {
+    showToast("Item Updated Successfully");
+    this.setState({updating: false});
+  };
+
+  onHandleError = error => {
+    handleAPIError(error);
+    this.setState({updating: false});
+    this.setState({deleting: false});
+  };
 
   render() {
-    return (
-        <div className="col-sm-4 bucket-card">
-          <div className="card">
-            <div className="card-body">
-              {this.state.isEditing ?
-                  <div>
-                    <input type="text" value={this.state.name}
-                           onChange={event => this.onChangeName(event.target.value)}/>
-                    <textarea className="form-control" rows="5"
-                              onChange={event => this.onChangeDescription(event.target.value)}
-                              placeholder="Item Description" value={this.state.description}>
-                    </textarea>
-                  </div>
-                  :
-                  <div>
-                    <h4 className="card-title">{this.props.name}</h4>
-                    <p className="card-text">{this.props.description}</p>
-                  </div>
-              }
-              <h6 className="card-subtitle mb-2 text-muted">{this.props.modifiedAt}</h6>
-              {this.state.isEditing ?
-                  <div>
-                    <button className="btn btn-primary bucket-links" onClick={this.onSaving}>Save</button>
-                    <button className="btn btn-info" onClick={this.onCancel}>Cancel</button>
-                  </div>
-                  :
-                  <div>
-                    <button className="btn btn-primary bucket-links" onClick={this.onEditing}>Edit</button>
-                    <button className="btn btn-danger" onClick={this.onDelete}>Delete</button>
-                  </div>
-              }
-            </div>
-          </div>
-        </div>
-    );
+    return <ItemCard
+        onChange={this.onChange}
+        onUpdate={this.onUpdate}
+        onCancel={this.onCancel}
+        onDelete={this.onDelete}
+        onEditing={this.onEditing}
+        modifiedAt={this.props.modifiedAt}
+        {...this.state}
+    />
   }
 }
 
@@ -76,7 +75,7 @@ Item.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string,
   modifiedAt: PropTypes.string.isRequired,
-  itemId: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
   bucketId: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   index: PropTypes.number.isRequired,

@@ -7,7 +7,8 @@ class ItemSearch extends React.Component {
   onSubmit = event => {
     event.preventDefault();
     const query = this.query.value;
-    this.props.dispatch(searchForItem(query, this.props.bucketId, this.props.isAuthenticated))
+    const {bucketId, isAuthenticated, dispatch} = this.props;
+    dispatch(searchForItem(query, bucketId, isAuthenticated))
   };
 
   render() {
@@ -15,9 +16,18 @@ class ItemSearch extends React.Component {
         <div className="col-sm-5 mx-sm-auto">
           <form className="form-inline">
             <div className="form-group">
-              <input type="text" className="form-control mb-2 mr-sm-2 mb-sm-0" ref={input => this.query = input}
-                     placeholder="search items..." required/>
-              <input type="submit" className="btn btn-primary" value="Search" onClick={this.onSubmit}/>
+              <input type="text"
+                     className="form-control mb-2 mr-sm-2 mb-sm-0"
+                     ref={input => this.query = input}
+                     placeholder="search items..." required
+              />
+
+              <input type="submit"
+                     className="btn btn-primary"
+                     value="Search"
+                     onClick={this.onSubmit}
+              />
+
             </div>
           </form>
         </div>
