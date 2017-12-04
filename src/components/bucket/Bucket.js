@@ -18,7 +18,7 @@ class Bucket extends React.Component {
     }
   }
 
-  onChange = (value) => this.setState({name: value});
+  onChange = event => this.setState({name: event.target.value});
 
   onEditing = () => this.setState({isEditing: true});
 
