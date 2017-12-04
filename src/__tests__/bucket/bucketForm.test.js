@@ -5,7 +5,7 @@ Enzyme.configure({adapter: new Adapter()});
 
 import {shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import {BucketForm} from "../components/bucket/BucketForm";
+import {BucketForm} from "../../components/bucket/BucketForm";
 
 const setup = (saving) => {
   const props = {

@@ -5,7 +5,7 @@ Enzyme.configure({adapter: new Adapter()});
 
 import {shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import {BucketCard} from "../components/bucket/BucketCard";
+import {BucketCard} from "../../components/bucket/BucketCard";
 
 const setUp = (editing, updating, deleting) => {
   const props = {
