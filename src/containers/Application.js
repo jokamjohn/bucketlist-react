@@ -13,7 +13,7 @@ import PasswordReset from "./PasswordReset";
 import {PrivateRoute} from "../components/auth/PrivateRoute";
 import {LogoutRoute} from "../components/auth/LogoutRoute";
 
-class Application extends React.Component {
+export class Application extends React.Component {
 
   render() {
     const {dispatch, isAuthenticated, isRegistered} = this.props;

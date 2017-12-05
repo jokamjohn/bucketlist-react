@@ -10,7 +10,7 @@ import {BASE_URL, DEFAULT_LOADER_COLOR} from "../utilities/Constants";
 import {connect} from 'react-redux';
 import Loader from "../components/Loader";
 
-class Buckets extends React.Component {
+export class Buckets extends React.Component {
 
   constructor(props) {
     super(props);
