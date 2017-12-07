@@ -5,7 +5,7 @@ import {getItems, receiveItems} from "../actions/items";
 import {BASE_URL, BUCKETLIST_URL, DEFAULT_LOADER_COLOR} from "../utilities/Constants";
 import AddItemModal from "../components/items/AddItem";
 import {AddItemButton} from "../components/items/AddItemButton";
-import {EmptyBucketMessage} from "../components/items/EmptyBucketMessage";
+import {EmptyItemsMessage} from "../components/items/EmptyBucketMessage";
 import {ShowItems} from "../components/items/ShowItems";
 import Pagination from "../components/pagination/Pagination";
 import {Redirect} from 'react-router-dom';
@@ -113,7 +113,7 @@ class Items extends React.Component {
               :
               <div>
                 <AddItemButton/>
-                <EmptyBucketMessage/>
+                <EmptyItemsMessage/>
               </div>
           }
           <AddItemModal bucketId={bucketId} isAuthenticated={isAuth} dispatch={dispatch}/>
