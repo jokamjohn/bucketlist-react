@@ -42,10 +42,7 @@ jobs:
       # run tests!
       - run:
           name: test and coverage
-          command: yarn test --coverage
+          command: yarn test --coverage && yarn coveralls < ./coverage/lcov.info
 
-      - run:
-          name: coveralls
-          command: yarn cov
 
 
