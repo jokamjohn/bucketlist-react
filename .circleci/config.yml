@@ -44,5 +44,7 @@ jobs:
           name: test and coverage
           command: yarn test --coverage && yarn coveralls < ./coverage/lcov.info
 
+      - persist_to_workspace:
+          root: ~/repo
 
 
