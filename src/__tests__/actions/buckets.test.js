@@ -11,7 +11,7 @@ const mockStore = configureMockStore(middlewares);
 const store = mockStore({});
 localStorage.setItem(AUTH_TOKEN, "dfbsiljkvdfiv");
 
-describe("Async  Bucket actions", () => {
+describe("Async  Bucket ItemActions", () => {
   beforeEach(() => {
     moxios.install(axios)
   });
@@ -21,7 +21,7 @@ describe("Async  Bucket actions", () => {
     store.clearActions()
   });
 
-  it("creates BUCKET_SUCCESS and BUCKET_SEARCH_CLEAR actions when fetching a user's buckets is done", () => {
+  it("creates BUCKET_SUCCESS and BUCKET_SEARCH_CLEAR ItemActions when fetching a user's buckets is done", () => {
     const data = {
       "buckets": [
         {
@@ -150,11 +150,6 @@ describe("Async  Bucket actions", () => {
       expect(store.getActions()[0]).toEqual(expectedAction)
     })
   });
-
-  it('', () => {
-
-  })
-
 });
 
 /**
