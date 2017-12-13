@@ -41,8 +41,8 @@ jobs:
 
       # run tests!
       - run:
-        name: Make coverage Folder
-        command: mkdir ~/coverage
+         name: Make coverage Folder
+         command: mkdir ~/coverage
 
       - run:
           name: test and coverage
