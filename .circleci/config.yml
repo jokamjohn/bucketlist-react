@@ -40,7 +40,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      -run:
+      - run:
         name: Make coverage Folder
         command: mkdir ~/coverage
 
