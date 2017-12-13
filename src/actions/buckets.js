@@ -132,7 +132,7 @@ export const getBuckets = (url, isAuthenticated, isSearchMode) => {
           }
         })
         .catch(error => {
-          logoutOnTokenExpired(dispatch, error);
+          handleError(dispatch, error);
         })
   }
 };
@@ -165,7 +165,7 @@ export const deleteBucketFromServer = (id, index, isAuthenticated) => {
   return dispatch => {
     return axios(config)
         .then(response => dispatch(deleteBucket(index)))
-        .catch(error => logoutOnTokenExpired(dispatch, error))
+        .catch(error => handleError(dispatch, error))
   }
 };
 
@@ -200,7 +200,7 @@ export const createBucketOnServer = (name, isAuthenticated) => {
   return dispatch => {
     return axios(config)
         .then(response => dispatch(createBucket(response.data)))
-        .catch(error => logoutOnTokenExpired(dispatch, error))
+        .catch(error => handleError(dispatch, error))
   }
 };
 
@@ -231,7 +231,7 @@ export const searchForBucket = (query, isAuthenticated) => {
   return dispatch => {
     return axios(config)
         .then(response => dispatch(searchBucket(response.data, query, true)))
-        .catch(error => logoutOnTokenExpired(dispatch, error))
+        .catch(error => handleError(dispatch, error))
   }
 };
 
@@ -266,16 +266,16 @@ export const editBucketOnServer = (name, id, isAuthenticated) => {
   return dispatch => {
     return axios(config)
         .then(response => dispatch(editBucket(response.data)))
-        .catch(error => logoutOnTokenExpired(dispatch, error))
+        .catch(error => handleError(dispatch, error))
   }
 };
 
 /**
- * Function to logout a user/delete local storage variables when a 401 error occurs
+ * Function to handle errors or logout a user/delete local storage variables when a 401 error occurs
  * @param dispatch
  * @param error Http Error
  */
-export function logoutOnTokenExpired(dispatch, error) {
+export function handleError(dispatch, error) {
   if (error.response) {
     if (error.response.status === 401) {
       dispatch(logoutUser())
