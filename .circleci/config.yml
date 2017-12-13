@@ -42,12 +42,7 @@ jobs:
       # run tests!
       - run:
           name: test and coverage
-          command: yarn test --coverage && yarn coveralls < ./coverage/lcov.info
+          command: yarn test --coverage && yarn coveralls < coverage/lcov.info
 
-      - store_test_results:
-          path: coverage
-
-      - store_artifacts:
-          path: coverage
 
 
