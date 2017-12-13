@@ -44,7 +44,10 @@ jobs:
           name: test and coverage
           command: yarn test --coverage && yarn coveralls < ./coverage/lcov.info
 
-      - persist_to_workspace:
-          root: ~/repo
+      - store_test_results:
+          path: coverage
+
+      - store_artifacts:
+          path: coverage
 
 
