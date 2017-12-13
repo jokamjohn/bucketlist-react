@@ -23,6 +23,9 @@ jobs:
         - /br-.*/
 
     steps:
+      - attach_workspace:
+          at: ~/repo
+
       - checkout
 
       # Download and cache dependencies
@@ -40,13 +43,17 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run:
-         name: Make coverage Folder
-         command: mkdir ~/coverage
+      - run: yarn test --coverage
+      - run: yarn coveralls < ./coverage/lcov.info
 
-      - run:
-          name: test and coverage
-          command: yarn test --coverage && yarn coveralls < ./coverage/lcov.info
+      - store_artifacts:
+          path: ./coverage/lcov.info
+          prefix: tests
+
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+
 
 
 
