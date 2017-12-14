@@ -3,7 +3,7 @@ import * as ItemActions from '../../actions/items';
 import * as BucketActions from '../../actions/buckets';
 import rootReducer from '../../reducers/rootReducer';
 import initialState from '../../reducers/initialState';
-import * as BucketActionTypes from "../../actiontypes/bucket";
+import * as LoginActionTypes from "../../actiontypes/login";
 
 describe('Test item section of the Store', () => {
   const store = createStore(rootReducer, initialState.items);
@@ -284,7 +284,7 @@ describe('Test buckets section of the store', () => {
       "next": null,
       "previous": null
     };
-    store.dispatch(BucketActions.searchBucket(data,'kampala',true));
+    store.dispatch(BucketActions.searchBucket(data, 'kampala', true));
 
     const actual = store.getState().buckets;
 
@@ -360,6 +360,59 @@ describe('Test buckets section of the store', () => {
         "isSearch": false,
         "query": ""
       }
+    };
+    expect(actual).toEqual(expected);
+  })
+});
+
+describe('Test auth/login section of the store', () => {
+  const store = createStore(rootReducer, initialState);
+  it('login request', () => {
+    const action = {
+      type: LoginActionTypes.LOGIN_REQUEST,
+      isAuthenticated: false,
+    };
+    store.dispatch(action);
+
+    const actual = store.getState().auth;
+
+    const expected = {
+      isAuthenticated: false,
+    };
+    expect(actual).toEqual(expected);
+  });
+
+  it('login success', () => {
+    const action = {
+      type: LoginActionTypes.LOGIN_SUCCESS,
+      isAuthenticated: true,
+      idToken: "xxcfdnbvdkflsdcvn"
+    };
+    store.dispatch(action);
+
+    const actual = store.getState().auth;
+
+    const expected = {
+      isAuthenticated: true,
+      idToken: "xxcfdnbvdkflsdcvn"
+    };
+    expect(actual).toEqual(expected);
+  });
+
+  it('login failure', () => {
+    const action = {
+      type: LoginActionTypes.LOGIN_FAILURE,
+      isAuthenticated: false,
+      message: 'login failure'
+    };
+    store.dispatch(action);
+
+    const actual = store.getState().auth;
+
+    const expected = {
+      isAuthenticated: false,
+      message: 'login failure',
+      idToken: "xxcfdnbvdkflsdcvn"
     };
     expect(actual).toEqual(expected);
   })
