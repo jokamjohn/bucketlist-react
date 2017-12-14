@@ -59,8 +59,6 @@ describe("Async  Bucket ItemActions", () => {
 
     const url = `${BASE_URL}bucketlists`;
 
-    // const store = mockStore({});
-
     return store.dispatch(actions.getBuckets(url, true, false)).then(() => {
       expect(store.getActions()).toEqual(expectedActions)
     })
@@ -78,8 +76,6 @@ describe("Async  Bucket ItemActions", () => {
       type: BucketActionTypes.BUCKET_DELETE,
       index: 1
     };
-
-    // const store = mockStore({});
 
     return store.dispatch(actions.deleteBucketFromServer(1, 1, true)).then(() => {
       expect(store.getActions()[0]).toEqual(expectedActions)
@@ -122,8 +118,6 @@ describe("Async  Bucket ItemActions", () => {
       isSearch: true,
       query: 'a',
     };
-
-    // const store = mockStore({});
 
     return store.dispatch(actions.searchForBucket('a', true)).then(() => {
       expect(store.getActions()[0]).toEqual(expectedActions)
