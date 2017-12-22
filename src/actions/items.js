@@ -1,7 +1,7 @@
 import * as ItemActionTypes from '../actiontypes/items';
 import {AUTH_TOKEN, BUCKETLIST_URL} from "../utilities/Constants";
 import axios from "axios";
-import {logoutOnTokenExpired} from "./buckets";
+import {handleError} from "./buckets";
 import {clearLocalStorage, logoutUser} from "./logout";
 import {TokenException} from "../utilities/Utils";
 
@@ -101,7 +101,7 @@ export const getItems = (bucketId, url, isAuthenticated, isSearchMode) => {
           }
         })
         .catch(error => {
-          logoutOnTokenExpired(dispatch, error);
+          handleError(dispatch, error);
         })
   }
 };
@@ -140,7 +140,7 @@ export const createItem = (bucketId, name, description = null, isAuthenticated) 
   return dispatch => {
     return axios(config)
         .catch(error => {
-          logoutOnTokenExpired(dispatch, error);
+          handleError(dispatch, error);
         })
   }
 };
@@ -174,7 +174,7 @@ export const deleteItem = (bucketId, itemId, itemIndex, isAuthenticated) => {
   return dispatch => {
     return axios(config)
         .then(response => dispatch(removeItem(itemIndex)))
-        .catch(error => logoutOnTokenExpired(dispatch, error))
+        .catch(error => handleError(dispatch, error))
   }
 };
 
@@ -215,7 +215,7 @@ export const editItem = (bucketId, itemId, name, description = null, isAuthentic
   return dispatch => {
     return axios(config)
         .then(response => dispatch(updateItem(response.data.item)))
-        .catch(error => logoutOnTokenExpired(dispatch, error))
+        .catch(error => handleError(dispatch, error))
   }
 };
 
@@ -249,7 +249,7 @@ export const searchForItem = (query, bucketId, isAuthenticated) => {
   return dispatch => {
     return axios(config)
         .then(response => dispatch(itemSearch(query, response.data, true)))
-        .catch(error => logoutOnTokenExpired(dispatch, error))
+        .catch(error => handleError(dispatch, error))
   }
 };
 

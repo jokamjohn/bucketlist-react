@@ -41,7 +41,7 @@ export const loginError = message => {
 
 /**
  * Logging a user using the K-Bucket API
- * The different actions are dispatched at different points during user login
+ * The different ItemActions are dispatched at different points during user login
  * @param credentials
  * @returns {function(*)}
  */

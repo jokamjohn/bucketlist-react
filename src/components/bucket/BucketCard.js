@@ -9,7 +9,7 @@ export const BucketCard = ({id, modifiedAt, name, isEditing, onChange, onSave, o
       <div className="card bucket-card">
         <div className="card-body">
           {isEditing ?
-              <input type="text" value={name} onChange={event => onChange(event.target.value)}/>
+              <input type="text" value={name} onChange={event => onChange(event)}/>
               :
               <h4 className="card-title"><Link to={`/buckets/${id}/items`}>{name}</Link></h4>
           }
