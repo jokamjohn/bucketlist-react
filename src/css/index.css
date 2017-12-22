@@ -1,0 +1,23 @@
+.main-content {
+    margin-top: 100px;
+}
+
+.auth-card {
+    width: 30rem;
+}
+
+.bucket-card {
+    width: 20rem;
+    margin-bottom: 10px;
+}
+
+.bucket-links {
+    margin-right: 10px;
+}
+
+.loader-center {
+    width: 50%;
+    margin: 0 auto ;
+    display: flex;
+}
+
